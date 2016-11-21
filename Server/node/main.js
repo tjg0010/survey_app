@@ -10,7 +10,6 @@ app.get('/', function (req, res) {
     // TODO: deal with errors, etc...
     db.getTestData(function(rows) {
         var result = [];
-
         for (var i = 0; i < rows.length; i++) {
             result.push(rows[i].name);
         }
