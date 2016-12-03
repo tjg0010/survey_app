@@ -1,18 +1,19 @@
 // ********************** Dependencies **********************
 var express = require('express');
 var db = require('./dbManager.js');
+var bodyParser = require("body-parser");
 var http = require('./httpHelper.js');
 // **********************************************************
 
 var app = express();
 
 // This is needed to parse post body.
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
     // TODO: deal with errors, etc...
-    db.getTestData(function(rows) {
+    db.getTestData(function (rows) {
         var result = [];
         for (var i = 0; i < rows.length; i++) {
             result.push(rows[i].name);
@@ -27,7 +28,7 @@ app.post('/saveLocation', function (req, res) {
     var lat = req.body.lat;
     var long = req.body.long;
 
-    db.saveLocation(lat, long, function(isSuccess) {
+    db.saveLocation(lat, long, function (isSuccess) {
         if (isSuccess) {
             res.end("Success");
         }
