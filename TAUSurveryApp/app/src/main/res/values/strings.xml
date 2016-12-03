@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TAU Survery App</string>
+    <string name="key_is_registered">key_is_registered</string>
 </resources>
