@@ -12,8 +12,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Get the preferences (key-value pairs) of this activity.
-        SharedPreferences prefs = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+        // Get the shared preferences (key-value pairs). This file is shared between the different activities.
+        SharedPreferences prefs = MainActivity.this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         boolean isRegistered = prefs.getBoolean(getString(R.string.key_is_registered), false);
 
         if (!isRegistered) {
