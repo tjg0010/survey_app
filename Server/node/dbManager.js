@@ -24,7 +24,7 @@ exports.disconnect = function(){
         // Ensures all previously enqueued queries are still
         // before sending a COM_QUIT packet to the MySQL server.
     });
-}
+};
 
 exports.getTestData = function(callback){
 
@@ -36,5 +36,20 @@ exports.getTestData = function(callback){
 
         callback(rows);
     });
-}
+};
 
+exports.saveLocation = function(lat, long, callback){
+    con.query(
+        'INSERT INTO `testschema`.`locations` (`lat`,`long`) VALUES (?, ?);',
+        [mysql.escape(lat), mysql.escape(long)],
+        function(err,res){
+            if(err) {
+                console.log("Error saving location: ", err);
+                callback(false);
+            }
+            else {
+                console.log("Insereted to DB: ", res.insertId);
+                callback(true);
+            }
+    });
+};
