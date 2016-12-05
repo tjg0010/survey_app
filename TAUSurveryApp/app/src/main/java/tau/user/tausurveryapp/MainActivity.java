@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (!isRegistered) {
             // Go to registration activity.
-            Intent intent = new Intent(this, RegisterActivity.class);
+            Intent intent = new Intent(this, IAgreeActivity.class);
             startActivity(intent);
         }
         else {
