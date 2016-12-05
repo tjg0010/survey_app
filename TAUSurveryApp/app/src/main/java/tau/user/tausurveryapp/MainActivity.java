@@ -1,6 +1,7 @@
 package tau.user.tausurveryapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,15 +13,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Get the preferences (key-value pairs) of this activity.
-        SharedPreferences prefs = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+        // Get the shared preferences (key-value pairs). This file is shared between the different activities.
+        SharedPreferences prefs = MainActivity.this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         boolean isRegistered = prefs.getBoolean(getString(R.string.key_is_registered), false);
 
+        // TODO: Consider adding a delay, so the user actually sees this activity...
+
         if (!isRegistered) {
-            // TODO: go to registration activity
+            // Go to registration activity.
+            Intent intent = new Intent(this, IAgreeActivity.class);
+            startActivity(intent);
         }
         else {
-            // TODO: go to main info activity
+            // Go to info activity.
+            Intent intent = new Intent(this, InfoActivity.class);
+            startActivity(intent);
         }
     }
 }
