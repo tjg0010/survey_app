@@ -16,5 +16,9 @@ public class IAgreeActivity extends AppCompatActivity {
     }
 
     public void agree(View view) {
+
+
+        // TODO: Migrate this to the right place (probably to the InfoActivity).
+        TrackingRepeater.getInstance().startRepeatedTracking(this, false);
     }
 }

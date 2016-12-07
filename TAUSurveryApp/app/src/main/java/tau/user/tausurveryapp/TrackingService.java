@@ -2,7 +2,7 @@ package tau.user.tausurveryapp;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.Context;
+import android.util.Log;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -29,7 +29,11 @@ public class TrackingService extends IntentService {
      * In case network operation fails, the data is saved locally and re-sent in the next try.
      */
     private void track() {
-        // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
+        // TODO: Implement this!
+        // Get the user location
+
+        // Send the location to the server.
+
+        Log.i("TrackingService", "Tracking now!");
     }
 }
