@@ -16,13 +16,6 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     private void initializeTracker() {
-        // Make sure alarm (tracking) is not already set by checking in our shared preferences.
-        SharedPreferences prefs = InfoActivity.this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        boolean isTracking = prefs.getBoolean(getString(R.string.key_is_tracking), false);
-
-        // If the alarm is not started, we should start it.
-        if (!isTracking) {
-
-        }
+        // TODO: Put tracker initialization here.
     }
 }
