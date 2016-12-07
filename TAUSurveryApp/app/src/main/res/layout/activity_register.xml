@@ -10,4 +10,206 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="tau.user.tausurveryapp.RegisterActivity">
 
+    <!--<Space-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_centerHorizontal="true" />-->
+
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0.5dp">
+
+        <!--Heading-->
+        <TextView
+            android:text="טופס הרשמה לסקר"
+            android:textDirection="rtl"
+            android:textSize="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- sex -->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layoutDirection="rtl"
+                android:weightSum="1"
+                android:layout_margin="20sp">
+
+            <TextView
+                    android:text="מין"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lblSex"
+                    android:textSize="24sp"
+                    android:layout_weight="0.84" />
+
+                <RadioGroup
+                    android:layout_width="182dp"
+                    android:layout_height="match_parent"
+                    android:layoutDirection="rtl"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioSexMale"
+                        android:text="זכר"
+                        android:layout_weight="0.46" />
+
+                    <RadioButton
+                        android:text="נקבה"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioSexFemale"
+                        android:layout_weight="1.43" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+        <!--Date of Birth-->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="rtl"
+            android:layout_margin="20dp">
+
+            <TextView
+                android:text="תאריך לידה"
+                android:layout_width="258dp"
+                android:layout_height="match_parent"
+                android:id="@+id/lblDateOfBirth"
+                android:textSize="24sp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/txtYearOfBirth"
+                android:layout_weight="1"
+                android:hint="שנה"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/txtMonthOfBirth"
+                android:layout_weight="1"
+                android:hint="חודש"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/txtDayOfBirth"
+                android:layout_weight="1"
+                android:hint="יום"/>
+
+        </LinearLayout>
+
+        <!--Address-->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:layoutDirection="rtl">
+
+
+            <TextView
+                android:text="כתובת מגורים"
+                android:layout_width="263dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblAddress"
+                android:textSize="24sp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="רחוב"
+                android:ems="10"
+                android:id="@+id/txtStreetNumber"
+                android:layout_weight="1.01"
+                android:inputType="text|number" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName|number"
+                android:text="מספר"
+                android:ems="10"
+                android:id="@+id/txtHouseNumber"
+                android:layout_weight="1.01" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text="עיר"
+                android:ems="10"
+                android:id="@+id/txtCity"
+                android:layout_weight="1.01" />
+        </LinearLayout>
+
+        <!-- Building Type -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layoutDirection="rtl"
+            android:layout_margin="20dp">
+
+            <TextView
+                android:text="סוג מגורים"
+                android:layout_width="272dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/BuildingType"
+                android:textSize="24sp" />
+
+            <RadioGroup
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layoutDirection="rtl"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radioBuildingTypeShared"
+                    android:layout_weight="1"
+                    android:text="בניין מגורים" />
+
+                <RadioButton
+                    android:text="RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/radioBuldingTypePrivate"
+                    android:layout_weight="1" />
+            </RadioGroup>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>
+
 </RelativeLayout>
