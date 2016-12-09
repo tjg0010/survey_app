@@ -1,5 +1,6 @@
 package tau.user.tausurveryapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,9 +17,10 @@ public class IAgreeActivity extends AppCompatActivity {
     }
 
     public void agree(View view) {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
 
-
-        // TODO: Migrate this to the right place (probably to the InfoActivity).
-        TrackingRepeater.getInstance().startRepeatedTracking(this, false);
+//        // TODO: Migrate this to the right place (probably to the InfoActivity).
+//        TrackingRepeater.getInstance().startRepeatedTracking(this, false);
     }
 }
