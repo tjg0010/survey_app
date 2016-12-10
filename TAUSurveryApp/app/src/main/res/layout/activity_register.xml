@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_register"
@@ -8,15 +9,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="tau.user.tausurveryapp.RegisterActivity">
+    tools:context="tau.user.tausurveryapp.RegisterActivity"
+    >
 
-
-
-    <!--<Space-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_centerHorizontal="true" />-->
 
     <ScrollView
     android:layout_width="match_parent"
@@ -27,206 +22,458 @@
 
 
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="0.5dp"
-        android:weightSum="6">
-
-        <!--Heading-->
-        <TextView
-            android:text="טופס הרשמה לסקר"
-            android:textDirection="rtl"
-            android:textSize="35sp"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"/>
+            android:layout_margin="0.5dp"
+            >
 
-        <!-- sex -->
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <!-- sex -->
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layoutDirection="rtl"
+                    android:layout_weight="1"
+                    android:weightSum="2"
+                    android:layout_margin="15dp">
+
+                <TextView
+                        android:text="מין"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lblSex"
+                        android:textSize="24sp"
+                        android:layout_weight="1" />
+
+                <RadioGroup
+                    android:layout_width="182dp"
+                    android:layout_height="match_parent"
+                    android:layoutDirection="rtl"
+                    android:orientation="horizontal"
+                    android:layout_weight="0.2"
+                    android:weightSum="1">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioSexMale"
+                        android:text="זכר"
+                        android:layout_weight="0.9"
+                        />
+
+                    <RadioButton
+                        android:text="נקבה"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioSexFemale"
+                        android:layout_weight="0.1" />
+
+                </RadioGroup>
+
+                </LinearLayout>
+
+            <!--Date of Birth-->
+            <LinearLayout
                 android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layoutDirection="rtl"
                 android:layout_weight="1"
-                android:weightSum="2"
-                android:layout_margin="15sp">
+                android:weightSum="5"
+                android:layout_margin="15dp"
+                android:layout_height="wrap_content">
 
-            <TextView
-                    android:text="מין"
+                <TextView
+                    android:text="תאריך לידה"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/lblSex"
+                    android:id="@+id/lblDateOfBirth"
+                    android:layout_weight="2"
                     android:textSize="24sp"
-                    android:layout_weight="1.98" />
+                    />
 
-            <RadioGroup
-                android:layout_width="182dp"
-                android:layout_height="match_parent"
-                android:layoutDirection="rtl"
-                android:orientation="horizontal"
-                android:layout_weight="0.02"
-                android:weightSum="1">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:layout_width="42dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/radioSexMale"
-                    android:text="זכר"
-                    android:layout_weight="0.9" />
+                    android:inputType="number"
+                    android:ems="10"
+                    android:layout_weight="1"
+                    android:id="@+id/txtYearOfBirth"
+                    android:hint="שנה"/>
 
-                <RadioButton
-                    android:text="נקבה"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:layout_width="66dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/radioSexFemale"
-                    android:layout_weight="0.1" />
+                    android:inputType="number"
+                    android:ems="10"
+                    android:layout_weight="1"
+                    android:id="@+id/txtMonthOfBirth"
+                    android:hint="חודש"/>
 
-            </RadioGroup>
+                <EditText
+                    android:layout_width="73dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/txtDayOfBirth"
+                    android:layout_weight="1"
+                    android:hint="יום"/>
 
             </LinearLayout>
 
-        <!--Date of Birth-->
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layoutDirection="rtl"
-            android:layout_weight="1"
-            android:weightSum="5"
-            android:layout_margin="15dp"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:text="תאריך לידה"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/lblDateOfBirth"
-                android:layout_weight="2"
-                android:textSize="24sp"
-                />
-
-            <EditText
-                android:layout_width="42dp"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
+            <!--Address-->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="15dp"
+                android:layoutDirection="rtl"
                 android:layout_weight="1"
-                android:id="@+id/txtYearOfBirth"
-                android:hint="שנה"/>
+                android:weightSum="1"
+                >
 
-            <EditText
-                android:layout_width="66dp"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:layout_weight="1"
-                android:id="@+id/txtMonthOfBirth"
-                android:hint="חודש"/>
+                <!-- Label -->
+                <TextView
+                    android:text="כתובת מגורים"
+                    android:layout_height="wrap_content"
+                    android:layout_width="204dp"
+                    android:id="@+id/lblAddress"
+                    android:textSize="24sp"
+                    android:layout_weight="0.5"/>
+                <!-- רחוב -->
+                <EditText
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:hint="רחוב"
+                    android:ems="10"
+                    android:id="@+id/txtStreetNumber"
+                    android:inputType="text"
+                    android:layout_weight="0.2"/>
+                <!-- מספר-->
+                <EditText
+                    android:layout_width="88dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName|number"
+                    android:hint="מספר"
+                    android:ems="10"
+                    android:id="@+id/txtHouseNumber"
+                    android:layout_weight="0.1"/>
+                <!-- עיר-->
+                <EditText
+                    android:layout_width="111dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:hint="עיר"
+                    android:ems="10"
+                    android:id="@+id/txtCity"
+                    android:layout_weight="0.1" />
 
-            <EditText
-                android:layout_width="73dp"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/txtDayOfBirth"
-                android:layout_weight="1"
-                android:hint="יום"/>
+            </LinearLayout>
 
-        </LinearLayout>
-
-        <!--Address-->
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="15dp"
-            android:layoutDirection="rtl"
-            android:layout_weight="1"
-            android:weightSum="1"
-            >
-
-
-            <TextView
-                android:text="כתובת מגורים"
-                android:layout_height="wrap_content"
-                android:layout_width="204dp"
-                android:id="@+id/lblAddress"
-                android:textSize="24sp"
-                android:layout_weight="0.5"/>
-
-            <EditText
-                android:layout_width="130dp"
-                android:layout_height="wrap_content"
-                android:text="רחוב"
-                android:ems="10"
-                android:id="@+id/txtStreetNumber"
-                android:inputType="text|number"
-                android:layout_weight="0.2"/>
-
-            <EditText
-                android:layout_width="88dp"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName|number"
-                android:text="מספר"
-                android:ems="10"
-                android:id="@+id/txtHouseNumber"
-                android:layout_weight="0.1"/>
-
-            <EditText
-                android:layout_width="111dp"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="עיר"
-                android:ems="10"
-                android:id="@+id/txtCity"
-                android:layout_weight="0.1" />
-        </LinearLayout>
-
-        <!-- Building Type -->
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layoutDirection="rtl"
-            android:layout_margin="15dp"
-            android:layout_weight="1"
-            android:weightSum="1">
-
-            <TextView
-                android:text="סוג מגורים"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/BuildingType"
-                android:textSize="24sp"
-                android:layout_weight="0.2"/>
-
-            <RadioGroup
-                android:layout_width="wrap_content"
+            <!-- Building Type -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layoutDirection="rtl"
+                android:layout_margin="15dp"
+                android:layout_weight="1"
+                android:weightSum="1">
+                <!-- Label -->
+                <TextView
+                    android:text="סוג מגורים"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/BuildingType"
+                    android:textSize="24sp"
+                    android:layout_weight="0.2"/>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="rtl"
+                    android:orientation="horizontal"
+                    android:layout_weight="0.4">
+                    <!-- בניים מגורים -->
+                    <RadioButton
+                        android:text="בניין מגורים"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioBuildingTypeShared"
+                        android:layout_weight="0.5"/>
+                    <!-- בניין פרטי-->
+                    <RadioButton
+                        android:text="בית פרטי"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioBuldingTypePrivate"
+                        android:layout_weight="0.5" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <!-- Population group Label-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layoutDirection="rtl"
+                android:orientation="vertical"
+                android:layout_margin="15sp">
+
+                <TextView
+                    android:text="קבוצת אוכלוסייה"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lblPopulationGroup"
+                    android:textSize="24sp"
+                    android:layout_weight="0.2"/>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layoutDirection="rtl">
+
+                    <RadioButton
+                        android:text="יהודי חרדי"
+                        android:id="@+id/radioOrthadox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <RadioButton
+                        android:text="יהודי דתי"
+                        android:id="@+id/radioReligous"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <RadioButton
+                        android:text="מסורתי או חילוני"
+                        android:id="@+id/radioTraditionalOrSecular"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <RadioButton
+                        android:text="ערבי"
+                        android:id="@+id/radioArab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <RadioButton
+                        android:text="אחר"
+                        android:id="@+id/radioPopGrpOther"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </RadioGroup>
+            </LinearLayout>
+
+            <!-- Current occupation -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layoutDirection="rtl"
+                android:orientation="vertical"
+                android:layout_margin="15dp">
+
+                <!-- Label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="סמן את עיסוקך הנוכחי"
+                    android:textSize="24dp"/>
+
+                <!-- Radio options-->
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:id="@+id/radioSoldier"
+                        android:text="חייל"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioStudent"
+                        android:text="סטודנט"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioWorking"
+                        android:text="עובד"
+                        />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioOccupationOther"
+                        android:text="אחר"/>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <!-- Private Car -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layoutDirection="rtl"
+                android:layout_margin="15sp"
+                android:weightSum="1"
+                >
+
+                <!-- Label -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="האם ברשותך רכב פרטי"
+                    android:textDirection="rtl"
+                    android:textSize="24dp" />
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="כן"
+                        android:id="@+id/radioOwnCarYes" />
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="לא"
+                        android:id="@+id/radioOwnCarNo"
+                        />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <!-- Public Transport Usage -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layoutDirection="rtl"
+                android:layout_margin="15sp"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="תדירות השימוש בתחבורה ציבורית"
+                    android:textSize="20dp"/>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioPubTrnsDaily"
+                        android:text="יומי"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioPubTrnsWeekly"
+                        android:text="שבועי"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioPubTrnsMonthly"
+                        android:text="חודשי"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioPubRarely"
+                        android:text="לעיתים רחוקות"/>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <!-- Family Status -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layoutDirection="rtl"
+                android:layout_margin="15sp"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="מצב משפחתי"
+                    android:id="@+id/txtFamilyStatus"
+                    android:textSize="24dp"/>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/radioFamilyStatusSingle"
+                        android:text="רווק"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/FamilyStatusMarried"
+                        android:text="שבועי"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/FamilyStatusDivorced"
+                        android:text="גרוש"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/FamilyStatusWiddow"
+                        android:text="לעיתים רחוקות"/>
+
+                </RadioGroup>
+            </LinearLayout>
+
+            <!-- Number of Kids -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_weight="0.5">
+                android:layoutDirection="rtl"
+                android:layout_margin="15sp"
+                android:weightSum="1">
 
-                <RadioButton
+                <TextView
+                    android:layout_width="253dp"
+                    android:layout_height="wrap_content"
+                    android:text="מספר ילדים עד גיל 18"
+                    android:id="@+id/txtNumOfKids"
+                    android:textSize="24dp" />
+
+                <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/radioBuildingTypeShared"
-                    android:layout_weight="1"
-                    android:text="בניין מגורים" />
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/txtboxNumOfKids"
+                    android:hint="0"/>
 
-                <RadioButton
-                    android:text="RadioButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/radioBuldingTypePrivate"
-                    android:layout_weight="1" />
-            </RadioGroup>
+
+
+
+            </LinearLayout>
+
         </LinearLayout>
 
-
-    </LinearLayout>
-
-</ScrollView>
+    </ScrollView>
 
 </RelativeLayout>
