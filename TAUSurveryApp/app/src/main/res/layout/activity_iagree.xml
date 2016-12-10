@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_iagree"
@@ -12,49 +13,68 @@
     tools:context="tau.user.tausurveryapp.IAgreeActivity">
 
     <TextView
-        android:text="טופס הסכמה לשימוש באפליקציה"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:fontFamily="casual"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/textView"
+        android:id="@+id/Terms_and_Conditions_Text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="טקסט הסכמה לסקר טקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקר"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="4pt"
         android:layout_weight="1"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/titleTextView"
         android:layout_above="@+id/layoutBottom"
-        tools:text="טקסט הסכמה לסקר טקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקר טקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקר טקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקר טקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקר טקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקר טקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקר טקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקר טקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקר טקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקר טקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקר טקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקרטקסט הסכמה לסקר"
-       />
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:fontFamily="sans-serif"
+        android:text="@string/Terms_and_Conditions"
+        android:scrollbars="vertical"
+        android:layoutDirection="rtl"
+        android:textDirection="anyRtl"
+        android:background="?android:attr/colorControlHighlight"
+        android:padding="2pt"
+        tools:ignore="NewApi,ObsoleteLayoutParam" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/layoutBottom"
         android:layout_alignParentBottom="true"
-        android:id="@+id/layoutBottom">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layoutDirection="rtl"
+        android:paddingTop="10pt">
+
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/agreeCheckBox"
+            android:layoutDirection="rtl"
+            android:layout_gravity="start|center_vertical"
+            android:layout_weight="1"
+            android:textDirection="anyRtl"
+            android:text="@string/agree_check_box" />
 
         <Button
             android:id="@+id/btnAgree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="אני מסכים"
+            android:text="המשך"
             android:background="@color/colorAgree"
-            android:onClick="agree"/>
+            android:onClick="agree"
+            android:layoutDirection="rtl"
+            android:layout_gravity="end" />
 
-        <CheckBox
-            android:text="CheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox3" />
 
     </LinearLayout>
+
+    <TextView
+        android:text="טופס הסכמה לשימוש באפליקציה"
+        android:layout_gravity="start|center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/titleTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="12pt" />
 
 
 </RelativeLayout>
