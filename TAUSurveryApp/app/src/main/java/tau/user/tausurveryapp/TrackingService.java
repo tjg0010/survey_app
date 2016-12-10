@@ -29,11 +29,18 @@ public class TrackingService extends IntentService {
      * In case network operation fails, the data is saved locally and re-sent in the next try.
      */
     private void track() {
-        // TODO: Implement this!
+        Log.i("TrackingService", "Tracking current location now...");
+
         // Get the user location
+        LocationManager locationManager = new LocationManager();
+        locationManager.GetCurrentLocation(this, new LocationManager.LocationCallbackable() {
+            @Override
+            public void run(String latitude, String longitude) {
+                // Send the location to the server.
 
-        // Send the location to the server.
-
-        Log.i("TrackingService", "Tracking now!");
+                // Close the service since it's no longer needed.
+                stopSelf();
+            }
+        });
     }
 }

@@ -3,6 +3,7 @@
     package="tau.user.tausurveryapp">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -31,7 +32,9 @@
 
         <service
             android:name=".TrackingService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity android:name=".LocationPermissionActivity"></activity>
     </application>
 
 </manifest>

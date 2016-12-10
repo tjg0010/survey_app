@@ -29,6 +29,9 @@ public class TrackingRepeater {
         SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         boolean isTrackingStarted = prefs.getBoolean(context.getString(R.string.key_was_tracking_started), false);
 
+        // For debugging purposes. TODO: remove when done!@#!@#!@#!@#!@#
+        isTrackingStarted = false;
+
         // Also start running the service in repeat if we haven't done so yet or if this is called after device reboot.
         if (!isTrackingStarted || isBooter) {
             // Create the intent that starts the TrackingService.
@@ -39,8 +42,8 @@ public class TrackingRepeater {
             AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime(),
-                    5000, pendingIntent);
-                    //AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
+//                    5000, pendingIntent);
+                    AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
         }
 
         // If we didn't start tracking yet, enable the booter.
