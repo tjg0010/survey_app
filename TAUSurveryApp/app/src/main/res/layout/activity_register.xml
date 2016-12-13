@@ -14,8 +14,8 @@
 
 
     <ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
@@ -29,6 +29,14 @@
             android:layout_margin="0.5dp"
             >
 
+            <!-- Dummy linear layout for focus on activity start -->
+            <LinearLayout
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_width="0px"
+                android:layout_height="0px"
+                />
+
             <!-- sex -->
             <LinearLayout
                     android:layout_width="match_parent"
@@ -38,11 +46,13 @@
                     android:layout_weight="1"
                     android:weightSum="2"
                     android:layout_margin="15dp"
-                    android:id="@+id/LLSex">
+                    android:id="@+id/LLSex"
+                >
+
                 <!--android:onClick="onClick" -->
 
                 <TextView
-                        android:text="מין?"
+                        android:text="מין"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/lblSex"
@@ -53,9 +63,11 @@
                     android:layout_width="182dp"
                     android:layout_height="match_parent"
                     android:layoutDirection="rtl"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_weight="0.2"
-                    android:weightSum="1">
+                    android:weightSum="1"
+
+                    >
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -63,6 +75,7 @@
                         android:id="@+id/radioSexMale"
                         android:text="זכר"
                         android:layout_weight="0.9"
+                        android:checked="true"
                         />
 
                     <RadioButton
@@ -86,6 +99,7 @@
                 android:layout_margin="15dp"
                 android:layout_height="wrap_content">
 
+                <!--Label-->
                 <TextView
                     android:text="תאריך לידה"
                     android:layout_width="wrap_content"
@@ -95,6 +109,7 @@
                     android:textSize="24sp"
                     />
 
+                <!--Birthday input fields-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -107,7 +122,12 @@
                         android:ems="10"
                         android:layout_weight="1"
                         android:id="@+id/txtYearOfBirth"
-                        android:hint="שנה"/>
+                        android:hint="שנה"
+                        android:maxLength="4"
+                        android:gravity="right"
+                        android:nextFocusDown="@+id/txtMonthOfBirth"
+
+                        />
 
                     <EditText
                         android:layout_width="66dp"
@@ -116,7 +136,11 @@
                         android:ems="10"
                         android:layout_weight="1"
                         android:id="@+id/txtMonthOfBirth"
-                        android:hint="חודש"/>
+                        android:hint="חודש"
+                        android:maxLength="2"
+                        android:gravity="right"
+                        android:nextFocusDown="@+id/txtDayOfBirth"
+                        />
 
                     <EditText
                         android:layout_width="73dp"
@@ -125,7 +149,11 @@
                         android:ems="10"
                         android:id="@+id/txtDayOfBirth"
                         android:layout_weight="1"
-                        android:hint="יום"/>
+                        android:hint="יום"
+                        android:maxLength="2"
+                        android:gravity="right"
+                        android:nextFocusDown="@+id/txtStreet"
+                        />
                 </LinearLayout>
 
             </LinearLayout>
@@ -161,19 +189,27 @@
                         android:layout_height="wrap_content"
                         android:hint="רחוב"
                         android:ems="10"
-                        android:id="@+id/txtStreetNumber"
+                        android:id="@+id/txtStreet"
                         android:inputType="text"
-                        android:layout_weight="0.2"/>
+                        android:layout_weight="0.2"
+                        android:gravity="right"
+                        android:nextFocusDown="@+id/txtHouseNumber"
+                        />
                     <!-- מספר-->
                     <EditText
                         android:layout_width="88dp"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName|number"
+                        android:inputType="number"
                         android:hint="מספר"
                         android:ems="10"
+                        android:maxLength="5"
                         android:id="@+id/txtHouseNumber"
-                        android:layout_weight="0.1"/>
+                        android:layout_weight="0.1"
+                        android:gravity="right"
+                        android:nextFocusDown="@+id/txtCity"
+                        />
                 </LinearLayout>
+
                 <!-- עיר-->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -181,11 +217,14 @@
                     <EditText
                         android:layout_width="111dp"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
+                        android:inputType="text"
                         android:hint="עיר"
                         android:ems="10"
                         android:id="@+id/txtCity"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:nextFocusDown="@+id/radioBuildingTypeShared"
+                        />
                 </LinearLayout>
 
             </LinearLayout>
@@ -212,7 +251,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layoutDirection="rtl"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_weight="0.4">
                     <!-- בניים מגורים -->
                     <RadioButton
@@ -356,7 +395,7 @@
                 <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -447,7 +486,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/FamilyStatusMarried"
-                        android:text="שבועי"/>
+                        android:text="נשוי"/>
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -457,7 +496,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/FamilyStatusWiddow"
-                        android:text="לעיתים רחוקות"/>
+                        android:text="אלמנ/ה"/>
 
                 </RadioGroup>
             </LinearLayout>
@@ -485,8 +524,11 @@
                     android:ems="10"
                     android:id="@+id/txtboxNumOfKids"
                     android:hint="0"
-                    android:singleLine="true"
-                    android:selectAllOnFocus="true" />
+                    android:maxLines="1"
+                    android:maxLength="2"
+                    android:selectAllOnFocus="true"
+                    android:gravity="right"
+                    />
 
 
 

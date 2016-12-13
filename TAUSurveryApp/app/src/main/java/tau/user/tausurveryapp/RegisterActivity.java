@@ -1,10 +1,8 @@
 package tau.user.tausurveryapp;
 
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.LinearLayout;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -17,6 +15,17 @@ public class RegisterActivity extends AppCompatActivity {
         actionBar.setHomeButtonEnabled(true);
 //        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+
+    // Function for validating numeric input fields
+    public boolean numberEditTextValidation(int min, int max, int value){
+
+        if ((value >= min) && (value <= max)){
+            return true;
+        }
+        return false;
+    }
+
 
     /////////////// Code for hiding elements onclick /////////////////////
 //
