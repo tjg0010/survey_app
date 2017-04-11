@@ -34,7 +34,6 @@ import java.util.ArrayList;
  */
 
 public class LocationManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
-    private LocationManager ourInstance = null;
     private GoogleApiClient mGoogleApiClient = null;
 
     private ArrayList<LocationCallbackable> callbacks;

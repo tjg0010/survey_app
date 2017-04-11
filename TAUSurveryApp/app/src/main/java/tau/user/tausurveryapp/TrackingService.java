@@ -31,6 +31,8 @@ public class TrackingService extends IntentService {
     private void track() {
         Log.i("TrackingService", "Tracking current location now...");
 
+        final TrackingService _this = this;
+
         // Get the user location
         LocationManager locationManager = new LocationManager();
         locationManager.GetCurrentLocation(this, new LocationManager.LocationCallbackable() {
@@ -38,7 +40,7 @@ public class TrackingService extends IntentService {
             public void run(String latitude, String longitude) {
                 if (latitude != null && longitude != null) {
                     // Send the location to the server.
-
+                    NetworkManager.getInstance().SendLocation(_this, latitude, longitude);
                 }
 
                 // Close the service since it's no longer needed.
