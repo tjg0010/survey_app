@@ -36,7 +36,10 @@ public class TrackingService extends IntentService {
         locationManager.GetCurrentLocation(this, new LocationManager.LocationCallbackable() {
             @Override
             public void run(String latitude, String longitude) {
-                // Send the location to the server.
+                if (latitude != null && longitude != null) {
+                    // Send the location to the server.
+
+                }
 
                 // Close the service since it's no longer needed.
                 stopSelf();

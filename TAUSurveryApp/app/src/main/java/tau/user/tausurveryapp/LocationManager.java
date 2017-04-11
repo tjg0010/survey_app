@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * Created by ran on 07/12/2016.
  */
 
-public class LocationManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class LocationManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private LocationManager ourInstance = null;
     private GoogleApiClient mGoogleApiClient = null;
 
@@ -44,44 +44,12 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
         callbacks = new ArrayList<>();
     }
 
-    public void VerifyLocationSettings() {
-        // Add this request via the LocationSettingsRequest builder.
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(createLocationRequest());
-
-        // Make sure the user's settings are satisfied.
-        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
-
-//        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-//            @Override
-//            public void onResult(LocationSettingsResult result) {
-//                final Status status = result.getStatus();
-//                //final LocationSettingsStates locationSettingsStates = result.getLocationSettingsStates();
-//                switch (status.getStatusCode()) {
-//                    case LocationSettingsStatusCodes.SUCCESS:
-//                        // All location settings are satisfied. The client can
-//                        // initialize location requests here.
-//                        break;
-//                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-//                        // Location settings are not satisfied, but this can be fixed
-//                        // by showing the user a dialog.
-//                        try {
-//                            // Show the dialog by calling startResolutionForResult(),
-//                            // and check the result in onActivityResult().
-//                            status.startResolutionForResult(activity, REQUEST_CHECK_SETTINGS);
-//                        }
-//                        catch (IntentSender.SendIntentException e) {
-//                            // Ignore the error.
-//                        }
-//                        break;
-//                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-//                        // Location settings are not satisfied. However, we have no way
-//                        // to fix the settings so we won't show the dialog.
-//                        break;
-//                }
-//            }
-//        });
-    }
-
+    /**
+     * First function in the location collection chain.
+     * This function is called from outside whenever a client wants to get the user's current location.
+     * @param context - the context withing we are running.
+     * @param callback - a callback class to be called once the sampling chain is completed.
+     */
     public void GetCurrentLocation(Context context, final LocationCallbackable callback) {
         // Save the context for onConnect to use it.
         currentContext = context;
@@ -98,57 +66,122 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
         // Add the given callback to the callback list. This will be used to return the location to whoever requested it.
         callbacks.add(callback);
 
-        VerifyLocationSettings();
-
-        // Connect to google api client.
-        // When connected, this will trigger onConnected and then we'll be able to request the user's location.
+        // Connect to GoogleApiClient. When connected, this will trigger onConnected and then we'll be able to request the user's location.
         mGoogleApiClient.connect();
     }
 
+    /**
+     * Fired when we are connected to the GoogleApiClient that can provide us with the user's current location.
+     * This can only happen after mGoogleApiClient.connect().
+     */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         // Create a location request.
         LocationRequest locationRequest = createLocationRequest();
 
-        // Check if we have permissions to get fine location.
+        // Check if we don't have permissions to get fine location.
         if (ActivityCompat.checkSelfPermission(currentContext, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // If we don't have permissions, launch LocationPermissionActivity. It will ask the user for permissions.
-            // But we can only do it if we have the current context.
-            if (currentContext != null) {
-                Intent intent = new Intent(currentContext, LocationPermissionActivity.class);
-                currentContext.startActivity(intent);
-            }
-            else {
-                Log.e("LocationManager", "Tried using currentContext but it was null!");
-            }
-
-            // Call the given callback with null.
+            // If we no permissions were granted - call the given callback with null.
             runCallback(null);
             return;
         }
 
-        // We have permissions :)
+        // If we got here, we have permissions :)
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location != null) {
-            // Call the callback that the caller has supplied us with.
-            runCallback(location);
             // Disconnect from GoogleApiClient.
             disconnect();
+
+            // Call the callback that the caller has supplied us with, with the location we have.
+            runCallback(location);
         }
         // Location was null - that means the GoogleApiClient didn't have enough time to get the current location.
-        else
-        {
-            // In that case, we register ourselves to getLocationUpdates and unregister after we get the location.
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    runCallback(location);
-                    disconnect();
-                }
-            });
+        else {
+            // In that case we should check if location settings are valid, and if so register to locationUpdated.
+            // If the settings are not valid, we will terminate.
+            VerifyLocationSettingsAndContinue(locationRequest);
         }
     }
 
+    /**
+     * Verify if the device's settings are valid for location sampling.
+     * If they are - register to get location updates and unregister once we got it.
+     * If they are not - the sampling chain is terminated, returning null to the client.
+     * @param locationRequest
+     */
+    private void VerifyLocationSettingsAndContinue(final LocationRequest locationRequest) {
+        // Add this request via the LocationSettingsRequest builder.
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
+        final LocationManager _this = this;
+
+        // Make sure the user's settings are satisfied.
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
+
+        // Set a callback for the pending result.
+        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+            @Override
+            public void onResult(LocationSettingsResult result) {
+                final Status status = result.getStatus();
+                //final LocationSettingsStates locationSettingsStates = result.getLocationSettingsStates();
+                switch (status.getStatusCode()) {
+                    case LocationSettingsStatusCodes.SUCCESS:
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        // All location settings are satisfied to request location updates.
+                        // So we register ourselves to getLocationUpdates and unregister after we get the location.
+                        //noinspection MissingPermission - we already check for permission in the prior function "onConnected".
+                        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, _this);
+
+                        // We can get stuck waiting for an update from FusedLocationApi.requestLocationUpdates.
+                        // To solve this, we wait 5 seconds and terminate our self (if we haven't already finished).
+                        new android.os.Handler().postDelayed(
+                                new Runnable() {
+                                    public void run() {
+                                        stopLocationUpdatesAndDisconnect();
+                                        runCallback(null);
+                                    }
+                                },
+                                5000);
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                    default:
+                        // Location settings are not satisfied. However, we have no way to fix the settings so we won't show the dialog.
+                        // Terminate the location sampling by calling the callback with null.
+                        disconnect();
+                        runCallback(null);
+                        break;
+                }
+            }
+        });
+    }
+
+    /**
+     * Fired after registering ourselves to requestLocationUpdates, and a location update is available.
+     * @param location - the current location of the user.
+     */
+    @Override
+    public void onLocationChanged(Location location) {
+        // We got our location sample - unregister ourselves from requesting location updates and disconnect.
+        stopLocationUpdatesAndDisconnect();
+
+        // Call the callback with the location we just got.
+        runCallback(location);
+    }
+
+    /**
+     * Ask FusedLocationApi to stop getting location updates and disconnects from GoogleApiClient.
+     */
+    private void stopLocationUpdatesAndDisconnect() {
+        // Unregister ourselves from requesting location updates.
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+
+        // Disconnect from GoogleApiClient.
+        disconnect();
+    }
+
+    /**
+     * A function that created a location request with our wanted configurations.
+     * @return a locationRequest.
+     */
     private LocationRequest createLocationRequest() {
         // Create a location request that sets all the settings we need.
         final LocationRequest locationRequest = new LocationRequest();
@@ -166,6 +199,10 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
         return locationRequest;
     }
 
+    /**
+     * Runs a callback class from the callbacks list if any exist, and sends it the given location.
+     * @param location - a location to send to the callback.
+     */
     private void runCallback(Location location) {
         // Only do something if we have a callback registered.
         if (!callbacks.isEmpty()) {
@@ -186,7 +223,9 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
 
     }
 
-    /** This function disconnects from the GoogleApiClient. */
+    /**
+     * This function disconnects from the GoogleApiClient.
+     */
     private void disconnect() {
         // Disconnect from google api client.
         if (mGoogleApiClient.isConnected()) {
@@ -203,9 +242,13 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e("LocationManager", "Connection failed. Error code: " + connectionResult.getErrorCode() + ". Error Message: " + connectionResult.getErrorMessage());
+        // Failed to connect, return false (as null) to the callback.
+        runCallback(null);
     }
 
-    /** Interface for supplying a callback for a location request from the location manager. */
+    /**
+     * Interface for supplying a callback for a location request from the location manager.
+     */
     public interface LocationCallbackable {
         void run(String latitude, String longitude);
     }

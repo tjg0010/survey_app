@@ -22,6 +22,8 @@ public class IAgreeActivity extends AppCompatActivity {
 
         Terms_and_Conditions_Text = (TextView)findViewById(R.id.Terms_and_Conditions_Text);
         Terms_and_Conditions_Text.setMovementMethod(new ScrollingMovementMethod());
+
+        setTitle("טופס הסכמה");
     }
 
 
@@ -42,7 +44,7 @@ public class IAgreeActivity extends AppCompatActivity {
         }
 
 
-//        // TODO: Migrate this to the right place (probably to the InfoActivity).
+        // TODO: Migrate this to the right place (probably to the InfoActivity).
         TrackingRepeater.getInstance().startRepeatedTracking(this, false);
     }
 }

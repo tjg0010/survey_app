@@ -42,8 +42,9 @@ public class TrackingRepeater {
             AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
             alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime(),
-//                    5000, pendingIntent);
-                    AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+                    120000, pendingIntent); // Setting tracking interval to 2 minutes for debbuging needs.
+//                    AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+            // TODO: revert this to have an interval of 15 minutes for each location sample.
         }
 
         // If we didn't start tracking yet, enable the booter.
