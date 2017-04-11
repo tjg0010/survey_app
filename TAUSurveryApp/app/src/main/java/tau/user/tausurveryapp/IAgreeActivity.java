@@ -35,16 +35,9 @@ public class IAgreeActivity extends AppCompatActivity {
         if(checkbox.isChecked()){
             Intent intent = new Intent(this, RegisterActivity.class);
             startActivity(intent);
-        }else{
-            Snackbar.make(view, "אנא אשרו את טופס ההסכמה", Snackbar.LENGTH_LONG).show();
-
-
-
-
         }
-
-
-        // TODO: Migrate this to the right place (probably to the InfoActivity).
-        TrackingRepeater.getInstance().startRepeatedTracking(this, false);
+        else{
+            Snackbar.make(view, "אנא אשרו את טופס ההסכמה", Snackbar.LENGTH_LONG).show();
+        }
     }
 }

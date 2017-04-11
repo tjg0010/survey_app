@@ -39,6 +39,7 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
 
     private ArrayList<LocationCallbackable> callbacks;
     private Context currentContext;
+    private boolean isLocationUpdated = false;
 
     public LocationManager() {
         callbacks = new ArrayList<>();
@@ -136,8 +137,11 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
                         new android.os.Handler().postDelayed(
                                 new Runnable() {
                                     public void run() {
-                                        stopLocationUpdatesAndDisconnect();
-                                        runCallback(null);
+                                        // Only try to stop the operation if we didn't get a location update.
+                                        if (!isLocationUpdated) {
+                                            stopLocationUpdatesAndDisconnect();
+                                            runCallback(null);
+                                        }
                                     }
                                 },
                                 5000);
@@ -160,6 +164,8 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
      */
     @Override
     public void onLocationChanged(Location location) {
+        isLocationUpdated = true;
+
         // We got our location sample - unregister ourselves from requesting location updates and disconnect.
         stopLocationUpdatesAndDisconnect();
 

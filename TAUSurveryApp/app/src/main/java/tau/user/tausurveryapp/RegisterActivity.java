@@ -24,6 +24,13 @@ public class RegisterActivity extends AppCompatActivity {
             // If we don't have permissions, request them.
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION);
         }
+        // If we do have permissions.
+        else {
+            // Start the tracking.
+            TrackingRepeater.getInstance().startRepeatedTracking(this, false);
+
+            // TODO: add this logic to the info screen as well once it's all set up.
+        }
     }
 
 
@@ -34,6 +41,26 @@ public class RegisterActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Callback for ActivityCompat.requestPermissions. If the permissions are granted, start the tracking.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case LOCATION_PERMISSION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted!
+                    TrackingRepeater.getInstance().startRepeatedTracking(this, false);
+                }
+                else {
+                    // Permission denied! Do nothing...
+                }
+                return;
+            }
+        }
     }
 
 
