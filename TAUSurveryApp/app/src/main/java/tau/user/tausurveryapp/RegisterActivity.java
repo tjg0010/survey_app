@@ -6,6 +6,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
+import tau.user.tausurveryapp.contracts.Locale;
+import tau.user.tausurveryapp.contracts.Survey;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private final int LOCATION_PERMISSION = 1;
@@ -13,9 +16,21 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        NetworkManager.getInstance().GetRegistrationSurvey(this, new NetworkCallback<Survey>() {
+            @Override
+            public void onResponse(Survey survey) {
+                setTitle(survey.getString(Locale.IL, survey.metadata.title));
+            }
+
+            @Override
+            public void onFailure(String error) {
+                // TODO: show the user a failure message and log error.
+            }
+        });
+
         setContentView(R.layout.activity_register);
         ActionBar actionBar = getSupportActionBar();
-        setTitle("טופס הרשמה");
         actionBar.setHomeButtonEnabled(true);
 //        getActionBar().setDisplayHomeAsUpEnabled(true);
 
