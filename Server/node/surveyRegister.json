@@ -1,0 +1,100 @@
+{
+  "metadata": {
+    "title": 1,
+    "startText": 2,
+    "submitBtnText": 3
+  },
+  "fields": [
+    {"id": "gender", "mandatory": true, "title": 21, "type": "choices",
+      "choices":[
+        {"value": "male", "title": 22, "type": "option"},
+        {"value": "female", "title": 23, "type": "option"}]},
+    {"id": "birthDate", "mandatory": true, "title": 31, "type": "date"},
+    {"id": "address", "mandatory": true, "title": 41, "type": "address"},
+    {"id": "homeType", "mandatory": true, "title": 51, "type": "choices",
+      "choices":[
+        {"value": "private", "title": 52, "type": "option"},
+        {"value": "building", "title": 53, "type": "option"}]},
+    {"id": "population", "mandatory": true, "title": 61, "type": "choices",
+      "choices":[
+        {"value": "orthodox", "title": 62, "type": "option"},
+        {"value": "religious", "title": 63, "type": "option"},
+        {"value": "non-religious", "title": 64, "type": "option"},
+        {"value": "arab", "title": 65, "type": "option"},
+        {"value": "other", "title": 65, "type": "other"}]},
+    {"id": "occupation", "mandatory": true, "title": 71, "type": "choices",
+      "choices":[
+        {"value": "soldier", "title": 72, "type": "option"},
+        {"value": "student", "title": 73, "type": "option"},
+        {"value": "working", "title": 74, "type": "option"},
+        {"value": "other", "title": 75, "type": "option"}]},
+    {"id": "hasPrivateCar", "mandatory": true, "title": 81, "type": "boolean"},
+    {"id": "publicTransportationFrequency", "mandatory": true, "title": 91, "type": "choices",
+      "choices":[
+        {"value": "daily", "title": 92, "type": "option"},
+        {"value": "weekly", "title": 93, "type": "option"},
+        {"value": "monthly", "title": 94, "type": "option"},
+        {"value": "rarely", "title": 95, "type": "option"}]},
+    {"id": "status", "mandatory": true, "title": 101, "type": "choices",
+      "choices":[
+        {"value": "single", "title": 102, "type": "option"},
+        {"value": "married", "title": 103, "type": "option"},
+        {"value": "divorced", "title": 104, "type": "option"},
+        {"value": "widowed", "title": 105, "type": "option"}]},
+    {"id": "numberOfChildren", "mandatory": true, "title": 111, "type": "int"},
+    {"id": "children", "mandatory": true, "title": 121, "type": "group", "conditionOn": "numberOfChildren", "conditionType": "repeat",
+      "fields":[
+        {"id": "childName", "mandatory": true, "title": 131, "type": "string"},
+        {"id": "childGender", "mandatory": true, "title": 141, "type": "choices",
+          "choices":[
+            {"value": "male", "title": 22, "type": "option"},
+            {"value": "female", "title": 23, "type": "option"}]},
+        {"id": "childAge", "mandatory": true, "title": 151, "type": "int"}
+      ]}
+  ],
+  "strings": {
+    "il": {
+      "1": "הרשמה לסקר",
+      "2": "על מנת להירשם לסקר, אנא מלא/י את הפרטים הבאים:",
+      "3": "הרשמה",
+      "21": "מין",
+      "22": "זכר",
+      "23": "נקבה",
+      "31": "תאריך לידה",
+      "41": "כתובת מגורים",
+      "51": "סוג מגורים",
+      "52": "בית פרטי",
+      "53": "בניין מגורים",
+      "61": "לאיזו קבוצה היית משייכ/ת את עצמך?",
+      "62": "יהודי חרדי",
+      "63": "יהודי דתי",
+      "64": "מסורתי או חילוני",
+      "65": "ערבי",
+      "66": "אחר",
+      "71": "סמן את עיסוקך הנוכחי",
+      "72": "חייל",
+      "73": "סטודנט",
+      "74": "עובד/ת",
+      "75": "אחר",
+      "81": "האם ברשותך רכב פרטי?",
+      "91": "תדירות השימוש בתחבורה ציבורית",
+      "92": "יומי",
+      "93": "שבועי",
+      "94": "חודשי",
+      "95": "לעיתים רחוקות",
+      "101": "מצב משפחתי",
+      "102": "רווק/ה",
+      "103": "נשוי/נשואה",
+      "104": "גרוש/ה",
+      "105": "אלמנ/ה",
+      "111": "מספר ילדים עד גיל 18",
+      "121": "אנא מלא/י את הפרטים הבאים אודות ילדיך:",
+      "131": "שם הילד/ה",
+      "141": "מין הילד/ה",
+      "151": "גיל הילד/ה"
+    },
+    "en": {
+
+    }
+  }
+}
