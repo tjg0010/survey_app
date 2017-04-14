@@ -3,6 +3,7 @@ var express = require('express');
 var db = require('./dbManager.js');
 var bodyParser = require("body-parser");
 var http = require('./httpHelper.js');
+var fs = require('fs');
 // **********************************************************
 
 var app = express();
@@ -11,16 +12,13 @@ var app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-app.get('/', function (req, res) {
-    // TODO: deal with errors, etc...
-    db.getTestData(function (rows) {
-        var result = [];
-        for (var i = 0; i < rows.length; i++) {
-            result.push(rows[i].name);
-        }
-
-        http.sendJsonResponseSuccess(res, result);
-    });
+app.get('/register', function (req, res) {
+    // To support hebrew, the surveryRegister.json file was saved with UTF-8-BOM encoding.
+    // Also, we use fs.readFileSync with utf8 encoding, and do not parse the file as json with stringify
+    // (we just send the text using http.sendTextResponseSuccess.
+    console.log('/register requested');
+    var survey = fs.readFileSync('surveys/surveyRegister.json', 'utf8');
+    http.sendTextResponseSuccess(res, survey);
 });
 
 app.post('/saveLocation', function (req, res) {
@@ -37,6 +35,18 @@ app.post('/saveLocation', function (req, res) {
         }
     });
 });
+
+// app.get('/', function (req, res) {
+//     // TODO: deal with errors, etc...
+//     db.getTestData(function (rows) {
+//         var result = [];
+//         for (var i = 0; i < rows.length; i++) {
+//             result.push(rows[i].name);
+//         }
+//
+//         http.sendJsonResponseSuccess(res, result);
+//     });
+// });
 
 var server = app.listen(8888, function () {
 
