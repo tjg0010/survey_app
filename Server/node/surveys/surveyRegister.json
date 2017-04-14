@@ -5,55 +5,55 @@
     "submitBtnText": 3
   },
   "fields": [
-    {"id": "gender", "mandatory": true, "title": 21, "type": "choices",
+    {"id": "gender", "mandatory": true, "title": 21, "type": "CHOICES",
       "choices":[
-        {"value": "male", "title": 22, "type": "option"},
-        {"value": "female", "title": 23, "type": "option"}]},
-    {"id": "birthDate", "mandatory": true, "title": 31, "type": "date"},
-    {"id": "address", "mandatory": true, "title": 41, "type": "address"},
-    {"id": "homeType", "mandatory": true, "title": 51, "type": "choices",
+        {"value": "male", "title": 22, "type": "OPTION"},
+        {"value": "female", "title": 23, "type": "OPTION"}]},
+    {"id": "birthDate", "mandatory": true, "title": 31, "type": "DATE"},
+    {"id": "address", "mandatory": true, "title": 41, "type": "ADDRESS"},
+    {"id": "homeType", "mandatory": true, "title": 51, "type": "CHOICES",
       "choices":[
-        {"value": "private", "title": 52, "type": "option"},
-        {"value": "building", "title": 53, "type": "option"}]},
-    {"id": "population", "mandatory": true, "title": 61, "type": "choices",
+        {"value": "private", "title": 52, "type": "OPTION"},
+        {"value": "building", "title": 53, "type": "OPTION"}]},
+    {"id": "population", "mandatory": true, "title": 61, "type": "CHOICES",
       "choices":[
-        {"value": "orthodox", "title": 62, "type": "option"},
-        {"value": "religious", "title": 63, "type": "option"},
-        {"value": "non-religious", "title": 64, "type": "option"},
-        {"value": "arab", "title": 65, "type": "option"},
-        {"value": "other", "title": 65, "type": "other"}]},
-    {"id": "occupation", "mandatory": true, "title": 71, "type": "choices",
+        {"value": "orthodox", "title": 62, "type": "OPTION"},
+        {"value": "religious", "title": 63, "type": "OPTION"},
+        {"value": "non-religious", "title": 64, "type": "OPTION"},
+        {"value": "arab", "title": 65, "type": "OPTION"},
+        {"value": "other", "title": 65, "type": "OTHER"}]},
+    {"id": "occupation", "mandatory": true, "title": 71, "type": "CHOICES",
       "choices":[
-        {"value": "soldier", "title": 72, "type": "option"},
-        {"value": "student", "title": 73, "type": "option"},
-        {"value": "working", "title": 74, "type": "option"},
-        {"value": "other", "title": 75, "type": "option"}]},
-    {"id": "hasPrivateCar", "mandatory": true, "title": 81, "type": "boolean"},
-    {"id": "publicTransportationFrequency", "mandatory": true, "title": 91, "type": "choices",
+        {"value": "soldier", "title": 72, "type": "OPTION"},
+        {"value": "student", "title": 73, "type": "OPTION"},
+        {"value": "working", "title": 74, "type": "OPTION"},
+        {"value": "other", "title": 75, "type": "OPTION"}]},
+    {"id": "hasPrivateCar", "mandatory": true, "title": 81, "type": "BOOLEAN"},
+    {"id": "publicTransportationFrequency", "mandatory": true, "title": 91, "type": "CHOICES",
       "choices":[
-        {"value": "daily", "title": 92, "type": "option"},
-        {"value": "weekly", "title": 93, "type": "option"},
-        {"value": "monthly", "title": 94, "type": "option"},
-        {"value": "rarely", "title": 95, "type": "option"}]},
-    {"id": "status", "mandatory": true, "title": 101, "type": "choices",
+        {"value": "daily", "title": 92, "type": "OPTION"},
+        {"value": "weekly", "title": 93, "type": "OPTION"},
+        {"value": "monthly", "title": 94, "type": "OPTION"},
+        {"value": "rarely", "title": 95, "type": "OPTION"}]},
+    {"id": "status", "mandatory": true, "title": 101, "type": "CHOICES",
       "choices":[
-        {"value": "single", "title": 102, "type": "option"},
-        {"value": "married", "title": 103, "type": "option"},
-        {"value": "divorced", "title": 104, "type": "option"},
-        {"value": "widowed", "title": 105, "type": "option"}]},
-    {"id": "numberOfChildren", "mandatory": true, "title": 111, "type": "int"},
-    {"id": "children", "mandatory": true, "title": 121, "type": "group", "conditionOn": "numberOfChildren", "conditionType": "repeat",
+        {"value": "single", "title": 102, "type": "OPTION"},
+        {"value": "married", "title": 103, "type": "OPTION"},
+        {"value": "divorced", "title": 104, "type": "OPTION"},
+        {"value": "widowed", "title": 105, "type": "OPTION"}]},
+    {"id": "numberOfChildren", "mandatory": true, "title": 111, "type": "INT"},
+    {"id": "children", "mandatory": true, "title": 121, "type": "GROUP", "conditionOn": "numberOfChildren", "conditionType": "REPEAT",
       "fields":[
-        {"id": "childName", "mandatory": true, "title": 131, "type": "string"},
-        {"id": "childGender", "mandatory": true, "title": 141, "type": "choices",
+        {"id": "childName", "mandatory": true, "title": 131, "type": "STRING"},
+        {"id": "childGender", "mandatory": true, "title": 141, "type": "CHOICES",
           "choices":[
-            {"value": "male", "title": 22, "type": "option"},
-            {"value": "female", "title": 23, "type": "option"}]},
-        {"id": "childAge", "mandatory": true, "title": 151, "type": "int"}
+            {"value": "male", "title": 22, "type": "OPTION"},
+            {"value": "female", "title": 23, "type": "OPTION"}]},
+        {"id": "childAge", "mandatory": true, "title": 151, "type": "INT"}
       ]}
   ],
   "strings": {
-    "il": {
+    "IL": {
       "1": "הרשמה לסקר",
       "2": "על מנת להירשם לסקר, אנא מלא/י את הפרטים הבאים:",
       "3": "הרשמה",
@@ -93,7 +93,7 @@
       "141": "מין הילד/ה",
       "151": "גיל הילד/ה"
     },
-    "en": {
+    "EN": {
 
     }
   }
