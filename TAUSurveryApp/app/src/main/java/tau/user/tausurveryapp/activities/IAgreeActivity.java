@@ -1,14 +1,15 @@
-package tau.user.tausurveryapp;
+package tau.user.tausurveryapp.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.support.design.widget.Snackbar;
+
+import tau.user.tausurveryapp.R;
 
 
 public class IAgreeActivity extends AppCompatActivity {

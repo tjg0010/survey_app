@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp;
+package tau.user.tausurveryapp.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -6,6 +6,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
+import tau.user.tausurveryapp.NetworkCallback;
+import tau.user.tausurveryapp.NetworkManager;
+import tau.user.tausurveryapp.R;
+import tau.user.tausurveryapp.TrackingRepeater;
 import tau.user.tausurveryapp.contracts.Locale;
 import tau.user.tausurveryapp.contracts.Survey;
 
@@ -32,7 +36,10 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
+
 
         // Check if the app has location permissions. If not, request them.
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

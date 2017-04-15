@@ -29,7 +29,7 @@ public class NetworkManager {
 
     private String userId;
 
-    static NetworkManager getInstance() {
+    public static NetworkManager getInstance() {
         return ourInstance;
     }
 
