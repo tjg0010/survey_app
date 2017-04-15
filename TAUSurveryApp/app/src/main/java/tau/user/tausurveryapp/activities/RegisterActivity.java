@@ -1,30 +1,39 @@
 package tau.user.tausurveryapp.activities;
 
+import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import tau.user.tausurveryapp.NetworkCallback;
 import tau.user.tausurveryapp.NetworkManager;
 import tau.user.tausurveryapp.R;
+import tau.user.tausurveryapp.SurveyBuilder;
 import tau.user.tausurveryapp.TrackingRepeater;
-import tau.user.tausurveryapp.contracts.Locale;
+import tau.user.tausurveryapp.contracts.TauLocale;
 import tau.user.tausurveryapp.contracts.Survey;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private final int LOCATION_PERMISSION = 1;
+    private SurveyBuilder sb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        forceRTLIfSupported();
+
+        sb = new SurveyBuilder();
+        final RegisterActivity _this = this;
 
         NetworkManager.getInstance().GetRegistrationSurvey(this, new NetworkCallback<Survey>() {
             @Override
             public void onResponse(Survey survey) {
-                setTitle(survey.getString(Locale.IL, survey.metadata.title));
+                sb.BuildSurvey(_this, survey, findViewById(R.id.contentView), TauLocale.IL);
             }
 
             @Override
@@ -55,6 +64,18 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private void forceRTLIfSupported()
+    {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Disable back button.
+    }
 
     // Function for validating numeric input fields
     public boolean numberEditTextValidation(int min, int max, int value){

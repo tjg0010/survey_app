@@ -9,21 +9,19 @@ import java.util.List;
 public class Field {
     public String id;
     public boolean mandatory;
-    public int title;
-    public FieldType type;
-    public List<Choice> choices;
+    private int title;
+    private FieldType type;
+    public Choice[] choices;
     public String conditionOn;
     public ConditionType conditionType;
-}
 
-enum FieldType {
-    STRING,
-    INT,
-    BOOLEAN,
-    DATE,
-    ADDRESS,
-    CHOICES,
-    GROUP
+    public FieldType getType() {
+        return this.type;
+    }
+
+    public int getTitleId() {
+        return this.title;
+    }
 }
 
 enum ConditionType {

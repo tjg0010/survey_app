@@ -2,7 +2,6 @@ package tau.user.tausurveryapp.contracts;
 
 import android.text.TextUtils;
 
-import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +14,7 @@ public class Survey {
 
     public List<Field> fields;
 
-    public Map<Locale, Map<String, String>> strings;
+    public Map<TauLocale, Map<String, String>> strings;
 
     /**
      * Gets a string from the survey's strings dictionary with the given locale and string id.
@@ -23,7 +22,7 @@ public class Survey {
      * @param StringId - the requested string id.
      * @return the title text.
      */
-    public String getString(Locale locale, int StringId) {
+    public String getString(TauLocale locale, int StringId) {
         String result = "";
 
         if (this.strings != null && !this.strings.isEmpty()) {

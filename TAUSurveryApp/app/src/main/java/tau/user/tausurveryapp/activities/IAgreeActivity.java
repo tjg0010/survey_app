@@ -1,6 +1,8 @@
 package tau.user.tausurveryapp.activities;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -19,6 +21,7 @@ public class IAgreeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        forceRTLIfSupported();
         setContentView(R.layout.activity_iagree);
 
         Terms_and_Conditions_Text = (TextView)findViewById(R.id.Terms_and_Conditions_Text);
@@ -27,6 +30,18 @@ public class IAgreeActivity extends AppCompatActivity {
         setTitle("טופס הסכמה");
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private void forceRTLIfSupported()
+    {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Disable back button.
+    }
 
     public void notAgree(View view) {
     }

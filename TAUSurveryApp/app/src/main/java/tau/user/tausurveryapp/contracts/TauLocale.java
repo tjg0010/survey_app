@@ -1,6 +1,6 @@
 package tau.user.tausurveryapp.contracts;
 
-public enum Locale {
+public enum TauLocale {
     IL,
     EN
 }
