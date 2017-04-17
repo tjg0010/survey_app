@@ -9,6 +9,10 @@
     <string name="date_button">לחץ/י להזנת תאריך</string>
     <string name="boolean_true">כן</string>
     <string name="boolean_false">לא</string>
+    <string name="address_street">רחוב</string>
+    <string name="address_street_number">מספר</string>
+    <string name="address_city">עיר</string>
+    <string name="cancel">ביטול</string>
 
 
     <string name="Terms_and_Conditions">
@@ -54,7 +58,7 @@
 \n\r
 \n\r
 \n\r
- </string>
+    </string>
     <string name="agree_check_box">מאשר/ת </string>
 
 </resources>

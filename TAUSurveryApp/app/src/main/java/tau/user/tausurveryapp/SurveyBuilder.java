@@ -5,14 +5,19 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.Calendar;
@@ -68,7 +73,7 @@ public class SurveyBuilder {
 
     private LinearLayout createFieldLayout(Survey survey, Field field, Activity activity, TauLocale locale) {
         // We put each field inside a linear layout.
-        LinearLayout ll = createLinearLayout(activity, locale);
+        LinearLayout ll = createWrapperLinearLayout(activity, locale);
 
         // If the field has a title.
         if (field.getTitleId() > 0) {
@@ -84,13 +89,15 @@ public class SurveyBuilder {
 
         switch (field.getType()) {
             case ADDRESS:
+                LinearLayout addressGroup = createAddressGroup(activity, survey, field, locale);
+                ll.addView(addressGroup);
                 break;
             case STRING:
                 break;
             case INT:
                 break;
             case BOOLEAN:
-                RadioGroup booleanGroup = createBolleanRadioButtons(activity, survey, field, locale);
+                RadioGroup booleanGroup = createBooleanRadioButtons(activity, survey, field, locale);
                 ll.addView(booleanGroup);
                 break;
             case DATE:
@@ -110,7 +117,7 @@ public class SurveyBuilder {
         return ll;
     }
 
-    private LinearLayout createLinearLayout(Context context, TauLocale locale) {
+    private LinearLayout createWrapperLinearLayout(Context context, TauLocale locale) {
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -155,7 +162,7 @@ public class SurveyBuilder {
         return radioGroup;
     }
 
-    private RadioGroup createBolleanRadioButtons(Activity activity, Survey survey, Field field, TauLocale locale) {
+    private RadioGroup createBooleanRadioButtons(Activity activity, Survey survey, Field field, TauLocale locale) {
         // First create the radio group to which we'll add the radio buttons.
         RadioGroup booleanGroup = new RadioGroup(activity);
         booleanGroup.setId(getViewId(field));
@@ -176,6 +183,7 @@ public class SurveyBuilder {
         radioButtonNo.setText(activity.getResources().getString(R.string.boolean_false));
         radioButtonNo.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, locale));
         // We will need an id to figure out later which radio button was selected.
+        //noinspection ResourceType
         radioButtonNo.setId(1);
         booleanGroup.addView(radioButtonNo);
 
@@ -229,6 +237,62 @@ public class SurveyBuilder {
         return container;
     }
 
+    @SuppressWarnings("ResourceType")
+    private LinearLayout createAddressGroup(Context context, Survey survey, Field field, TauLocale locale) {
+        // Create a container for the whole address input group.
+        LinearLayout container = new LinearLayout(context);
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
+
+        // Create a container for "street" and "street number" (which are side by side).
+        LinearLayout streetContainer = new LinearLayout(context);
+        streetContainer.setOrientation(LinearLayout.HORIZONTAL);
+        streetContainer.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
+
+        // Create the "street" input.
+        EditText streetName = new EditText(context);
+        streetName.setId(0);
+        streetName.setInputType(InputType.TYPE_CLASS_TEXT);
+        streetName.setHint(R.string.address_street);
+        streetName.setLayoutParams(createLinearLayoutParamsWithWeight(0.7));
+        streetContainer.addView(streetName);
+        // Create the "street number" input.
+        EditText streetNumber = new EditText(context);
+        streetNumber.setId(1);
+        streetNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
+        streetNumber.setHint(R.string.address_street_number);
+        streetNumber.setLayoutParams(createLinearLayoutParamsWithWeight(0.3));
+        InputFilter[] filterArray = new InputFilter[1];
+        filterArray[0] = new InputFilter.LengthFilter(5); // Set maximum length of street number.
+        streetNumber.setFilters(filterArray);
+        streetContainer.addView(streetNumber);
+
+        // Create a container for the city name input.
+        LinearLayout cityContainer = new LinearLayout(context);
+        cityContainer.setOrientation(LinearLayout.VERTICAL);
+        cityContainer.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
+
+        // Load the cities string array from the resources.
+        String[] cities = context.getResources().getStringArray(R.array.cities_list);
+
+        // Create the "city" input with auto complete.
+        SearchableSpinner cityName = new SearchableSpinner(context);
+        cityName.setId(2);
+        cityName.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
+        cityName.setTitle(context.getResources().getString(R.string.address_city));
+        cityName.setPositiveButton(context.getResources().getString(R.string.cancel));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, cities);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cityName.setAdapter(adapter);
+        cityContainer.addView(cityName);
+
+        // Add everything to the container.
+        container.addView(streetContainer);
+        container.addView(cityContainer);
+
+        return container;
+    }
+
 
 
     // region: Helper functions
@@ -272,6 +336,15 @@ public class SurveyBuilder {
 
     private LinearLayout.LayoutParams createLinearLayoutParams(int matchOrWrapParent){
         return createLinearLayoutParams(matchOrWrapParent, null);
+    }
+
+    private LinearLayout.LayoutParams createLinearLayoutParamsWithWeight(double weight){
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                (float) weight);
+
+        return layoutParams;
     }
 
     // endregion

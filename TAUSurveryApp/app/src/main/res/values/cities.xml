@@ -1,0 +1,1276 @@
+<resources>
+    <string-array name="cities_list">
+        <item>בחר/י עיר</item>
+        <item>אבו ג\'ווייעד</item>
+        <item>אבו גוש</item>
+        <item>אבו סנאן</item>
+        <item>אבו סריחאן</item>
+        <item>אבו עבדון</item>
+        <item>אבו עמאר</item>
+        <item>אבו עמרה</item>
+        <item>אבו קורינאת</item>
+        <item>אבו קרינאת</item>
+        <item>אבו רובייעה</item>
+        <item>אבו רוקייק</item>
+        <item>אבו תלול</item>
+        <item>אבטין</item>
+        <item>אבטליון</item>
+        <item>אביאל</item>
+        <item>אביבים</item>
+        <item>אביגדור</item>
+        <item>אביחיל</item>
+        <item>אביטל</item>
+        <item>אביעזר</item>
+        <item>אבירים</item>
+        <item>אבן יהודה</item>
+        <item>אבן מנחם</item>
+        <item>אבן ספיר</item>
+        <item>אבן שמואל</item>
+        <item>אבני איתן</item>
+        <item>אבני חפץ</item>
+        <item>אבנת</item>
+        <item>אבשלום</item>
+        <item>אדורה</item>
+        <item>אדירים</item>
+        <item>אדמית</item>
+        <item>אדרת</item>
+        <item>אודים</item>
+        <item>אודם</item>
+        <item>אוהד</item>
+        <item>אום אל-פחם</item>
+        <item>אום אל-קוטוף</item>
+        <item>אום בטין</item>
+        <item>אומן</item>
+        <item>אומץ</item>
+        <item>אופקים</item>
+        <item>אור הגנוז</item>
+        <item>אור הנר</item>
+        <item>אור יהודה</item>
+        <item>אור עקיבא</item>
+        <item>אורה</item>
+        <item>אורות</item>
+        <item>אורטל</item>
+        <item>אורים</item>
+        <item>אורנים</item>
+        <item>אורנית</item>
+        <item>אושה</item>
+        <item>אזור</item>
+        <item>אחווה</item>
+        <item>אחוזם</item>
+        <item>אחוזת ברק</item>
+        <item>אחיהוד</item>
+        <item>אחיטוב</item>
+        <item>אחיסמך</item>
+        <item>אחיעזר</item>
+        <item>אטרש</item>
+        <item>איבים</item>
+        <item>אייל</item>
+        <item>איילת השחר</item>
+        <item>אילון</item>
+        <item>אילות</item>
+        <item>אילניה</item>
+        <item>אילת</item>
+        <item>אירוס</item>
+        <item>איתמר</item>
+        <item>איתן</item>
+        <item>איתנים</item>
+        <item>אכסאל</item>
+        <item>אל סייד</item>
+        <item>אל-עזי</item>
+        <item>אל-עריאן</item>
+        <item>אל-רום</item>
+        <item>אלומה</item>
+        <item>אלומות</item>
+        <item>אלון הגליל</item>
+        <item>אלון מורה</item>
+        <item>אלון שבות</item>
+        <item>אלוני אבא</item>
+        <item>אלוני הבשן</item>
+        <item>אלוני יצחק</item>
+        <item>אלונים</item>
+        <item>אלי-עד</item>
+        <item>אליאב</item>
+        <item>אליכין</item>
+        <item>אליפז</item>
+        <item>אליפלט</item>
+        <item>אליקים</item>
+        <item>אלישיב</item>
+        <item>אלישמע</item>
+        <item>אלמגור</item>
+        <item>אלמוג</item>
+        <item>אלעד</item>
+        <item>אלעזר</item>
+        <item>אלפי מנשה</item>
+        <item>אלקוש</item>
+        <item>אלקנה</item>
+        <item>אמונים</item>
+        <item>אמירים</item>
+        <item>אמנון</item>
+        <item>אמציה</item>
+        <item>אניעם</item>
+        <item>אסד</item>
+        <item>אספר</item>
+        <item>אעבלין</item>
+        <item>אעצם</item>
+        <item>אפיניש</item>
+        <item>אפיק</item>
+        <item>אפיקים</item>
+        <item>אפק</item>
+        <item>אפרת</item>
+        <item>ארבל</item>
+        <item>ארגמן</item>
+        <item>ארז</item>
+        <item>אריאל</item>
+        <item>ארסוף</item>
+        <item>אשבול</item>
+        <item>אשבל</item>
+        <item>אשדוד</item>
+        <item>אשדות יעקב (איחוד)</item>
+        <item>אשדות יעקב (מאוחד)</item>
+        <item>אשחר</item>
+        <item>אשכולות</item>
+        <item>אשל הנשיא</item>
+        <item>אשלים</item>
+        <item>אשקלון</item>
+        <item>אשרת</item>
+        <item>אשתאול</item>
+        <item>אתגר</item>
+        <item>באקה אל-גרביה</item>
+        <item>באר אורה</item>
+        <item>באר גנים</item>
+        <item>באר טוביה</item>
+        <item>באר יעקב</item>
+        <item>באר מילכה</item>
+        <item>באר שבע</item>
+        <item>בארות יצחק</item>
+        <item>בארותיים</item>
+        <item>בארי</item>
+        <item>בוסתן הגליל</item>
+        <item>בועיינה-נוג\'ידאת</item>
+        <item>בוקעאתא</item>
+        <item>בורגתה</item>
+        <item>בחן</item>
+        <item>בטחה</item>
+        <item>ביצרון</item>
+        <item>ביר אל-מכסור</item>
+        <item>ביר הדאג\'</item>
+        <item>ביריה</item>
+        <item>בית אורן</item>
+        <item>בית אל</item>
+        <item>בית אלעזרי</item>
+        <item>בית אלפא</item>
+        <item>בית אריה</item>
+        <item>בית ברל</item>
+        <item>בית ג\'ן</item>
+        <item>בית גוברין</item>
+        <item>בית גמליאל</item>
+        <item>בית דגן</item>
+        <item>בית הגדי</item>
+        <item>בית הלוי</item>
+        <item>בית הלל</item>
+        <item>בית העמק</item>
+        <item>בית הערבה</item>
+        <item>בית השיטה</item>
+        <item>בית זיד</item>
+        <item>בית זית</item>
+        <item>בית זרע</item>
+        <item>בית חורון</item>
+        <item>בית חירות</item>
+        <item>בית חלקיה</item>
+        <item>בית חנן</item>
+        <item>בית חנניה</item>
+        <item>בית חשמונאי</item>
+        <item>בית יהושע</item>
+        <item>בית יוסף</item>
+        <item>בית ינאי</item>
+        <item>בית יצחק-שער חפר</item>
+        <item>בית לחם הגלילית</item>
+        <item>בית מאיר</item>
+        <item>בית נחמיה</item>
+        <item>בית ניר</item>
+        <item>בית נקופה</item>
+        <item>בית עובד</item>
+        <item>בית עוזיאל</item>
+        <item>בית עזרא</item>
+        <item>בית עריף</item>
+        <item>בית צבי</item>
+        <item>בית קמה</item>
+        <item>בית קשת</item>
+        <item>בית רבן</item>
+        <item>בית רימון</item>
+        <item>בית שאן</item>
+        <item>בית שמש</item>
+        <item>בית שערים</item>
+        <item>בית שקמה</item>
+        <item>ביתן אהרן</item>
+        <item>ביתר עילית</item>
+        <item>בלפוריה</item>
+        <item>בן זכאי</item>
+        <item>בן עמי</item>
+        <item>בן שמן (כפר נוער)</item>
+        <item>בן שמן (מושב)</item>
+        <item>בני ברק</item>
+        <item>בני דקלים</item>
+        <item>בני דרום</item>
+        <item>בני דרור</item>
+        <item>בני יהודה</item>
+        <item>בני נצרים</item>
+        <item>בני עטרות</item>
+        <item>בני עי"ש</item>
+        <item>בני ציון</item>
+        <item>בני ראם</item>
+        <item>בניה</item>
+        <item>בנימינה-גבעת עדה</item>
+        <item>בסמ"ה</item>
+        <item>בסמת טבעון</item>
+        <item>בענה</item>
+        <item>בצרה</item>
+        <item>בצת</item>
+        <item>בקוע</item>
+        <item>בקעות</item>
+        <item>בר גיורא</item>
+        <item>בר יוחאי</item>
+        <item>ברוכין</item>
+        <item>ברור חיל</item>
+        <item>ברוש</item>
+        <item>ברכה</item>
+        <item>ברכיה</item>
+        <item>ברעם</item>
+        <item>ברק</item>
+        <item>ברקאי</item>
+        <item>ברקן</item>
+        <item>ברקת</item>
+        <item>בת הדר</item>
+        <item>בת חן</item>
+        <item>בת חפר</item>
+        <item>בת חצור</item>
+        <item>בת ים</item>
+        <item>בת עין</item>
+        <item>בת שלמה</item>
+        <item>ג\'דיידה-מכר</item>
+        <item>ג\'ולס</item>
+        <item>ג\'לג\'וליה</item>
+        <item>ג\'נאביב</item>
+        <item>ג\'סר א-זרקא</item>
+        <item>ג\'ש (גוש חלב)</item>
+        <item>ג\'ת</item>
+        <item>גאולי תימן</item>
+        <item>גאולים</item>
+        <item>גאליה</item>
+        <item>גבולות</item>
+        <item>גבים</item>
+        <item>גבע</item>
+        <item>גבע בנימין</item>
+        <item>גבע כרמל</item>
+        <item>גבעולים</item>
+        <item>גבעון החדשה</item>
+        <item>גבעות בר</item>
+        <item>גבעת אבני</item>
+        <item>גבעת אלה</item>
+        <item>גבעת ברנר</item>
+        <item>גבעת השלושה</item>
+        <item>גבעת זאב</item>
+        <item>גבעת ח"ן</item>
+        <item>גבעת חיים (איחוד)</item>
+        <item>גבעת חיים (מאוחד)</item>
+        <item>גבעת יואב</item>
+        <item>גבעת יערים</item>
+        <item>גבעת ישעיהו</item>
+        <item>גבעת כ"ח</item>
+        <item>גבעת ניל"י</item>
+        <item>גבעת עוז</item>
+        <item>גבעת שמואל</item>
+        <item>גבעת שמש</item>
+        <item>גבעת שפירא</item>
+        <item>גבעתי</item>
+        <item>גבעתיים</item>
+        <item>גברעם</item>
+        <item>גבת</item>
+        <item>גדות</item>
+        <item>גדיש</item>
+        <item>גדעונה</item>
+        <item>גדרה</item>
+        <item>גונן</item>
+        <item>גורן</item>
+        <item>גורנות הגליל</item>
+        <item>גזית</item>
+        <item>גזר</item>
+        <item>גיאה</item>
+        <item>גיבתון</item>
+        <item>גיזו</item>
+        <item>גילון</item>
+        <item>גילת</item>
+        <item>גינוסר</item>
+        <item>גיניגר</item>
+        <item>גינתון</item>
+        <item>גיתה</item>
+        <item>גיתית</item>
+        <item>גלאון</item>
+        <item>גלגל</item>
+        <item>גליל ים</item>
+        <item>גלעד (אבן יצחק)</item>
+        <item>גמזו</item>
+        <item>גן הדרום</item>
+        <item>גן השומרון</item>
+        <item>גן חיים</item>
+        <item>גן יאשיה</item>
+        <item>גן יבנה</item>
+        <item>גן נר</item>
+        <item>גן שורק</item>
+        <item>גן שלמה</item>
+        <item>גן שמואל</item>
+        <item>גנות</item>
+        <item>גנות הדר</item>
+        <item>גני הדר</item>
+        <item>גני טל</item>
+        <item>גני יוחנן</item>
+        <item>גני מודיעין</item>
+        <item>גני עם</item>
+        <item>גני תקווה</item>
+        <item>געש</item>
+        <item>געתון</item>
+        <item>גפן</item>
+        <item>גרופית</item>
+        <item>גשור</item>
+        <item>גשר</item>
+        <item>גשר הזיו</item>
+        <item>גת (קיבוץ)</item>
+        <item>גת רימון</item>
+        <item>דאלית אל-כרמל</item>
+        <item>דבורה</item>
+        <item>דבוריה</item>
+        <item>דבירה</item>
+        <item>דברת</item>
+        <item>דגניה א</item>
+        <item>דגניה ב</item>
+        <item>דוב"ב</item>
+        <item>דולב</item>
+        <item>דור</item>
+        <item>דורות</item>
+        <item>דחי</item>
+        <item>דייר אל-אסד</item>
+        <item>דייר חנא</item>
+        <item>דייר ראפאת</item>
+        <item>דימונה</item>
+        <item>דישון</item>
+        <item>דליה</item>
+        <item>דלתון</item>
+        <item>דמיידה</item>
+        <item>דן</item>
+        <item>דפנה</item>
+        <item>דקל</item>
+        <item>דריג\'את</item>
+        <item>האון</item>
+        <item>הבונים</item>
+        <item>הגושרים</item>
+        <item>הדר עם</item>
+        <item>הוד השרון</item>
+        <item>הודיה</item>
+        <item>הודיות</item>
+        <item>הוואשלה</item>
+        <item>הוזייל</item>
+        <item>הושעיה</item>
+        <item>הזורע</item>
+        <item>הזורעים</item>
+        <item>החותרים</item>
+        <item>היוגב</item>
+        <item>הילה</item>
+        <item>המעפיל</item>
+        <item>הסוללים</item>
+        <item>העוגן</item>
+        <item>הר אדר</item>
+        <item>הר גילה</item>
+        <item>הר עמשא</item>
+        <item>הראל</item>
+        <item>הרדוף</item>
+        <item>הרצליה</item>
+        <item>הררית</item>
+        <item>ורד יריחו</item>
+        <item>ורדון</item>
+        <item>זבארגה</item>
+        <item>זבדיאל</item>
+        <item>זוהר</item>
+        <item>זיקים</item>
+        <item>זיתן</item>
+        <item>זכרון יעקב</item>
+        <item>זכריה</item>
+        <item>זמר</item>
+        <item>זמרת</item>
+        <item>זנוח</item>
+        <item>זרועה</item>
+        <item>זרזיר</item>
+        <item>זרחיה</item>
+        <item>ח\'ואלד</item>
+        <item>ח\'ואלד</item>
+        <item>חבצלת השרון</item>
+        <item>חבר</item>
+        <item>חברון</item>
+        <item>חגור</item>
+        <item>חגי</item>
+        <item>חגלה</item>
+        <item>חד-נס</item>
+        <item>חדיד</item>
+        <item>חדרה</item>
+        <item>חוג\'ייראת (ד\'הרה)</item>
+        <item>חולדה</item>
+        <item>חולון</item>
+        <item>חולית</item>
+        <item>חולתה</item>
+        <item>חוסן</item>
+        <item>חוסנייה</item>
+        <item>חופית</item>
+        <item>חוקוק</item>
+        <item>חורה</item>
+        <item>חורפיש</item>
+        <item>חורשים</item>
+        <item>חזון</item>
+        <item>חיבת ציון</item>
+        <item>חיננית</item>
+        <item>חיפה</item>
+        <item>חירות</item>
+        <item>חלוץ</item>
+        <item>חלמיש</item>
+        <item>חלץ</item>
+        <item>חמאם</item>
+        <item>חמד</item>
+        <item>חמדיה</item>
+        <item>חמדת</item>
+        <item>חמרה</item>
+        <item>חניאל</item>
+        <item>חניתה</item>
+        <item>חנתון</item>
+        <item>חספין</item>
+        <item>חפץ חיים</item>
+        <item>חפצי-בה</item>
+        <item>חצב</item>
+        <item>חצבה</item>
+        <item>חצור הגלילית</item>
+        <item>חצור-אשדוד</item>
+        <item>חצר בארותיים</item>
+        <item>חצרות חולדה</item>
+        <item>חצרות יסף</item>
+        <item>חצרות כ"ח</item>
+        <item>חצרים</item>
+        <item>חרב לאת</item>
+        <item>חרוצים</item>
+        <item>חריש</item>
+        <item>חרמש</item>
+        <item>חרשים</item>
+        <item>חשמונאים</item>
+        <item>טבריה</item>
+        <item>טובא-זנגריה</item>
+        <item>טורעאן</item>
+        <item>טייבה</item>
+        <item>טייבה (בעמק)</item>
+        <item>טירה</item>
+        <item>טירת יהודה</item>
+        <item>טירת כרמל</item>
+        <item>טירת צבי</item>
+        <item>טל שחר</item>
+        <item>טל-אל</item>
+        <item>טללים</item>
+        <item>טלמון</item>
+        <item>טמרה</item>
+        <item>טמרה (יזרעאל)</item>
+        <item>טנא</item>
+        <item>טפחות</item>
+        <item>יאנוח-ג\'ת</item>
+        <item>יבול</item>
+        <item>יבנאל</item>
+        <item>יבנה</item>
+        <item>יגור</item>
+        <item>יגל</item>
+        <item>יד בנימין</item>
+        <item>יד השמונה</item>
+        <item>יד חנה</item>
+        <item>יד מרדכי</item>
+        <item>יד נתן</item>
+        <item>יד רמב"ם</item>
+        <item>ידידה</item>
+        <item>יהוד-מונוסון</item>
+        <item>יהל</item>
+        <item>יובל</item>
+        <item>יובלים</item>
+        <item>יודפת</item>
+        <item>יונתן</item>
+        <item>יושיביה</item>
+        <item>יזרעאל</item>
+        <item>יחיעם</item>
+        <item>יטבתה</item>
+        <item>ייט"ב</item>
+        <item>יכיני</item>
+        <item>ינוב</item>
+        <item>ינון</item>
+        <item>יסוד המעלה</item>
+        <item>יסודות</item>
+        <item>יסעור</item>
+        <item>יעד</item>
+        <item>יעל</item>
+        <item>יעף</item>
+        <item>יערה</item>
+        <item>יפיע</item>
+        <item>יפית</item>
+        <item>יפעת</item>
+        <item>יפתח</item>
+        <item>יצהר</item>
+        <item>יציץ</item>
+        <item>יקום</item>
+        <item>יקיר</item>
+        <item>יקנעם (מושבה)</item>
+        <item>יקנעם עילית</item>
+        <item>יראון</item>
+        <item>ירדנה</item>
+        <item>ירוחם</item>
+        <item>ירושלים</item>
+        <item>ירחיב</item>
+        <item>ירכא</item>
+        <item>ירקונה</item>
+        <item>ישע</item>
+        <item>ישעי</item>
+        <item>ישרש</item>
+        <item>יתד</item>
+        <item>יתיר</item>
+        <item>כאבול</item>
+        <item>כאוכב אבו אל-היג\'א</item>
+        <item>כברי</item>
+        <item>כדורי</item>
+        <item>כדיתה</item>
+        <item>כוכב השחר</item>
+        <item>כוכב יאיר</item>
+        <item>כוכב יעקב</item>
+        <item>כוכב מיכאל</item>
+        <item>כורזים</item>
+        <item>כחל</item>
+        <item>כחלה</item>
+        <item>כיסופים</item>
+        <item>כישור</item>
+        <item>כליל</item>
+        <item>כלנית</item>
+        <item>כמאנה</item>
+        <item>כמהין</item>
+        <item>כמון</item>
+        <item>כנות</item>
+        <item>כנף</item>
+        <item>כנרת (מושבה)</item>
+        <item>כנרת (קבוצה)</item>
+        <item>כסיפה</item>
+        <item>כסלון</item>
+        <item>כסרא-סמיע</item>
+        <item>כעביה-טבאש-חג\'אג\'רה</item>
+        <item>כפר אביב</item>
+        <item>כפר אדומים</item>
+        <item>כפר אוריה</item>
+        <item>כפר אחים</item>
+        <item>כפר ביאליק</item>
+        <item>כפר ביל"ו</item>
+        <item>כפר בלום</item>
+        <item>כפר בן נון</item>
+        <item>כפר ברא</item>
+        <item>כפר ברוך</item>
+        <item>כפר גדעון</item>
+        <item>כפר גלים</item>
+        <item>כפר גליקסון</item>
+        <item>כפר גלעדי</item>
+        <item>כפר דניאל</item>
+        <item>כפר האורנים</item>
+        <item>כפר החורש</item>
+        <item>כפר המכבי</item>
+        <item>כפר הנגיד</item>
+        <item>כפר הנוער הדתי</item>
+        <item>כפר הנשיא</item>
+        <item>כפר הס</item>
+        <item>כפר הרא"ה</item>
+        <item>כפר הרי"ף</item>
+        <item>כפר ויתקין</item>
+        <item>כפר ורבורג</item>
+        <item>כפר ורדים</item>
+        <item>כפר זוהרים</item>
+        <item>כפר זיתים</item>
+        <item>כפר חב"ד</item>
+        <item>כפר חושן</item>
+        <item>כפר חיטים</item>
+        <item>כפר חיים</item>
+        <item>כפר חנניה</item>
+        <item>כפר חסידים א</item>
+        <item>כפר חסידים ב</item>
+        <item>כפר חרוב</item>
+        <item>כפר טרומן</item>
+        <item>כפר יאסיף</item>
+        <item>כפר ידידיה</item>
+        <item>כפר יהושע</item>
+        <item>כפר יונה</item>
+        <item>כפר יחזקאל</item>
+        <item>כפר יעבץ</item>
+        <item>כפר כמא</item>
+        <item>כפר כנא</item>
+        <item>כפר מונש</item>
+        <item>כפר מימון</item>
+        <item>כפר מל"ל</item>
+        <item>כפר מנדא</item>
+        <item>כפר מנחם</item>
+        <item>כפר מסריק</item>
+        <item>כפר מצר</item>
+        <item>כפר מרדכי</item>
+        <item>כפר נטר</item>
+        <item>כפר סאלד</item>
+        <item>כפר סבא</item>
+        <item>כפר סילבר</item>
+        <item>כפר סירקין</item>
+        <item>כפר עבודה</item>
+        <item>כפר עזה</item>
+        <item>כפר עציון</item>
+        <item>כפר פינס</item>
+        <item>כפר קאסם</item>
+        <item>כפר קיש</item>
+        <item>כפר קרע</item>
+        <item>כפר ראש הנקרה</item>
+        <item>כפר רוזנואלד (זרעית)</item>
+        <item>כפר רופין</item>
+        <item>כפר רות</item>
+        <item>כפר שמאי</item>
+        <item>כפר שמואל</item>
+        <item>כפר שמריהו</item>
+        <item>כפר תבור</item>
+        <item>כפר תפוח</item>
+        <item>כרי דשא</item>
+        <item>כרכום</item>
+        <item>כרם בן זמרה</item>
+        <item>כרם בן שמן</item>
+        <item>כרם יבנה (ישיבה)</item>
+        <item>כרם מהר"ל</item>
+        <item>כרם שלום</item>
+        <item>כרמי יוסף</item>
+        <item>כרמי צור</item>
+        <item>כרמי קטיף</item>
+        <item>כרמיאל</item>
+        <item>כרמיה</item>
+        <item>כרמים</item>
+        <item>כרמל</item>
+        <item>לא רשום</item>
+        <item>לבון</item>
+        <item>לביא</item>
+        <item>לבנים</item>
+        <item>להב</item>
+        <item>להבות הבשן</item>
+        <item>להבות חביבה</item>
+        <item>להבים</item>
+        <item>לוד</item>
+        <item>לוזית</item>
+        <item>לוחמי הגיטאות</item>
+        <item>לוטם</item>
+        <item>לוטן</item>
+        <item>לימן</item>
+        <item>לכיש</item>
+        <item>לפיד</item>
+        <item>לפידות</item>
+        <item>לקיה</item>
+        <item>מאור</item>
+        <item>מאיר שפיה</item>
+        <item>מבוא ביתר</item>
+        <item>מבוא דותן</item>
+        <item>מבוא חורון</item>
+        <item>מבוא חמה</item>
+        <item>מבוא מודיעים</item>
+        <item>מבואות ים</item>
+        <item>מבועים</item>
+        <item>מבטחים</item>
+        <item>מבקיעים</item>
+        <item>מבשרת ציון</item>
+        <item>מג\'ד אל-כרום</item>
+        <item>מג\'דל שמס</item>
+        <item>מגאר</item>
+        <item>מגדים</item>
+        <item>מגדל</item>
+        <item>מגדל העמק</item>
+        <item>מגדל עוז</item>
+        <item>מגדלים</item>
+        <item>מגידו</item>
+        <item>מגל</item>
+        <item>מגן</item>
+        <item>מגן שאול</item>
+        <item>מגשימים</item>
+        <item>מדרך עוז</item>
+        <item>מדרשת בן גוריון</item>
+        <item>מדרשת רופין</item>
+        <item>מודיעין עילית</item>
+        <item>מודיעין-מכבים-רעות</item>
+        <item>מולדה</item>
+        <item>מולדת</item>
+        <item>מוצא עילית</item>
+        <item>מוקייבלה</item>
+        <item>מורן</item>
+        <item>מורשת</item>
+        <item>מזור</item>
+        <item>מזכרת בתיה</item>
+        <item>מזרע</item>
+        <item>מזרעה</item>
+        <item>מחולה</item>
+        <item>מחנה הילה</item>
+        <item>מחנה טלי</item>
+        <item>מחנה יהודית</item>
+        <item>מחנה יוכבד</item>
+        <item>מחנה יפה</item>
+        <item>מחנה יתיר</item>
+        <item>מחנה מרים</item>
+        <item>מחנה עדי</item>
+        <item>מחנה תל נוף</item>
+        <item>מחניים</item>
+        <item>מחסיה</item>
+        <item>מטולה</item>
+        <item>מטע</item>
+        <item>מי עמי</item>
+        <item>מיטב</item>
+        <item>מייסר</item>
+        <item>מיצר</item>
+        <item>מירב</item>
+        <item>מירון</item>
+        <item>מישר</item>
+        <item>מיתר</item>
+        <item>מכורה</item>
+        <item>מכחול</item>
+        <item>מכמורת</item>
+        <item>מכמנים</item>
+        <item>מלאה</item>
+        <item>מלילות</item>
+        <item>מלכיה</item>
+        <item>מלכישוע</item>
+        <item>מנוחה</item>
+        <item>מנוף</item>
+        <item>מנות</item>
+        <item>מנחמיה</item>
+        <item>מנרה</item>
+        <item>מנשית זבדה</item>
+        <item>מסד</item>
+        <item>מסדה</item>
+        <item>מסילות</item>
+        <item>מסילת ציון</item>
+        <item>מסלול</item>
+        <item>מסעדה</item>
+        <item>מסעודין אל-עזאזמה</item>
+        <item>מעברות</item>
+        <item>מעגלים</item>
+        <item>מעגן</item>
+        <item>מעגן מיכאל</item>
+        <item>מעוז חיים</item>
+        <item>מעון</item>
+        <item>מעונה</item>
+        <item>מעיליא</item>
+        <item>מעין ברוך</item>
+        <item>מעין צבי</item>
+        <item>מעלה אדומים</item>
+        <item>מעלה אפרים</item>
+        <item>מעלה גלבוע</item>
+        <item>מעלה גמלא</item>
+        <item>מעלה החמישה</item>
+        <item>מעלה לבונה</item>
+        <item>מעלה מכמש</item>
+        <item>מעלה עירון</item>
+        <item>מעלה עמוס</item>
+        <item>מעלה שומרון</item>
+        <item>מעלות-תרשיחא</item>
+        <item>מענית</item>
+        <item>מעש</item>
+        <item>מפלסים</item>
+        <item>מצדות יהודה</item>
+        <item>מצובה</item>
+        <item>מצליח</item>
+        <item>מצפה</item>
+        <item>מצפה אבי"ב</item>
+        <item>מצפה אילן</item>
+        <item>מצפה יריחו</item>
+        <item>מצפה נטופה</item>
+        <item>מצפה רמון</item>
+        <item>מצפה שלם</item>
+        <item>מצר</item>
+        <item>מקווה ישראל</item>
+        <item>מרגליות</item>
+        <item>מרום גולן</item>
+        <item>מרחב עם</item>
+        <item>מרחביה (מושב)</item>
+        <item>מרחביה (קיבוץ)</item>
+        <item>מרכז שפירא</item>
+        <item>משאבי שדה</item>
+        <item>משגב דב</item>
+        <item>משגב עם</item>
+        <item>משהד</item>
+        <item>משואה</item>
+        <item>משואות יצחק</item>
+        <item>משכיות</item>
+        <item>משמר איילון</item>
+        <item>משמר דוד</item>
+        <item>משמר הירדן</item>
+        <item>משמר הנגב</item>
+        <item>משמר העמק</item>
+        <item>משמר השבעה</item>
+        <item>משמר השרון</item>
+        <item>משמרות</item>
+        <item>משמרת</item>
+        <item>משען</item>
+        <item>מתן</item>
+        <item>מתת</item>
+        <item>מתתיהו</item>
+        <item>נאות גולן</item>
+        <item>נאות הכיכר</item>
+        <item>נאות מרדכי</item>
+        <item>נאות סמדר</item>
+        <item>נאעורה</item>
+        <item>נבטים</item>
+        <item>נגבה</item>
+        <item>נגוהות</item>
+        <item>נהורה</item>
+        <item>נהלל</item>
+        <item>נהריה</item>
+        <item>נוב</item>
+        <item>נוגה</item>
+        <item>נווה</item>
+        <item>נווה אבות</item>
+        <item>נווה אור</item>
+        <item>נווה אטי"ב</item>
+        <item>נווה אילן</item>
+        <item>נווה איתן</item>
+        <item>נווה דניאל</item>
+        <item>נווה זוהר</item>
+        <item>נווה זיו</item>
+        <item>נווה חריף</item>
+        <item>נווה ים</item>
+        <item>נווה ימין</item>
+        <item>נווה ירק</item>
+        <item>נווה מבטח</item>
+        <item>נווה מיכאל</item>
+        <item>נווה שלום</item>
+        <item>נועם</item>
+        <item>נוף איילון</item>
+        <item>נופים</item>
+        <item>נופית</item>
+        <item>נופך</item>
+        <item>נוקדים</item>
+        <item>נורדיה</item>
+        <item>נורית</item>
+        <item>נחושה</item>
+        <item>נחל עוז</item>
+        <item>נחלה</item>
+        <item>נחליאל</item>
+        <item>נחלים</item>
+        <item>נחם</item>
+        <item>נחף</item>
+        <item>נחשולים</item>
+        <item>נחשון</item>
+        <item>נחשונים</item>
+        <item>נטועה</item>
+        <item>נטור</item>
+        <item>נטע</item>
+        <item>נטעים</item>
+        <item>נטף</item>
+        <item>ניין</item>
+        <item>ניל"י</item>
+        <item>ניצן</item>
+        <item>ניצן ב</item>
+        <item>ניצנה (קהילת חינוך)</item>
+        <item>ניצני סיני</item>
+        <item>ניצני עוז</item>
+        <item>ניצנים</item>
+        <item>ניר אליהו</item>
+        <item>ניר בנים</item>
+        <item>ניר גלים</item>
+        <item>ניר דוד (תל עמל)</item>
+        <item>ניר ח"ן</item>
+        <item>ניר יפה</item>
+        <item>ניר יצחק</item>
+        <item>ניר ישראל</item>
+        <item>ניר משה</item>
+        <item>ניר עוז</item>
+        <item>ניר עם</item>
+        <item>ניר עציון</item>
+        <item>ניר עקיבא</item>
+        <item>ניר צבי</item>
+        <item>נירים</item>
+        <item>נירית</item>
+        <item>נירן</item>
+        <item>נמרוד</item>
+        <item>נס הרים</item>
+        <item>נס עמים</item>
+        <item>נס ציונה</item>
+        <item>נעורים</item>
+        <item>נעלה</item>
+        <item>נעמ"ה</item>
+        <item>נען</item>
+        <item>נצאצרה</item>
+        <item>נצר חזני</item>
+        <item>נצר סרני</item>
+        <item>נצרת</item>
+        <item>נצרת עילית</item>
+        <item>נשר</item>
+        <item>נתיב הגדוד</item>
+        <item>נתיב הל"ה</item>
+        <item>נתיב העשרה</item>
+        <item>נתיב השיירה</item>
+        <item>נתיבות</item>
+        <item>נתניה</item>
+        <item>סאג\'ור</item>
+        <item>סאסא</item>
+        <item>סביון</item>
+        <item>סגולה</item>
+        <item>סואעד (חמרייה)</item>
+        <item>סואעד (כמאנה)</item>
+        <item>סולם</item>
+        <item>סוסיה</item>
+        <item>סופה</item>
+        <item>סח\'נין</item>
+        <item>סייד</item>
+        <item>סלמה</item>
+        <item>סלעית</item>
+        <item>סמר</item>
+        <item>סנסנה</item>
+        <item>סעד</item>
+        <item>סער</item>
+        <item>ספיר</item>
+        <item>סתריה</item>
+        <item>ע\'ג\'ר</item>
+        <item>עבדון</item>
+        <item>עברון</item>
+        <item>עגור</item>
+        <item>עדי</item>
+        <item>עדנים</item>
+        <item>עוזה</item>
+        <item>עוזייר</item>
+        <item>עולש</item>
+        <item>עומר</item>
+        <item>עופר</item>
+        <item>עופרה</item>
+        <item>עוצם</item>
+        <item>עוקבי (בנו עוקבה)</item>
+        <item>עזוז</item>
+        <item>עזר</item>
+        <item>עזריאל</item>
+        <item>עזריה</item>
+        <item>עזריקם</item>
+        <item>עטאוונה</item>
+        <item>עטרת</item>
+        <item>עידן</item>
+        <item>עיילבון</item>
+        <item>עיינות</item>
+        <item>עילוט</item>
+        <item>עין איילה</item>
+        <item>עין אל-אסד</item>
+        <item>עין גב</item>
+        <item>עין גדי</item>
+        <item>עין דור</item>
+        <item>עין הבשור</item>
+        <item>עין הוד</item>
+        <item>עין החורש</item>
+        <item>עין המפרץ</item>
+        <item>עין הנצי"ב</item>
+        <item>עין העמק</item>
+        <item>עין השופט</item>
+        <item>עין השלושה</item>
+        <item>עין ורד</item>
+        <item>עין זיוון</item>
+        <item>עין חוד</item>
+        <item>עין חצבה</item>
+        <item>עין חרוד (איחוד)</item>
+        <item>עין חרוד(מאוחד)</item>
+        <item>עין יהב</item>
+        <item>עין יעקב</item>
+        <item>עין כרם-בי"ס חקלאי</item>
+        <item>עין כרמל</item>
+        <item>עין מאהל</item>
+        <item>עין נקובא</item>
+        <item>עין עירון</item>
+        <item>עין צורים</item>
+        <item>עין קנייא</item>
+        <item>עין ראפה</item>
+        <item>עין שמר</item>
+        <item>עין שריד</item>
+        <item>עין תמר</item>
+        <item>עינת</item>
+        <item>עיר אובות</item>
+        <item>עכו</item>
+        <item>עלומים</item>
+        <item>עלי</item>
+        <item>עלי זהב</item>
+        <item>עלמה</item>
+        <item>עלמון</item>
+        <item>עמוקה</item>
+        <item>עמינדב</item>
+        <item>עמיעד</item>
+        <item>עמיעוז</item>
+        <item>עמיקם</item>
+        <item>עמיר</item>
+        <item>עמנואל</item>
+        <item>עמקה</item>
+        <item>ענב</item>
+        <item>עספיא</item>
+        <item>עפולה</item>
+        <item>עץ אפרים</item>
+        <item>עצמון שגב</item>
+        <item>עראבה</item>
+        <item>עראמשה</item>
+        <item>ערב אל נעים</item>
+        <item>ערד</item>
+        <item>ערוגות</item>
+        <item>ערערה</item>
+        <item>ערערה-בנגב</item>
+        <item>עשרת</item>
+        <item>עתלית</item>
+        <item>עתניאל</item>
+        <item>פארן</item>
+        <item>פדואל</item>
+        <item>פדויים</item>
+        <item>פדיה</item>
+        <item>פוריה - כפר עבודה</item>
+        <item>פוריה - נווה עובד</item>
+        <item>פוריה עילית</item>
+        <item>פוריידיס</item>
+        <item>פורת</item>
+        <item>פטיש</item>
+        <item>פלך</item>
+        <item>פלמחים</item>
+        <item>פני חבר</item>
+        <item>פסגות</item>
+        <item>פסוטה</item>
+        <item>פעמי תש"ז</item>
+        <item>פצאל</item>
+        <item>פקיעין (בוקייעה)</item>
+        <item>פקיעין חדשה</item>
+        <item>פרדס חנה-כרכור</item>
+        <item>פרדסיה</item>
+        <item>פרוד</item>
+        <item>פרזון</item>
+        <item>פרי גן</item>
+        <item>פתח תקווה</item>
+        <item>פתחיה</item>
+        <item>צאלים</item>
+        <item>צביה</item>
+        <item>צבעון</item>
+        <item>צובה</item>
+        <item>צוחר</item>
+        <item>צופיה</item>
+        <item>צופים</item>
+        <item>צופית</item>
+        <item>צופר</item>
+        <item>צוקי ים</item>
+        <item>צוקים</item>
+        <item>צור הדסה</item>
+        <item>צור יצחק</item>
+        <item>צור משה</item>
+        <item>צור נתן</item>
+        <item>צוריאל</item>
+        <item>צורית</item>
+        <item>ציפורי</item>
+        <item>צלפון</item>
+        <item>צנדלה</item>
+        <item>צפריה</item>
+        <item>צפרירים</item>
+        <item>צפת</item>
+        <item>צרופה</item>
+        <item>צרעה</item>
+        <item>קבועה</item>
+        <item>קבוצת יבנה</item>
+        <item>קדומים</item>
+        <item>קדימה-צורן</item>
+        <item>קדמה</item>
+        <item>קדמת צבי</item>
+        <item>קדר</item>
+        <item>קדרון</item>
+        <item>קדרים</item>
+        <item>קודייראת א-צאנע</item>
+        <item>קוואעין</item>
+        <item>קוממיות</item>
+        <item>קורנית</item>
+        <item>קטורה</item>
+        <item>קיסריה</item>
+        <item>קלחים</item>
+        <item>קליה</item>
+        <item>קלנסווה</item>
+        <item>קלע</item>
+        <item>קציר</item>
+        <item>קצר א-סר</item>
+        <item>קצרין</item>
+        <item>קרית אונו</item>
+        <item>קרית ארבע</item>
+        <item>קרית אתא</item>
+        <item>קרית ביאליק</item>
+        <item>קרית גת</item>
+        <item>קרית טבעון</item>
+        <item>קרית ים</item>
+        <item>קרית יערים</item>
+        <item>קרית יערים (מוסד)</item>
+        <item>קרית מוצקין</item>
+        <item>קרית מלאכי</item>
+        <item>קרית נטפים</item>
+        <item>קרית ענבים</item>
+        <item>קרית עקרון</item>
+        <item>קרית שלמה</item>
+        <item>קרית שמונה</item>
+        <item>קרני שומרון</item>
+        <item>קשת</item>
+        <item>ראמה</item>
+        <item>ראס אל-עין</item>
+        <item>ראס עלי</item>
+        <item>ראש העין</item>
+        <item>ראש פינה</item>
+        <item>ראש צורים</item>
+        <item>ראשון לציון</item>
+        <item>רבבה</item>
+        <item>רבדים</item>
+        <item>רביבים</item>
+        <item>רביד</item>
+        <item>רגבה</item>
+        <item>רגבים</item>
+        <item>רהט</item>
+        <item>רווחה</item>
+        <item>רוויה</item>
+        <item>רוח מדבר</item>
+        <item>רוחמה</item>
+        <item>רומאנה</item>
+        <item>רומת הייב</item>
+        <item>רועי</item>
+        <item>רותם</item>
+        <item>רחוב</item>
+        <item>רחובות</item>
+        <item>רחלים</item>
+        <item>ריחאניה</item>
+        <item>ריחן</item>
+        <item>ריינה</item>
+        <item>רימונים</item>
+        <item>רינתיה</item>
+        <item>רכסים</item>
+        <item>רם-און</item>
+        <item>רמות</item>
+        <item>רמות השבים</item>
+        <item>רמות מאיר</item>
+        <item>רמות מנשה</item>
+        <item>רמות נפתלי</item>
+        <item>רמלה</item>
+        <item>רמת גן</item>
+        <item>רמת דוד</item>
+        <item>רמת הכובש</item>
+        <item>רמת השופט</item>
+        <item>רמת השרון</item>
+        <item>רמת יוחנן</item>
+        <item>רמת ישי</item>
+        <item>רמת מגשימים</item>
+        <item>רמת צבי</item>
+        <item>רמת רזיאל</item>
+        <item>רמת רחל</item>
+        <item>רנן</item>
+        <item>רעים</item>
+        <item>רעננה</item>
+        <item>רקפת</item>
+        <item>רשפון</item>
+        <item>רשפים</item>
+        <item>רתמים</item>
+        <item>שאר ישוב</item>
+        <item>שבי ציון</item>
+        <item>שבי שומרון</item>
+        <item>שבלי - אום אל-גנם</item>
+        <item>שגב-שלום</item>
+        <item>שדה אילן</item>
+        <item>שדה אליהו</item>
+        <item>שדה אליעזר</item>
+        <item>שדה בוקר</item>
+        <item>שדה דוד</item>
+        <item>שדה ורבורג</item>
+        <item>שדה יואב</item>
+        <item>שדה יעקב</item>
+        <item>שדה יצחק</item>
+        <item>שדה משה</item>
+        <item>שדה נחום</item>
+        <item>שדה נחמיה</item>
+        <item>שדה ניצן</item>
+        <item>שדה עוזיהו</item>
+        <item>שדה צבי</item>
+        <item>שדות ים</item>
+        <item>שדות מיכה</item>
+        <item>שדי אברהם</item>
+        <item>שדי חמד</item>
+        <item>שדי תרומות</item>
+        <item>שדמה</item>
+        <item>שדמות דבורה</item>
+        <item>שדמות מחולה</item>
+        <item>שדרות</item>
+        <item>שואבה</item>
+        <item>שובה</item>
+        <item>שובל</item>
+        <item>שוהם</item>
+        <item>שומרה</item>
+        <item>שומריה</item>
+        <item>שוקדה</item>
+        <item>שורש</item>
+        <item>שורשים</item>
+        <item>שושנת העמקים</item>
+        <item>שזור</item>
+        <item>שחר</item>
+        <item>שחרות</item>
+        <item>שיבולים</item>
+        <item>שיטים</item>
+        <item>שייח\' דנון</item>
+        <item>שילה</item>
+        <item>שילת</item>
+        <item>שכניה</item>
+        <item>שלווה</item>
+        <item>שלווה במדבר</item>
+        <item>שלוחות</item>
+        <item>שלומי</item>
+        <item>שלומית</item>
+        <item>שמיר</item>
+        <item>שמעה</item>
+        <item>שמרת</item>
+        <item>שמשית</item>
+        <item>שני</item>
+        <item>שניר</item>
+        <item>שעב</item>
+        <item>שעורים</item>
+        <item>שעל</item>
+        <item>שעלבים</item>
+        <item>שער אפרים</item>
+        <item>שער הגולן</item>
+        <item>שער העמקים</item>
+        <item>שער מנשה</item>
+        <item>שערי תקווה</item>
+        <item>שפיים</item>
+        <item>שפיר</item>
+        <item>שפר</item>
+        <item>שפרעם</item>
+        <item>שקד</item>
+        <item>שקף</item>
+        <item>שרונה</item>
+        <item>שריגים (לי-און)</item>
+        <item>שריד</item>
+        <item>שרשרת</item>
+        <item>שתולה</item>
+        <item>שתולים</item>
+        <item>תאשור</item>
+        <item>תדהר</item>
+        <item>תובל</item>
+        <item>תומר</item>
+        <item>תושיה</item>
+        <item>תימורים</item>
+        <item>תירוש</item>
+        <item>תל אביב - יפו</item>
+        <item>תל יוסף</item>
+        <item>תל יצחק</item>
+        <item>תל מונד</item>
+        <item>תל עדשים</item>
+        <item>תל קציר</item>
+        <item>תל שבע</item>
+        <item>תל תאומים</item>
+        <item>תלם</item>
+        <item>תלמי אליהו</item>
+        <item>תלמי אלעזר</item>
+        <item>תלמי ביל"ו</item>
+        <item>תלמי יוסף</item>
+        <item>תלמי יחיאל</item>
+        <item>תלמי יפה</item>
+        <item>תלמים</item>
+        <item>תמרת</item>
+        <item>תנובות</item>
+        <item>תעוז</item>
+        <item>תפרח</item>
+        <item>תקומה</item>
+        <item>תקוע</item>
+        <item>תראבין א-צאנע</item>
+        <item>תראבין א-צאנע (ישוב)</item>
+        <item>תרום</item>
+    </string-array>
+</resources>

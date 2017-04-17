@@ -14,6 +14,8 @@ public class Field {
     public Choice[] choices;
     public String conditionOn;
     public ConditionType conditionType;
+    public List<Field> fields;
+
 
     public FieldType getType() {
         return this.type;
