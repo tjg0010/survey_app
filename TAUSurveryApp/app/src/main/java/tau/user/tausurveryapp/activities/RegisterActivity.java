@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import tau.user.tausurveryapp.NetworkCallback;
 import tau.user.tausurveryapp.NetworkManager;
@@ -33,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
         NetworkManager.getInstance().GetRegistrationSurvey(this, new NetworkCallback<Survey>() {
             @Override
             public void onResponse(Survey survey) {
-                sb.BuildSurvey(_this, survey, findViewById(R.id.contentView), TauLocale.IL);
+                sb.BuildSurvey(_this, survey, (LinearLayout)findViewById(R.id.contentView), TauLocale.IL);
             }
 
             @Override

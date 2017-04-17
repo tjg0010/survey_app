@@ -4,6 +4,13 @@
     <string name="preference_file_key">preference_file_key</string>
     <string name="key_was_tracking_started">key_was_tracking_started</string>
     <string name="key_user_id">key_user_id</string>
+
+
+    <string name="date_button">לחץ/י להזנת תאריך</string>
+    <string name="boolean_true">כן</string>
+    <string name="boolean_false">לא</string>
+
+
     <string name="Terms_and_Conditions">
 
 אני מצהיר בזה כי אני מסכים להשתתף במחקר בנושא (שם מדויק כפי שכתוב בקשה, רצוי בשפה מובנת לכל קורא).

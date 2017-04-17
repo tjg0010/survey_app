@@ -2,23 +2,27 @@ package tau.user.tausurveryapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.LayoutDirection;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import java.util.Dictionary;
-import java.util.List;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
+import java.util.Calendar;
+import java.util.HashMap;
 
 import tau.user.tausurveryapp.contracts.Choice;
 import tau.user.tausurveryapp.contracts.Field;
 import tau.user.tausurveryapp.contracts.TauLocale;
 import tau.user.tausurveryapp.contracts.Survey;
+import tau.user.tausurveryapp.uiListeners.TauDateListener;
 
 /**
  * Created by ran on 15/04/2017.
@@ -26,19 +30,21 @@ import tau.user.tausurveryapp.contracts.Survey;
 
 public class SurveyBuilder {
 
-    private final float titleTextSize = 24;
-    private final float defaultTextSize = 14;
+    private final float titleTextSize = 22;
     private int idsCounter;
 
-    private Dictionary<String, Field> idToFieldDict;
-    private Dictionary<String, Integer> fieldIdToViewId;
+    private HashMap<String, Field> idToFieldDict;
+    private HashMap<String, Integer> fieldIdToViewId;
 
     public SurveyBuilder() {
-        idsCounter = 0;
+        // Initialize idsCounter to 1000, so it won't get mixed up with other ids (we probably won't have a 1000 views).
+        idsCounter = 1000;
+        idToFieldDict = new HashMap<String, Field>();
+        fieldIdToViewId = new HashMap<String, Integer>();
     }
 
 
-    public void BuildSurvey(Activity activity, Survey survey, View view, TauLocale locale) {
+    public void BuildSurvey(Activity activity, Survey survey, LinearLayout view, TauLocale locale) {
         // Set the activity's title.
         activity.setTitle(survey.getString(locale, survey.metadata.title));
 
@@ -51,13 +57,16 @@ public class SurveyBuilder {
                     idToFieldDict.put(field.id, field);
 
                     // Create the field's layout and add it to the view.
-                    createFieldLayout(survey, field, activity, view, locale);
+                    LinearLayout fieldLayout = createFieldLayout(survey, field, activity, locale);
+
+                    // Add the field to the view.
+                    view.addView(fieldLayout);
                 }
             }
         }
     }
 
-    private void createFieldLayout(Survey survey, Field field, Activity activity, View view, TauLocale locale) {
+    private LinearLayout createFieldLayout(Survey survey, Field field, Activity activity, TauLocale locale) {
         // We put each field inside a linear layout.
         LinearLayout ll = createLinearLayout(activity, locale);
 
@@ -81,18 +90,24 @@ public class SurveyBuilder {
             case INT:
                 break;
             case BOOLEAN:
+                RadioGroup booleanGroup = createBolleanRadioButtons(activity, survey, field, locale);
+                ll.addView(booleanGroup);
                 break;
             case DATE:
+                LinearLayout dateInput = createDateInput(activity, survey, field, locale);
+                ll.addView(dateInput);
                 break;
             case CHOICES:
                 if (field.choices != null && field.choices.length > 0) {
-                    RadioGroup radioButtons = createRadioButtons(activity, survey, field, locale);
-                    ll.addView(radioButtons);
+                    RadioGroup choicesGroup = createRadioButtons(activity, survey, field, locale);
+                    ll.addView(choicesGroup);
                 }
                 break;
             case GROUP:
                 break;
         }
+
+        return ll;
     }
 
     private LinearLayout createLinearLayout(Context context, TauLocale locale) {
@@ -128,20 +143,95 @@ public class SurveyBuilder {
         for (int i = 0; i < field.choices.length; i++) {
             Choice choice = field.choices[i];
 
-            if (!TextUtils.isEmpty(choice.value) && choice.title != 0){
-                RadioButton radioButton = new RadioButton(context);
-                radioButton.setText(survey.getString(locale, choice.title));
-                // We will need an id to figure out later which radio button was selected.
-                radioButton.setId(i);
-                radioGroup.addView(radioButton);
-            }
+            RadioButton radioButton = new RadioButton(context);
+            radioButton.setText(survey.getString(locale, choice.title));
+            RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            radioButton.setLayoutParams(layoutParams);
+            // We will need an id to figure out later which radio button was selected.
+            radioButton.setId(i);
+            radioGroup.addView(radioButton);
         }
 
         return radioGroup;
     }
 
+    private RadioGroup createBolleanRadioButtons(Activity activity, Survey survey, Field field, TauLocale locale) {
+        // First create the radio group to which we'll add the radio buttons.
+        RadioGroup booleanGroup = new RadioGroup(activity);
+        booleanGroup.setId(getViewId(field));
+        booleanGroup.setOrientation(RadioGroup.VERTICAL);
+        booleanGroup.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
 
-    // Helper functions
+        // Create two radio buttons: yes and no.
+        // Yes radio button.
+        RadioButton radioButtonYes = new RadioButton(activity);
+        radioButtonYes.setText(activity.getResources().getString(R.string.boolean_true));
+        radioButtonYes.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, locale));
+        // We will need an id to figure out later which radio button was selected.
+        radioButtonYes.setId(0);
+        booleanGroup.addView(radioButtonYes);
+
+        // No radio button.
+        RadioButton radioButtonNo = new RadioButton(activity);
+        radioButtonNo.setText(activity.getResources().getString(R.string.boolean_false));
+        radioButtonNo.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, locale));
+        // We will need an id to figure out later which radio button was selected.
+        radioButtonNo.setId(1);
+        booleanGroup.addView(radioButtonNo);
+
+        return booleanGroup;
+    }
+
+    private LinearLayout createDateInput(final Activity activity, Survey survey, Field field, TauLocale locale) {
+        // Create a container for the "add date" button.
+        LinearLayout container = new LinearLayout(activity);
+        container.setOrientation(LinearLayout.HORIZONTAL);
+        container.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
+
+        // Add a text view that will hold the chosen date.
+        TextView dateText = new TextView(activity);
+        dateText.setId(getViewId(field));
+        dateText.setTextColor(Color.BLACK);
+        dateText.setVisibility(View.GONE);
+        dateText.setPaintFlags(dateText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        LinearLayout.LayoutParams dateTextParams = createLinearLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT);
+        dateTextParams.setMarginStart(70);
+        dateText.setLayoutParams(dateTextParams);
+
+        // Create a button that the user can click to add a date via a dialog.
+        Button dateButton = new Button(activity);
+        dateButton.setText(activity.getResources().getString(R.string.date_button));
+        dateButton.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, locale));
+
+        // Create a date listener to catch the set event of the date picker.
+        // We supply it with the dateHiddenText, so we can retrieve the date later on.
+        final TauDateListener dateListener = new TauDateListener(dateText);
+
+        // Show a DatePickerDialog when the user clicks the button.
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar now = Calendar.getInstance();
+                // Supply the DatePickerDialog with our dateListener.
+                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                        dateListener,
+                        now.get(Calendar.YEAR),
+                        now.get(Calendar.MONTH),
+                        now.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.show(activity.getFragmentManager(), "DatePickerDialog");
+            }
+        });
+
+        container.addView(dateButton);
+        container.addView(dateText);
+
+        return container;
+    }
+
+
+
+    // region: Helper functions
 
     /**
      * Takes care of incrementing the idsCounter, so that each view gets its unique id.
@@ -179,4 +269,10 @@ public class SurveyBuilder {
 
         return layoutParams;
     }
+
+    private LinearLayout.LayoutParams createLinearLayoutParams(int matchOrWrapParent){
+        return createLinearLayoutParams(matchOrWrapParent, null);
+    }
+
+    // endregion
 }
