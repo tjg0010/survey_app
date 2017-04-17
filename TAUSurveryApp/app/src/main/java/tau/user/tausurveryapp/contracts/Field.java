@@ -14,6 +14,7 @@ public class Field {
     public Choice[] choices;
     public String conditionOn;
     public ConditionType conditionType;
+    public String repeatText;
     public List<Field> fields;
 
 
@@ -24,10 +25,5 @@ public class Field {
     public int getTitleId() {
         return this.title;
     }
-}
-
-enum ConditionType {
-    REPEAT,
-    SHOW
 }
 

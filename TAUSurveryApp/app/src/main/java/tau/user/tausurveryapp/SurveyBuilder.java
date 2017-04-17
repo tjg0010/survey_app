@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +26,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import tau.user.tausurveryapp.contracts.Choice;
+import tau.user.tausurveryapp.contracts.ConditionType;
 import tau.user.tausurveryapp.contracts.Field;
 import tau.user.tausurveryapp.contracts.TauLocale;
 import tau.user.tausurveryapp.contracts.Survey;
@@ -38,14 +41,18 @@ public class SurveyBuilder {
     private final float titleTextSize = 22;
     private int idsCounter;
 
-    private HashMap<String, Field> idToFieldDict;
-    private HashMap<String, Integer> fieldIdToViewId;
+    private HashMap<String, Field> fieldIdToFieldMap;
+    private HashMap<String, Integer> fieldIdToViewIdMap;
+    private HashMap<Integer, String> viewIdToFieldIdMap;
+    private HashMap<Integer, Integer> viewIdToRegisteredGroupViewId;
 
     public SurveyBuilder() {
         // Initialize idsCounter to 1000, so it won't get mixed up with other ids (we probably won't have a 1000 views).
         idsCounter = 1000;
-        idToFieldDict = new HashMap<String, Field>();
-        fieldIdToViewId = new HashMap<String, Integer>();
+        fieldIdToFieldMap = new HashMap<String, Field>();
+        fieldIdToViewIdMap = new HashMap<String, Integer>();
+        viewIdToFieldIdMap = new HashMap<Integer, String>();
+        viewIdToRegisteredGroupViewId = new HashMap<Integer, Integer>();
     }
 
 
@@ -59,7 +66,7 @@ public class SurveyBuilder {
                 // Only do something if the field has an id and a type.
                 if (!TextUtils.isEmpty(field.id) && field.getType() != null) {
                     // Add the the field to the dictionary.
-                    idToFieldDict.put(field.id, field);
+                    fieldIdToFieldMap.put(field.id, field);
 
                     // Create the field's layout and add it to the view.
                     LinearLayout fieldLayout = createFieldLayout(survey, field, activity, locale);
@@ -115,6 +122,8 @@ public class SurveyBuilder {
                 }
                 break;
             case GROUP:
+                LinearLayout groupView = createGroupView(activity, survey, field, locale);
+                ll.addView(groupView);
                 break;
         }
 
@@ -258,6 +267,7 @@ public class SurveyBuilder {
         EditText streetName = new EditText(context);
         streetName.setId(0);
         streetName.setInputType(InputType.TYPE_CLASS_TEXT);
+        streetName.setSingleLine();
         streetName.setHint(R.string.address_street);
         streetName.setLayoutParams(createLinearLayoutParamsWithWeight(0.7));
         streetContainer.addView(streetName);
@@ -265,6 +275,7 @@ public class SurveyBuilder {
         EditText streetNumber = new EditText(context);
         streetNumber.setId(1);
         streetNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
+        streetNumber.setSingleLine();
         streetNumber.setHint(R.string.address_street_number);
         streetNumber.setLayoutParams(createLinearLayoutParamsWithWeight(0.3));
         InputFilter[] filterArray = new InputFilter[1];
@@ -298,12 +309,37 @@ public class SurveyBuilder {
         return container;
     }
 
-    private EditText createIntegerInput(Context context, Survey survey, Field field, TauLocale locale) {
-        EditText editText = new EditText(context);
+    private EditText createIntegerInput(final Activity activity, final Survey survey, Field field, final TauLocale locale) {
+        EditText editText = new EditText(activity);
         editText.setId(getViewId(field));
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        editText.setSingleLine();
         editText.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
         editText.setText("0");
+
+        // Add an event listener, for when the user finished typing, so we can enable/disable the registered groups.
+        editText.setOnEditorActionListener(
+                new EditText.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView tv, int actionId, KeyEvent event) {
+                        if (event != null && event.getAction() != KeyEvent.ACTION_DOWN) {
+                            // pass on to other listeners.
+                            return false;
+                        }
+                        else if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+                                || event == null || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                            // the user is done typing.
+                            // Check if there's a group we should show or hide.
+                            RecalculateGroups(tv, activity, survey, locale);
+
+                            // consume this event.
+                            return true;
+                        }
+
+                        // pass on to other listeners.
+                        return false;
+                    }
+                });
 
         return editText;
     }
@@ -312,9 +348,28 @@ public class SurveyBuilder {
         EditText editText = new EditText(context);
         editText.setId(getViewId(field));
         editText.setInputType(InputType.TYPE_CLASS_TEXT);
+        editText.setSingleLine();
         editText.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
 
         return editText;
+    }
+
+    private LinearLayout createGroupView(Context context, Survey survey, Field field, TauLocale locale) {
+        // Create a linear layout that will hold the group.
+        LinearLayout container = new LinearLayout(context);
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
+        int groupViewId = getViewId(field);
+        container.setId(groupViewId);
+        container.setVisibility(View.GONE);
+
+        // Register this view.
+        if (!TextUtils.isEmpty(field.conditionOn) && fieldIdToViewIdMap.containsKey(field.conditionOn)) {
+            Integer conditionedViewId = fieldIdToViewIdMap.get(field.conditionOn);
+            this.viewIdToRegisteredGroupViewId.put(conditionedViewId, groupViewId);
+        }
+
+        return container;
     }
 
 
@@ -329,9 +384,73 @@ public class SurveyBuilder {
     private int getViewId(Field field) {
         idsCounter++;
 
-        fieldIdToViewId.put(field.id, idsCounter);
+        fieldIdToViewIdMap.put(field.id, idsCounter);
+        viewIdToFieldIdMap.put(idsCounter, field.id);
 
         return idsCounter;
+    }
+
+    /**
+     * Goes over all registered groups, and decides if to show or hide them.
+     * @param textView - the textView control that was changed.
+     * @param survey
+     * @param locale
+     */
+    private void RecalculateGroups(TextView textView, Activity activity, Survey survey, TauLocale locale) {
+        boolean shouldShow = false;
+        // Check if the text is not empty and not zero.
+        String text = textView.getText().toString();
+        if (!TextUtils.isEmpty(text) && !text.trim().isEmpty() && text.trim() != "0") {
+            // If the text is not empty or zero, we should show the group.
+            shouldShow = true;
+        }
+
+        Integer textViewId = textView.getId();
+
+        // Check if this text view id has a group registered to it.
+        if (textViewId > 1000 && viewIdToRegisteredGroupViewId.containsKey(textViewId)) {
+            Integer groupViewId = viewIdToRegisteredGroupViewId.get(textViewId);
+
+            // Try to find the registered group's view, and the group itself.
+            View groupView = activity.findViewById(groupViewId);
+            if (groupView != null && viewIdToFieldIdMap.containsKey(groupViewId)) {
+                LinearLayout groupLinearLayout = (LinearLayout)groupView;
+                // Get the group itself (the group is actually a field).
+                Field group = fieldIdToFieldMap.get(viewIdToFieldIdMap.get(groupViewId));
+
+                if (group.conditionType == ConditionType.REPEAT) {
+                    if (shouldShow) {
+                        Integer number = Utils.tryParse(text);
+                        if (number != null) {
+                            // Clear the group view.
+                            groupLinearLayout.removeAllViews();
+
+                            // A group is actually a second survey - build its layout.
+                            for (int i = 0; i < number; i++) {
+                                this.BuildSurvey(activity, survey, groupLinearLayout, locale);
+                            }
+                        }
+                    }
+                }
+                else {
+                    // If repeat not requested - only create the layout once.
+                    if (shouldShow) {
+                        // Clear the group view.
+                        groupLinearLayout.removeAllViews();
+                        // A group is actually a second survey - build its layout.
+                        this.BuildSurvey(activity, survey, groupLinearLayout, locale);
+                    }
+                }
+
+                // Show or hide the group.
+                if (shouldShow) {
+                    groupView.setVisibility(View.VISIBLE);
+                }
+                else {
+                    groupView.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 
     /**
