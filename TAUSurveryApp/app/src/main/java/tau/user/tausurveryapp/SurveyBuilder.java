@@ -93,8 +93,12 @@ public class SurveyBuilder {
                 ll.addView(addressGroup);
                 break;
             case STRING:
+                EditText stringInput = createStringInput(activity, survey, field, locale);
+                ll.addView(stringInput);
                 break;
             case INT:
+                EditText integerInput = createIntegerInput(activity, survey, field, locale);
+                ll.addView(integerInput);
                 break;
             case BOOLEAN:
                 RadioGroup booleanGroup = createBooleanRadioButtons(activity, survey, field, locale);
@@ -243,6 +247,7 @@ public class SurveyBuilder {
         LinearLayout container = new LinearLayout(context);
         container.setOrientation(LinearLayout.VERTICAL);
         container.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
+        container.setId(getViewId(field));
 
         // Create a container for "street" and "street number" (which are side by side).
         LinearLayout streetContainer = new LinearLayout(context);
@@ -291,6 +296,25 @@ public class SurveyBuilder {
         container.addView(cityContainer);
 
         return container;
+    }
+
+    private EditText createIntegerInput(Context context, Survey survey, Field field, TauLocale locale) {
+        EditText editText = new EditText(context);
+        editText.setId(getViewId(field));
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        editText.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
+        editText.setText("0");
+
+        return editText;
+    }
+
+    private EditText createStringInput(Context context, Survey survey, Field field, TauLocale locale) {
+        EditText editText = new EditText(context);
+        editText.setId(getViewId(field));
+        editText.setInputType(InputType.TYPE_CLASS_TEXT);
+        editText.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
+
+        return editText;
     }
 
 
