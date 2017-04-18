@@ -16,6 +16,7 @@ import tau.user.tausurveyapp.NetworkManager;
 import tau.user.tausurveyapp.R;
 import tau.user.tausurveyapp.SurveyBuilder;
 import tau.user.tausurveyapp.TrackingRepeater;
+import tau.user.tausurveyapp.Utils;
 import tau.user.tausurveyapp.contracts.TauLocale;
 import tau.user.tausurveyapp.contracts.Survey;
 
@@ -39,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_spinner);
         progressBar.setVisibility(View.VISIBLE);
 
+        Utils.initializeErrorMsg(this,getString(R.string.register_survey_error_title), getString(R.string.register_survey_error_body));
+
         sb = new SurveyBuilder();
 
         NetworkManager.getInstance().GetRegistrationSurvey(this, new NetworkCallback<Survey>() {
@@ -46,12 +49,15 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Survey survey) {
                 sb.BuildSurvey(RegisterActivity.this, survey, (LinearLayout)findViewById(R.id.contentView), TauLocale.IL);
                 progressBar.setVisibility(View.GONE);
+                Utils.toggleErrorMsg(RegisterActivity.this, false);
             }
 
             @Override
             public void onFailure(String error) {
                 // TODO: show the user a failure message and log error.
                 progressBar.setVisibility(View.GONE);
+                Utils.toggleErrorMsg(RegisterActivity.this, true);
+                RegisterActivity.this.setTitle(getString(R.string.register_survey_default_title));
             }
         });
 

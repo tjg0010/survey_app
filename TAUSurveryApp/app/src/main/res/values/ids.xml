@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tau_error_msg" type="id">901</item>
+    <item name="tau_error_msg_title" type="id">902</item>
+    <item name="tau_error_msg_body" type="id">903</item>
+</resources>

@@ -6,7 +6,10 @@
     <string name="key_user_id">key_user_id</string>
 
 
-    <string name="register_survey_loading_title">טוען סקר...</string>
+    <string name="register_survey_error_title">לא ניתן לטעון את טופס ההרשמה כעת</string>
+    <string name="register_survey_error_body">אירעה שגיאה בעת טעינת הנתונים.\n\r אנא נסו שוב מאוחר יותר.</string>
+    <string name="register_survey_loading_title">טוען...</string>
+    <string name="register_survey_default_title">הרשמה</string>
     <string name="date_button">לחץ/י להזנת תאריך</string>
     <string name="boolean_true">כן</string>
     <string name="boolean_false">לא</string>
