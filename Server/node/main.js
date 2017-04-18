@@ -16,12 +16,17 @@ app.get('/register', function (req, res) {
     // To support hebrew, the surveryRegister.json file was saved with UTF-8-BOM encoding.
     // Also, we use fs.readFileSync with utf8 encoding, and do not parse the file as json with stringify
     // (we just send the text using http.sendTextResponseSuccess.
-    console.log('/register requested');
+    console.log('/register called');
     var survey = fs.readFileSync('surveys/surveyRegister.json', 'utf8');
     http.sendTextResponseSuccess(res, survey);
 });
 
-app.post('/saveLocation', function (req, res) {
+app.post('/location/:userId', function (req, res) {
+    if (req.params.userId) {
+        console.log('/saveLocation called. User id: %s', req.params.userId);
+    }
+
+    //req.params.userId
 
     var lat = req.body.lat;
     var long = req.body.long;
