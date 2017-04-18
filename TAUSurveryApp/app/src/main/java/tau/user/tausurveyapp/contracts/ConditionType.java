@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp.contracts;
+package tau.user.tausurveyapp.contracts;
 
 public enum ConditionType {
     REPEAT,

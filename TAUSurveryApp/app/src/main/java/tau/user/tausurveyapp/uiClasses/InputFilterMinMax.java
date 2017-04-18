@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp.uiClasses;
+package tau.user.tausurveyapp.uiClasses;
 
 import android.text.InputFilter;
 import android.text.Spanned;

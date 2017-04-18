@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp;
+package tau.user.tausurveyapp;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

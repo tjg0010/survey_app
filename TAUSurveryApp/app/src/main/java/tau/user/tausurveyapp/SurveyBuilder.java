@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp;
+package tau.user.tausurveyapp;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,13 +28,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import tau.user.tausurveryapp.contracts.Choice;
-import tau.user.tausurveryapp.contracts.Field;
-import tau.user.tausurveryapp.contracts.FieldType;
-import tau.user.tausurveryapp.contracts.TauLocale;
-import tau.user.tausurveryapp.contracts.Survey;
-import tau.user.tausurveryapp.uiClasses.InputFilterMinMax;
-import tau.user.tausurveryapp.uiClasses.TauDateListener;
+import tau.user.tausurveyapp.contracts.Choice;
+import tau.user.tausurveyapp.contracts.Field;
+import tau.user.tausurveyapp.contracts.FieldType;
+import tau.user.tausurveyapp.contracts.TauLocale;
+import tau.user.tausurveyapp.contracts.Survey;
+import tau.user.tausurveyapp.uiClasses.InputFilterMinMax;
+import tau.user.tausurveyapp.uiClasses.TauDateListener;
 
 /**
  * Created by ran on 15/04/2017.

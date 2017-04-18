@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp;
+package tau.user.tausurveyapp;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

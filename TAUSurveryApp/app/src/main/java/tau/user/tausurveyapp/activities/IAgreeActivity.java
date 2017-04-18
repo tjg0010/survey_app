@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp.activities;
+package tau.user.tausurveyapp.activities;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.support.design.widget.Snackbar;
 
-import tau.user.tausurveryapp.R;
+import tau.user.tausurveyapp.R;
 
 
 public class IAgreeActivity extends AppCompatActivity {

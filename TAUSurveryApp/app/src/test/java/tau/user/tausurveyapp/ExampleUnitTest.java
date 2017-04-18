@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp;
+package tau.user.tausurveyapp;
 
 import org.junit.Test;
 

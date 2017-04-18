@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="tau.user.tausurveryapp.activities.IAgreeActivity"
+    tools:context="tau.user.tausurveyapp.activities.IAgreeActivity"
     android:layoutDirection="rtl">
 
     <include layout="@layout/tau_toolbar"/>

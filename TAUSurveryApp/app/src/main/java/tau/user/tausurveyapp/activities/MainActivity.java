@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp.activities;
+package tau.user.tausurveyapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import tau.user.tausurveryapp.R;
+import tau.user.tausurveyapp.R;
 
 public class MainActivity extends AppCompatActivity {
 

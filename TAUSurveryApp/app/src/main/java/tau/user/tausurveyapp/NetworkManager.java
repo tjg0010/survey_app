@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp;
+package tau.user.tausurveyapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,7 +13,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
-import tau.user.tausurveryapp.contracts.Survey;
+import tau.user.tausurveyapp.contracts.Survey;
 
 /**
  * Created by ran on 11/04/2017.

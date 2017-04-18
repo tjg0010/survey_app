@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp.activities;
+package tau.user.tausurveyapp.activities;
 
 import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
@@ -11,13 +11,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import tau.user.tausurveryapp.NetworkCallback;
-import tau.user.tausurveryapp.NetworkManager;
-import tau.user.tausurveryapp.R;
-import tau.user.tausurveryapp.SurveyBuilder;
-import tau.user.tausurveryapp.TrackingRepeater;
-import tau.user.tausurveryapp.contracts.TauLocale;
-import tau.user.tausurveryapp.contracts.Survey;
+import tau.user.tausurveyapp.NetworkCallback;
+import tau.user.tausurveyapp.NetworkManager;
+import tau.user.tausurveyapp.R;
+import tau.user.tausurveyapp.SurveyBuilder;
+import tau.user.tausurveyapp.TrackingRepeater;
+import tau.user.tausurveyapp.contracts.TauLocale;
+import tau.user.tausurveyapp.contracts.Survey;
 
 public class RegisterActivity extends AppCompatActivity {
 

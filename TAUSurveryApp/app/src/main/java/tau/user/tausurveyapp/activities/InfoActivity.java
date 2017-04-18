@@ -1,11 +1,9 @@
-package tau.user.tausurveryapp.activities;
+package tau.user.tausurveyapp.activities;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import tau.user.tausurveryapp.R;
+import tau.user.tausurveyapp.R;
 
 public class InfoActivity extends AppCompatActivity {
 

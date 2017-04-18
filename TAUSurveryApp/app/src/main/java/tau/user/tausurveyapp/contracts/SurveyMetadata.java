@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp.contracts;
+package tau.user.tausurveyapp.contracts;
 
 /**
  * Created by ran on 14/04/2017.

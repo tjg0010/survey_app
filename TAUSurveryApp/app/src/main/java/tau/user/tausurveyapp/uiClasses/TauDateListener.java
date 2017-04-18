@@ -1,4 +1,4 @@
-package tau.user.tausurveryapp.uiClasses;
+package tau.user.tausurveyapp.uiClasses;
 
 import android.view.View;
 import android.widget.TextView;
