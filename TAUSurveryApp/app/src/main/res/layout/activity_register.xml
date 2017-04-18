@@ -10,9 +10,8 @@
 
     <include layout="@layout/tau_toolbar"/>
 
-    <include layout="@layout/tau_error_msg" />
-
     <ScrollView
+        android:id="@+id/register_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="@dimen/activity_vertical_margin"
@@ -20,24 +19,43 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
-        <!-- Content view to which the dynamic content is added. -->
         <LinearLayout
-            android:id="@+id/contentView"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="0.5dp"
-            >
+            android:orientation="vertical">
 
-            <!-- Dummy linear layout for focus on activity start -->
+            <!-- Content view to which the dynamic content is added. -->
             <LinearLayout
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:layout_width="0px"
-                android:layout_height="0px"
-                />
+                android:id="@+id/contentView"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0.5dp"
+                >
 
-            <!-- All other views are added dynamically here. -->
+                <!-- Dummy linear layout for focus on activity start -->
+                <LinearLayout
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    />
+
+                <!-- All other views are added dynamically here. -->
+
+            </LinearLayout>
+
+            <include layout="@layout/tau_error_msg" />
+
+            <Button
+                android:id="@+id/register_submit"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorAccent"
+                android:text="@string/register_survey_default_submit"
+                android:layout_gravity="end"
+                android:visibility="gone" />
 
         </LinearLayout>
 

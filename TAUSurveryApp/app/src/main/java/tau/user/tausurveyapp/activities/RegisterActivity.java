@@ -50,12 +50,14 @@ public class RegisterActivity extends AppCompatActivity {
                 sb.BuildSurvey(RegisterActivity.this, survey, (LinearLayout)findViewById(R.id.contentView), TauLocale.IL);
                 progressBar.setVisibility(View.GONE);
                 Utils.toggleErrorMsg(RegisterActivity.this, false);
+                RegisterActivity.this.toggleSubmitButton(true);
             }
 
             @Override
             public void onFailure(String error) {
                 // TODO: show the user a failure message and log error.
                 progressBar.setVisibility(View.GONE);
+                RegisterActivity.this.toggleSubmitButton(false);
                 Utils.toggleErrorMsg(RegisterActivity.this, true);
                 RegisterActivity.this.setTitle(getString(R.string.register_survey_default_title));
             }
@@ -75,6 +77,13 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    private void toggleSubmitButton(boolean show) {
+        View submitButton = findViewById(R.id.register_submit);
+        if (submitButton != null) {
+            submitButton.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void forceRTLIfSupported()
     {
@@ -86,15 +95,6 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Disable back button.
-    }
-
-    // Function for validating numeric input fields
-    public boolean numberEditTextValidation(int min, int max, int value){
-
-        if ((value >= min) && (value <= max)){
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -116,16 +116,4 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
     }
-
-
-    /////////////// Code for hiding elements onclick /////////////////////
-//
-//    public void onClick(View v){
-//
-//        LinearLayout one = (LinearLayout) findViewById(R.id.LLSex);
-//        one.setVisibility(View.GONE);
-// }
-
-
-
 }

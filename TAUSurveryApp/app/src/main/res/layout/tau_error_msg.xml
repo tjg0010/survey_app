@@ -13,7 +13,7 @@
         android:text=""
         android:textAlignment="center"
         android:textColor="?android:attr/colorForeground"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tau_error_msg_body"
@@ -23,7 +23,7 @@
         android:text=""
         android:textAlignment="center"
         android:textColor="?android:attr/textColorTertiary"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:layout_marginTop="15dp"
         android:padding="8dp"/>
 
