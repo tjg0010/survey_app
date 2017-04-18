@@ -42,7 +42,7 @@
         {"value": "divorced", "title": 104, "type": "OPTION"},
         {"value": "widowed", "title": 105, "type": "OPTION"}]},
     {"id": "numberOfChildren", "mandatory": true, "title": 111, "type": "INT"},
-    {"id": "children", "mandatory": true, "title": 121, "type": "GROUP", "conditionOn": "numberOfChildren",
+    {"id": "children", "mandatory": true, "type": "GROUP", "conditionOn": "numberOfChildren",
       "conditionType": "REPEAT", "repeatText": 122,
       "fields":[
         {"id": "childName", "mandatory": true, "title": 131, "type": "STRING"},
@@ -89,11 +89,10 @@
       "104": "גרוש/ה",
       "105": "אלמנ/ה",
       "111": "מספר ילדים עד גיל 18",
-      "121": "אנא מלא/י את הפרטים הבאים אודות ילדיך:",
       "122": "פרטי ילד/ה ##:",
-      "131": "שם הילד/ה",
-      "141": "מין הילד/ה",
-      "151": "גיל הילד/ה"
+      "131": "שם פרטי",
+      "141": "מין",
+      "151": "גיל"
     },
     "EN": {
 
