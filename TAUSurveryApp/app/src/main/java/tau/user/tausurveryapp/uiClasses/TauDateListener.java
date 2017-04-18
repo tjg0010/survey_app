@@ -1,9 +1,6 @@
-package tau.user.tausurveryapp.uiListeners;
+package tau.user.tausurveryapp.uiClasses;
 
-import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;

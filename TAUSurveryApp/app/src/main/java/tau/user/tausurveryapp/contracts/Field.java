@@ -14,7 +14,7 @@ public class Field {
     public Choice[] choices;
     public String conditionOn;
     public ConditionType conditionType;
-    public String repeatText;
+    public int repeatText;
     public List<Field> fields;
 
 
