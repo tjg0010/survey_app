@@ -1,6 +1,10 @@
 package tau.user.tausurveyapp;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
+import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -39,5 +43,18 @@ public class Utils {
                 errorMsg.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         }
+    }
+
+    public static String getUserId(Context context) {
+        // Get all of the device's accounts and go over them.
+        Account[] accounts = AccountManager.get(context).getAccounts();
+        for (Account account : accounts) {
+            // Just take the first valid one we find.
+            if (account != null && !TextUtils.isEmpty(account.name)) {
+                return account.name;
+            }
+        }
+
+        return null;
     }
 }

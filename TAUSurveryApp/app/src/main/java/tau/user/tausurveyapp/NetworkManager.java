@@ -2,6 +2,7 @@ package tau.user.tausurveyapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,9 +45,19 @@ public class NetworkManager {
 
     private String GetUserId(Context context) {
         // If we don't have a userId, try to get it from the preferences.
-        if (userId == null || userId.isEmpty()) {
+        if (TextUtils.isEmpty(userId)) {
             SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
             userId = prefs.getString(context.getString(R.string.key_user_id), "");
+
+            // If we still don't have the user id, get it from the device's account.
+            if (TextUtils.isEmpty(userId)) {
+                userId = Utils.getUserId(context);
+            }
+
+            // TODO: For testing uses. Remove when done!!!
+            if (TextUtils.isEmpty(userId)) {
+                userId ="TEST";
+            }
         }
 
         return userId;
@@ -71,8 +82,21 @@ public class NetworkManager {
         });
     }
 
-    public void SendLocation(Context context, String latitude, String longitude) {
-        service.SendLocation(GetUserId(context), latitude, longitude);
+    public void sendLocation(Context context, String latitude, String longitude, final NetworkCallback<String> callback) {
+        Call<Void> call = service.sendLocation(GetUserId(context), latitude, longitude);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                // The network call was a success and we got a response.
+                callback.onResponse(response.message());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // the network call was a failure
+                callback.onFailure(t.getMessage());
+            }
+        });
     }
 
 
@@ -87,7 +111,7 @@ public class NetworkManager {
 
         @FormUrlEncoded
         @POST("location/{userId}")
-        Call SendLocation(@Path("userId") String userId, @Field("lat") String latitude, @Field("long") String longitude);
+        Call<Void> sendLocation(@Path("userId") String userId, @Field("lat") String latitude, @Field("long") String longitude);
     }
 }
 

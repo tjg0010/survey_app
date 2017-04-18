@@ -40,11 +40,20 @@ public class TrackingService extends IntentService {
             public void run(String latitude, String longitude) {
                 if (latitude != null && longitude != null) {
                     // Send the location to the server.
-                    //NetworkManager.getInstance().SendLocation(_this, latitude, longitude);
-                }
+                    NetworkManager.getInstance().sendLocation(_this, latitude, longitude, new NetworkCallback<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            // Stop the service since it's no longer needed.
+                            stopSelf();
+                        }
 
-                // Close the service since it's no longer needed.
-                stopSelf();
+                        @Override
+                        public void onFailure(String error) {
+                            // Stop the service since it's no longer needed.
+                            stopSelf();
+                        }
+                    });
+                }
             }
         });
     }

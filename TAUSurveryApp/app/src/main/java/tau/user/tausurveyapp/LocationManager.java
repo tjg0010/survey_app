@@ -126,7 +126,7 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
                         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, _this);
 
                         // We can get stuck waiting for an update from FusedLocationApi.requestLocationUpdates.
-                        // To solve this, we wait 5 seconds and terminate our self (if we haven't already finished).
+                        // To solve this, we wait 10 seconds and terminate our self (if we haven't already finished).
                         new android.os.Handler().postDelayed(
                                 new Runnable() {
                                     public void run() {
@@ -137,7 +137,7 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
                                         }
                                     }
                                 },
-                                5000);
+                                10000);
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                     default:
@@ -185,7 +185,7 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
         // Create a location request that sets all the settings we need.
         final LocationRequest locationRequest = new LocationRequest();
         // Set the interval in which we want to receive the location.
-        locationRequest.setInterval(10000);
+        locationRequest.setInterval(4000);
         // Set the fastest interval we agree to accept. We don't care much because we only need one update.
         locationRequest.setFastestInterval(1000);
         // Tell that we want a very accurate location.
