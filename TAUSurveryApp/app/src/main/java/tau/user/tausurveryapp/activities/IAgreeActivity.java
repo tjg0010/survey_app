@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.CheckBox;
@@ -23,6 +24,9 @@ public class IAgreeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         forceRTLIfSupported();
         setContentView(R.layout.activity_iagree);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tau_toolbar);
+        setSupportActionBar(toolbar);
 
         Terms_and_Conditions_Text = (TextView)findViewById(R.id.Terms_and_Conditions_Text);
         Terms_and_Conditions_Text.setMovementMethod(new ScrollingMovementMethod());

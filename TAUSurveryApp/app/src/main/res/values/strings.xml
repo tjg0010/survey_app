@@ -6,6 +6,7 @@
     <string name="key_user_id">key_user_id</string>
 
 
+    <string name="register_survey_loading_title">טוען סקר...</string>
     <string name="date_button">לחץ/י להזנת תאריך</string>
     <string name="boolean_true">כן</string>
     <string name="boolean_false">לא</string>

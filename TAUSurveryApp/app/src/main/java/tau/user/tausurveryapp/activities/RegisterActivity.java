@@ -5,10 +5,11 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import tau.user.tausurveryapp.NetworkCallback;
 import tau.user.tausurveryapp.NetworkManager;
@@ -28,28 +29,31 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         forceRTLIfSupported();
 
+        // Set a loading title right away so we won't display the default title.
+        setTitle(R.string.register_survey_loading_title);
+
+        setContentView(R.layout.activity_register);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tau_toolbar);
+        setSupportActionBar(toolbar);
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_spinner);
+        progressBar.setVisibility(View.VISIBLE);
+
         sb = new SurveyBuilder();
-        final RegisterActivity _this = this;
 
         NetworkManager.getInstance().GetRegistrationSurvey(this, new NetworkCallback<Survey>() {
             @Override
             public void onResponse(Survey survey) {
-                sb.BuildSurvey(_this, survey, (LinearLayout)findViewById(R.id.contentView), TauLocale.IL);
+                sb.BuildSurvey(RegisterActivity.this, survey, (LinearLayout)findViewById(R.id.contentView), TauLocale.IL);
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(String error) {
                 // TODO: show the user a failure message and log error.
+                progressBar.setVisibility(View.GONE);
             }
         });
-
-        setContentView(R.layout.activity_register);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeButtonEnabled(true);
-
-
-
-
 
         // Check if the app has location permissions. If not, request them.
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
