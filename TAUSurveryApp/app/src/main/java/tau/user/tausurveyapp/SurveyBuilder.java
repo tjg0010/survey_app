@@ -65,6 +65,10 @@ public class SurveyBuilder {
         // Set the activity's title.
         activity.setTitle(survey.getString(locale, survey.metadata.title));
 
+        // Set the submit button text.
+        Button submitButton = (Button)activity.findViewById(R.id.register_submit);
+        submitButton.setText(survey.getString(locale, survey.metadata.submitBtnText));
+
         // Go over all the survey fields and create its layout.
         if (survey != null && survey.fields != null && !survey.fields.isEmpty()) {
             BuildSurveyFields(activity, survey.fields, survey, view, locale);
@@ -322,7 +326,6 @@ public class SurveyBuilder {
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setSingleLine();
         editText.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
-        editText.setText("0");
 
         return editText;
     }

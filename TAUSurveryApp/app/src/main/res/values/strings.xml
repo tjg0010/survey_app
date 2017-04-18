@@ -10,7 +10,7 @@
     <string name="register_survey_error_body">אירעה שגיאה בעת טעינת הנתונים.\n\r אנא נסו שוב מאוחר יותר.</string>
     <string name="register_survey_loading_title">טוען...</string>
     <string name="register_survey_default_title">הרשמה</string>
-    <string name="register_survey_default_submit">הרשמה!</string>
+    <string name="register_survey_default_submit">הרשמה</string>
     <string name="date_button">לחץ/י להזנת תאריך</string>
     <string name="boolean_true">כן</string>
     <string name="boolean_false">לא</string>
