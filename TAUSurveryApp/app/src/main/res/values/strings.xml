@@ -18,6 +18,10 @@
     <string name="address_street_number">מספר</string>
     <string name="address_city">עיר</string>
     <string name="cancel">ביטול</string>
+    <string name="survey_mandatory_field_empty">יש למלא את כל שדות החובה על מנת להמשיך</string>
+    <string name="survey_network_error">איראה שגיאה בעת ביצוע ההרשמה. אנא נסו שוב מאוחר יותר.</string>
+    <string name="survey_error_title">שגיאת הרשמה</string>
+    <string name="survey_error_button">סגור</string>
 
 
     <string name="Terms_and_Conditions">

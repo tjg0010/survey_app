@@ -10,6 +10,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,12 +28,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import tau.user.tausurveyapp.contracts.Address;
 import tau.user.tausurveyapp.contracts.Choice;
 import tau.user.tausurveyapp.contracts.Field;
+import tau.user.tausurveyapp.contracts.FieldSubmission;
 import tau.user.tausurveyapp.contracts.FieldType;
 import tau.user.tausurveyapp.contracts.TauLocale;
 import tau.user.tausurveyapp.contracts.Survey;
+import tau.user.tausurveyapp.types.SurveySubmitResult;
 import tau.user.tausurveyapp.uiClasses.InputFilterMinMax;
 import tau.user.tausurveyapp.uiClasses.TauDateListener;
 
@@ -61,28 +66,128 @@ public class SurveyBuilder {
     }
 
 
-    public void BuildSurvey(Activity activity, Survey survey, LinearLayout view, TauLocale locale) {
+    public void buildSurvey(Activity activity, Survey survey, LinearLayout view, TauLocale locale) {
         // Set the activity's title.
         activity.setTitle(survey.getString(locale, survey.metadata.title));
 
         // Set the submit button text.
-        Button submitButton = (Button)activity.findViewById(R.id.register_submit);
+        Button submitButton = (Button)activity.findViewById(R.id.btn_submit);
         submitButton.setText(survey.getString(locale, survey.metadata.submitBtnText));
 
         // Go over all the survey fields and create its layout.
         if (survey != null && survey.fields != null && !survey.fields.isEmpty()) {
-            BuildSurveyFields(activity, survey.fields, survey, view, locale);
+            buildSurveyFields(activity, survey.fields, survey, view, locale);
         }
+    }
+
+    /**
+     * Goes over all fields, collects their values and send it to the server.
+     * If a field is mandatory and was not filled - a failure is called in the supplied callback.
+     */
+    public SurveySubmitResult submitSurvey(Activity activity) {
+        // Create the user submission result list we send to the server.
+        ArrayList<FieldSubmission> submissions = new ArrayList<>();
+
+        // Go over all of our fields.
+        // No need to add a special treatment for groups, since all group fields are included in the fieldIdToFieldMap,
+        // and if the field is a part of a group it will have a groupId attribute. We just need to ignore them :)
+        for(int i = 0; i < viewIdToFieldIdMap.size(); i++) {
+            int viewId = viewIdToFieldIdMap.keyAt(i);
+            String fieldId = viewIdToFieldIdMap.get(viewId);
+            Field field = fieldIdToFieldMap.get(fieldId);
+
+            // Only do something if this is not a group field.
+            if (field.getType() != FieldType.GROUP) {
+                // Get the input the user has set.
+                FieldSubmission fieldSubmission = getFieldValue(fieldId, field, viewId, activity);
+
+                // If the field is mandatory but empty, return a result with an error.
+                if (field.mandatory && (fieldSubmission == null || fieldSubmission.isValueEmpty(activity))) {
+                    ArrayList<Integer> invalidViewIds = new ArrayList<>();
+                    invalidViewIds.add(viewId);
+
+                    return new SurveySubmitResult(false, activity.getString(R.string.survey_mandatory_field_empty), invalidViewIds);
+                }
+
+                // This field is valid, add it to the submissions list.
+                submissions.add(fieldSubmission);
+            }
+        }
+
+        // If we got here, all fields were filled as expected. Send them to the server.
+        // Send the location to the server (this is a synchronous call to the API since we assume we are already being called async).
+        boolean isSuccess = NetworkManager.getInstance().submitRegistration(activity, submissions);
+
+        // Return a result according to the success of the API call.
+        return new SurveySubmitResult(isSuccess, activity.getString(R.string.survey_network_error), null);
+    }
+
+    @SuppressWarnings("ResourceType")
+    private FieldSubmission getFieldValue(String fieldId, Field field, int viewId, Activity activity) {
+        // Get the view id by the given field id, and find the view.
+        View view = activity.findViewById(viewId);
+
+        if (view != null) {
+            FieldType fieldType = field.getType();
+
+            if (fieldType == FieldType.ADDRESS) {
+                LinearLayout addressContainer = (LinearLayout)view;
+                String streetName = ((EditText)addressContainer.findViewById(0)).getText().toString();
+                String streetNumber = ((EditText)addressContainer.findViewById(1)).getText().toString();
+                String city = ((SearchableSpinner)addressContainer.findViewById(2)).getSelectedItem().toString();
+                return new FieldSubmission<Address>(Address.class, fieldId, new Address(streetName, streetNumber, city), field.groupId);
+            }
+            else if (fieldType == FieldType.INT || fieldType == FieldType.STRING) {
+                EditText editText = (EditText)view;
+                return new FieldSubmission<String>(String.class, fieldId, editText.getText().toString(), field.groupId);
+            }
+            else if (fieldType == FieldType.CHOICES) {
+                RadioGroup radioGroup = (RadioGroup)view;
+                int radioButtonID = radioGroup.getCheckedRadioButtonId();
+                View radioButton = radioGroup.findViewById(radioButtonID);
+                if (radioButton != null) {
+                    return new FieldSubmission<String>(String.class, fieldId, radioButton.getTag().toString(), field.groupId);
+                }
+                return null;
+            }
+            else if (fieldType == FieldType.BOOLEAN) {
+                RadioGroup booleanGroup = (RadioGroup)view;
+                int booleanRadioButtonID = booleanGroup.getCheckedRadioButtonId();
+                View booleanRadioButton = booleanGroup.findViewById(booleanRadioButtonID);
+                if (booleanRadioButton != null) {
+                    return new FieldSubmission<Boolean>(Boolean.class, fieldId, Boolean.parseBoolean(booleanRadioButton.getTag().toString()), field.groupId);
+                }
+                return null;
+            }
+            else if (fieldType == FieldType.DATE) {
+                TextView dateText = (TextView)view;
+                return new FieldSubmission<String>(String.class, fieldId, dateText.getText().toString(), field.groupId);
+            }
+            else if (fieldType == FieldType.GROUP) {
+                // We don't handle groups here! Only groups' fields are handled.
+                Log.e("Developer Error", "Tried processing a group field where groups are ignored");
+                return null;
+            }
+        }
+
+        // If we got here, something went wrong. Return null.
+        Log.e("Developer Error", "getFieldValue had a null view or a field with an unknown type");
+        return null;
     }
 
     /**
      * Goes over the given fields and creates them inside the given activity and view, using the given survey and locale.
      * This function can also be used to create sub-surveys (groups), giving it any fields list and any view wanted.
      */
-    private void BuildSurveyFields(Activity activity, List<Field> fields, Survey survey, LinearLayout view, TauLocale locale) {
+    private void buildSurveyFields(Activity activity, List<Field> fields, Survey survey, LinearLayout view, TauLocale locale, String groupId) {
         for (Field field : fields) {
             // Only do something if the field has an id and a type.
             if (!TextUtils.isEmpty(field.id) && field.getType() != null) {
+                // If we got a group id, mark the field to be part of that group.
+                if (!TextUtils.isEmpty(groupId)) {
+                    field.groupId = groupId;
+                }
+
                 // Add the the field to the dictionary.
                 fieldIdToFieldMap.put(field.id, field);
 
@@ -93,6 +198,13 @@ public class SurveyBuilder {
                 view.addView(fieldLayout);
             }
         }
+    }
+
+    /**
+     * A wrapper for buildSurveyFields without group Id.
+     */
+    private void buildSurveyFields(Activity activity, List<Field> fields, Survey survey, LinearLayout view, TauLocale locale) {
+        buildSurveyFields(activity, fields, survey, view, locale, null);
     }
 
     private LinearLayout createFieldLayout(Survey survey, Field field, Activity activity, TauLocale locale) {
@@ -186,6 +298,7 @@ public class SurveyBuilder {
             radioButton.setLayoutParams(layoutParams);
             // We will need an id to figure out later which radio button was selected.
             radioButton.setId(i);
+            radioButton.setTag(choice.value);
             radioGroup.addView(radioButton);
         }
 
@@ -206,6 +319,7 @@ public class SurveyBuilder {
         radioButtonYes.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, locale));
         // We will need an id to figure out later which radio button was selected.
         radioButtonYes.setId(0);
+        radioButtonYes.setTag("true");
         booleanGroup.addView(radioButtonYes);
 
         // No radio button.
@@ -215,6 +329,7 @@ public class SurveyBuilder {
         // We will need an id to figure out later which radio button was selected.
         //noinspection ResourceType
         radioButtonNo.setId(1);
+        radioButtonYes.setTag("false");
         booleanGroup.addView(radioButtonNo);
 
         return booleanGroup;
@@ -375,7 +490,7 @@ public class SurveyBuilder {
                     conditionedView.addTextChangedListener(new TextWatcher() {
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
                             // Check if there's a group we should show or hide.
-                            RecalculateGroups(conditionedView, activity, survey, locale);
+                            recalculateGroups(conditionedView, activity, survey, locale);
                         }
 
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -387,8 +502,6 @@ public class SurveyBuilder {
 
         return container;
     }
-
-
 
     // region: Helper functions
 
@@ -413,7 +526,7 @@ public class SurveyBuilder {
      * @param survey - the current survey.
      * @param locale - the current locale.
      */
-    private void RecalculateGroups(TextView textView, Activity activity, Survey survey, TauLocale locale) {
+    private void recalculateGroups(TextView textView, Activity activity, Survey survey, TauLocale locale) {
         boolean shouldShow = false;
         // Check if the text is not empty and not zero.
         String text = textView.getText().toString();
@@ -429,13 +542,16 @@ public class SurveyBuilder {
             // Go over all the registered groups views and act upon them.
             List<Integer> registeredGroups = viewIdToRegisteredGroupViewId.get(textViewId, new ArrayList<Integer>());
             for (Integer groupViewId : registeredGroups) {
-                // Try to find the registered group's view, the group id and then the group itself(which is actually just another field).
+                // Try to find the registered group's view, the group id and then the group itself (which is actually just another field).
                 View groupView = activity.findViewById(groupViewId);
                 String groupId = viewIdToFieldIdMap.get(groupViewId, "");
                 Field group = fieldIdToFieldMap.get(groupId);
 
                 // If we found both the group and its view, we can continue.
                 if (groupView != null && group != null && group.fields != null && !group.fields.isEmpty()) {
+                    // Clear any fields of this group that might have been added before.
+                    clearGroupFields(groupId);
+
                     // Cast the group view to LinearLayout (we require a linear layout in the BuildSurvey function).
                     LinearLayout groupLinearLayout = (LinearLayout)groupView;
 
@@ -456,7 +572,7 @@ public class SurveyBuilder {
                     switch (group.conditionType) {
                         case REPEAT:
                             Integer number = Utils.tryParse(text);
-                            if (shouldShow && number != null) {
+                            if (shouldShow && number != null && number > 0) {
                                 // A group is actually a second survey - build its layout (as many times as requested).
                                 for (int i = 0; i < number; i++) {
                                     // Add the repeated title (if exists).
@@ -469,7 +585,7 @@ public class SurveyBuilder {
                                         groupLinearLayout.addView(repeatedTitleView);
                                     }
                                     // Create and add the group's fields.
-                                    this.BuildSurveyFields(activity, group.fields, survey, groupLinearLayout, locale);
+                                    this.buildSurveyFields(activity, group.fields, survey, groupLinearLayout, locale, groupId);
                                 }
                             }
                             break;
@@ -478,7 +594,7 @@ public class SurveyBuilder {
                             // If repeat not requested - only create the layout once.
                             if (shouldShow) {
                                 // A group is actually a second survey - build its layout.
-                                this.BuildSurveyFields(activity, group.fields, survey, groupLinearLayout, locale);
+                                this.buildSurveyFields(activity, group.fields, survey, groupLinearLayout, locale, groupId);
                             }
                             break;
                     }
@@ -492,6 +608,42 @@ public class SurveyBuilder {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Clears all of our dictionaries from fields that belong to the given group id.
+     */
+    private void clearGroupFields(String groupId) {
+        ArrayList<String> fieldIdsToDelete = new ArrayList<String>();
+
+        // Go over all fields.
+        for(Map.Entry<String, Field> idFieldPair: fieldIdToFieldMap.entrySet()) {
+            String fieldId = idFieldPair.getKey();
+            Field field = idFieldPair.getValue();
+
+            // If we found a field with the same group id as the one we got, we should clear it.
+            if (!TextUtils.isEmpty(field.groupId) && field.groupId.equalsIgnoreCase(groupId)) {
+                // Add this field id to the delete targets (we don't delete it now to not mess up the dictionary while iterating over it.
+                fieldIdsToDelete.add(fieldId);
+            }
+        }
+
+        // Go over the deletion list and delete what's needed.
+        for (String fieldId: fieldIdsToDelete) {
+            // Get this fieldId related viewId;
+            Integer viewId = fieldIdToViewIdMap.get(fieldId);
+
+            // If we found a viewId for this fieldId.
+            if (viewId != null && viewId != 0) {
+                // Remove this viewId from both viewIdToFieldIdMap and viewIdToRegisteredGroupViewId.
+                viewIdToFieldIdMap.remove(viewId);
+                viewIdToRegisteredGroupViewId.remove(viewId);
+            }
+
+            // Remove this field id from both fieldIdToFieldMap and fieldIdToViewIdMap.
+            fieldIdToFieldMap.remove(fieldId);
+            fieldIdToViewIdMap.remove(fieldId);
         }
     }
 

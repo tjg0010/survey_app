@@ -1,4 +1,4 @@
-package tau.user.tausurveyapp;
+package tau.user.tausurveyapp.types;
 
 public interface NetworkCallback<T> {
 

@@ -1,5 +1,9 @@
 package tau.user.tausurveyapp.contracts;
 
+import android.text.TextUtils;
+
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 
 /**
@@ -7,16 +11,27 @@ import java.util.List;
  */
 
 public class Field {
+    @Expose
     public String id;
+    @Expose
     public boolean mandatory;
+    @Expose
     private int title;
+    @Expose
     private FieldType type;
+    @Expose
     public Choice[] choices;
+    @Expose
     public String conditionOn;
+    @Expose
     public ConditionType conditionType;
+    @Expose
     public int repeatText;
+    @Expose
     public List<Field> fields;
 
+    @Expose(serialize = false, deserialize = false)
+    public String groupId;
 
     public FieldType getType() {
         return this.type;

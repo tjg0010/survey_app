@@ -2,6 +2,8 @@ package tau.user.tausurveyapp.contracts;
 
 import android.text.TextUtils;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +12,13 @@ import java.util.Map;
  */
 
 public class Survey {
+    @Expose
     public SurveyMetadata metadata;
 
+    @Expose
     public List<Field> fields;
 
+    @Expose
     public Map<TauLocale, Map<String, String>> strings;
 
     /**

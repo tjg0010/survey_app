@@ -3,18 +3,27 @@ package tau.user.tausurveyapp;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.util.Log;
+
+import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import tau.user.tausurveyapp.contracts.FieldSubmission;
 import tau.user.tausurveyapp.contracts.Survey;
+import tau.user.tausurveyapp.types.NetworkCallback;
 
 /**
  * Created by ran on 11/04/2017.
@@ -37,7 +46,7 @@ public class NetworkManager {
     private NetworkManager() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()))
                 .build();
 
         service = retrofit.create(TauService.class);
@@ -63,7 +72,7 @@ public class NetworkManager {
         return userId;
     }
 
-    /** API functions */
+    // region: API functions
 
     public void GetRegistrationSurvey(Context context, final NetworkCallback<Survey> callback) {
         Call<Survey> call = service.getRegistrationSurvey();
@@ -99,11 +108,30 @@ public class NetworkManager {
         });
     }
 
+    /**
+     * Submits the given field submission list to the server.
+     * NOTE: this function is synchronous!
+     */
+    public boolean submitRegistration(Context context, ArrayList<FieldSubmission> fieldSubmissions) {
+        Call<Void> call = service.submitRegistration(GetUserId(context), fieldSubmissions);
+        try {
+            // Call the API synchronously.
+            Response response = call.execute();
+            return response.isSuccessful();
+        }
+        catch (IOException e) {
+            Log.e("NetworkManager", "submitRegistration timeout", e);
+            return false;
+        }
+        catch (Exception e){
+            Log.e("NetworkManager", "submitRegistration unexpected exception: ", e);
+            return false;
+        }
+    }
 
+    // endregion
 
-
-
-    /** TauService RetroFit Interface */
+    // region: TauService RetroFit Interface
 
     private interface TauService {
         @GET("register")
@@ -112,6 +140,12 @@ public class NetworkManager {
         @FormUrlEncoded
         @POST("location/{userId}")
         Call<Void> sendLocation(@Path("userId") String userId, @Field("lat") String latitude, @Field("long") String longitude);
+
+        @FormUrlEncoded
+        @POST("register/{userId}")
+        Call<Void> submitRegistration(@Path("userId") String userId, @Field("fieldSubmissions") ArrayList<FieldSubmission> fieldSubmissions);
     }
+
+    // endregion
 }
 

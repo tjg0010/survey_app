@@ -3,7 +3,10 @@ package tau.user.tausurveyapp;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -56,5 +59,27 @@ public class Utils {
         }
 
         return null;
+    }
+
+    public static void showAlertBox(Activity activity, String title, String message, @StringRes int buttonTxt) {
+        // From: https://developer.android.com/guide/topics/ui/dialogs.html
+
+        // 1. Instantiate an AlertDialog.Builder with its constructor.
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        // 2. Add the buttons.
+        builder.setPositiveButton(buttonTxt, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                dialog.dismiss();
+            }
+        });
+
+        // 3. Chain together various setter methods to set the dialog characteristics.
+        builder.setMessage(message).setTitle(title);
+
+        // 4. Get the AlertDialog from create().
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

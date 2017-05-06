@@ -48,14 +48,15 @@
             <include layout="@layout/tau_error_msg" />
 
             <Button
-                android:id="@+id/register_submit"
+                android:id="@+id/btn_submit"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="?attr/colorAccent"
                 android:text="@string/register_survey_default_submit"
                 android:layout_gravity="end"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:onClick="submit"/>
 
         </LinearLayout>
 
