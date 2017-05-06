@@ -137,7 +137,11 @@ public class SurveyBuilder {
                 String city = ((SearchableSpinner)addressContainer.findViewById(2)).getSelectedItem().toString();
                 return new FieldSubmission<Address>(Address.class, fieldId, new Address(streetName, streetNumber, city), field.groupId);
             }
-            else if (fieldType == FieldType.INT || fieldType == FieldType.STRING) {
+            else if (fieldType == FieldType.INT) {
+                EditText editText = (EditText)view;
+                return new FieldSubmission<Integer>(Integer.class, fieldId, Integer.parseInt(editText.getText().toString()), field.groupId);
+            }
+            else if (fieldType == FieldType.STRING) {
                 EditText editText = (EditText)view;
                 return new FieldSubmission<String>(String.class, fieldId, editText.getText().toString(), field.groupId);
             }

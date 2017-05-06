@@ -8,6 +8,7 @@ import com.google.gson.annotations.Expose;
 import tau.user.tausurveyapp.R;
 
 public class FieldSubmission<T> {
+    // Don't expose this field to GSON (as json) because it doesn't know how to handle it.
     @Expose(serialize = false, deserialize = false)
     private final Class<T> type;
 
@@ -19,10 +20,6 @@ public class FieldSubmission<T> {
 
     @Expose
     public String groupId;
-
-    public FieldSubmission(Class<T> type) {
-        this.type = type;
-    }
 
     public FieldSubmission(Class<T> type, String id, T value, String groupId) {
         this.type = type;

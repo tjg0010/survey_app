@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -141,9 +142,8 @@ public class NetworkManager {
         @POST("location/{userId}")
         Call<Void> sendLocation(@Path("userId") String userId, @Field("lat") String latitude, @Field("long") String longitude);
 
-        @FormUrlEncoded
         @POST("register/{userId}")
-        Call<Void> submitRegistration(@Path("userId") String userId, @Field("fieldSubmissions") ArrayList<FieldSubmission> fieldSubmissions);
+        Call<Void> submitRegistration(@Path("userId") String userId, @Body List<FieldSubmission> fieldSubmissions);
     }
 
     // endregion
