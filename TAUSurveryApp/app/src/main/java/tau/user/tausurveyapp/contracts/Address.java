@@ -6,23 +6,19 @@ import com.google.gson.annotations.Expose;
 
 public class Address {
     @Expose
-    public String streetName;
+    private String street;
     @Expose
-    public String streetNumber;
+    private Integer number;
     @Expose
-    public String city;
+    private String city;
 
-    public Address() {
-
-    }
-
-    public Address(String streetName, String streetNumber, String city) {
-        this.streetName = streetName;
-        this.streetNumber = streetNumber;
+    public Address(String streetName, Integer streetNumber, String city) {
+        this.street = streetName;
+        this.number = streetNumber;
         this.city = city;
     }
 
     public boolean isEmpty(String defaultValue) {
-        return TextUtils.isEmpty(this.streetName) || TextUtils.isEmpty(this.streetNumber) || TextUtils.isEmpty(this.city) || this.city.equalsIgnoreCase(defaultValue);
+        return TextUtils.isEmpty(this.street) || this.number == null || TextUtils.isEmpty(this.city) || this.city.equalsIgnoreCase(defaultValue);
     }
 }

@@ -133,7 +133,7 @@ public class SurveyBuilder {
             if (fieldType == FieldType.ADDRESS) {
                 LinearLayout addressContainer = (LinearLayout)view;
                 String streetName = ((EditText)addressContainer.findViewById(0)).getText().toString();
-                String streetNumber = ((EditText)addressContainer.findViewById(1)).getText().toString();
+                int streetNumber = Integer.parseInt(((EditText)addressContainer.findViewById(1)).getText().toString());
                 String city = ((SearchableSpinner)addressContainer.findViewById(2)).getSelectedItem().toString();
                 return new FieldSubmission<Address>(Address.class, fieldId, new Address(streetName, streetNumber, city), field.groupId);
             }
