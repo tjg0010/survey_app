@@ -1,4 +1,10 @@
-var mysql = require("mysql");
+// region: Dependencies
+const winston = require('winston');     // Logging.
+const mysql = require("mysql");         // MySql DB connector.
+// endregion
+
+// A map that holds all table names (as values) and their name representation in the json file (as keys).
+var surveyTableMap = { registration: 'main', children: 'children' };
 
 var con = mysql.createConnection({
     host: "localhost",
@@ -10,11 +16,10 @@ exports.connect = function()
 {
     con.connect(function(err){
         if(err){
-            console.log('Error connecting to Db');
-            console.log(err);
+            winston.log('error', 'Error connecting to Db', {error: err});
             return;
         }
-        console.log('Connection established to db');
+        winston.log('info', 'Connection established to db');
     });
 };
 
@@ -26,30 +31,99 @@ exports.disconnect = function(){
     });
 };
 
-exports.getTestData = function(callback){
-
-    con.query('SELECT * FROM testschema.users',function(err,rows){
-        if(err) throw err;
-
-        console.log('Data received from Db:\n');
-        console.log(rows);
-
-        callback(rows);
-    });
-};
-
 exports.saveLocation = function(lat, long, callback){
     con.query(
         'INSERT INTO `testschema`.`locations` (`lat`,`long`) VALUES (?, ?);',
         [mysql.escape(lat), mysql.escape(long)],
         function(err,res){
             if(err) {
-                console.log("Error saving location: ", err);
-                callback(false);
+                winston.log('error', 'Error saving location.', {error: err});
+                callback(err);
             }
             else {
-                console.log("Insereted to DB: ", res.insertId);
-                callback(true);
+                winston.log('info', 'Data inserted to DB.', {id: res.insertId});
+                callback();
             }
     });
 };
+
+exports.saveSurvey = function(surveyName, paramNames, paramValues, callback) {
+    // Only do something if we got a recognized survey.
+    if (surveyName && surveyTableMap[surveyName]) {
+        var parsedValues = escapeDataArray(paramValues);
+
+        con.query(
+            'INSERT INTO `tausurvey`.`' + surveyTableMap[surveyName] + '` ' // the table name.
+            + '(' + paramNames.join(',') + ')'                              // param names.
+            + ' VALUES ( ' + parsedValues.join(',') + ');',                 // param values.
+            function(err,res){
+                if(err) {
+                    winston.log('error', 'Error saving survey.', {error: err});
+                    callback(err);
+                }
+                else {
+                    winston.log('info', 'Data inserted to DB (saveSurvey).', {id: res.insertId});
+                    callback();
+                }
+            });
+    }
+    // Otherwise, throw an exception.
+    else {
+        winston.log('error', 'dbManager.saveSurvey got a null surveyName or an unrecognized one');
+        throw 'dbManager.saveSurvey got a null surveyName or an unrecognized one';
+    }
+};
+
+exports.saveSurveyGroup = function(surveyName, paramNames, paramValuesGroup, userId, callback) {
+    // Only do something if we got a recognized survey.
+    if (surveyName && surveyTableMap[surveyName]) {
+        // Add the userId to the param names.
+        paramNames.push('userId');
+
+        var paramValuesStrings = [];
+
+        // The paramValuesGroup is an array of paramValues arrays, since groups can have repeated items.
+        // We parse each paramValues list separately.
+        for (var i = 0; i < paramValuesGroup.length; i++) {
+            var parsedValues = escapeDataArray(paramValuesGroup[i]);
+            // Also add the userId to each list.
+            paramValuesStrings.push('(' + parsedValues.join(',') + ',' + mysql.escape(userId) + ')');
+        }
+
+        con.query(
+            'INSERT INTO `tausurvey`.`' + surveyTableMap[surveyName] + '` ' // the table name.
+            + '(' + paramNames.join(',') + ')'                              // param names.
+            + ' VALUES ' + paramValuesStrings.join(',') + ';',              // param values arrays.
+            function(err,res){
+                if(err) {
+                    winston.log('error', 'Error saving survey.', {error: err});
+                    callback(err);
+                }
+                else {
+                    winston.log('info', 'Data inserted to DB (saveSurvey).', {id: res.insertId});
+                    callback();
+                }
+            });
+    }
+    // Otherwise, throw an exception.
+    else {
+        winston.log('error', 'dbManager.saveSurvey got a null surveyName or an unrecognized one');
+        throw 'dbManager.saveSurvey got a null surveyName or an unrecognized one';
+    }
+};
+
+/**
+ * Goes over the given data array and runs mysql.escape on each value.
+ * @param dataArray - the array to escape for the db.
+ * @returns {Array}
+ */
+function escapeDataArray(dataArray) {
+    var escapedArray = [];
+
+    // Go over all the data we got and escape each value.
+    for (var i = 0; i < dataArray.length; i++) {
+        escapedArray.push(mysql.escape(dataArray[i]));
+    }
+
+    return escapedArray;
+}

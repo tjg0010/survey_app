@@ -1,0 +1,31 @@
+CREATE DATABASE IF NOT EXISTS tausurvey;
+
+CREATE TABLE IF NOT EXISTS `tausurvey`.`main` (
+  `userId` VARCHAR(45) NOT NULL,
+  `gender` VARCHAR(7) NOT NULL,
+  `birthDate` DATE NOT NULL,
+  `homeCity` VARCHAR(60) NOT NULL,
+  `homeStreet` VARCHAR(100) NOT NULL,
+  `homeNumber` INT NOT NULL,
+  `homeType` VARCHAR(45) NOT NULL,
+  `population` VARCHAR(45) NOT NULL,
+  `occupation` VARCHAR(45) NOT NULL,
+  `hasPrivateCar` TINYINT(1) NOT NULL,
+  `publicTransportationFrequency` VARCHAR(45) NOT NULL,
+  `status` VARCHAR(45) NOT NULL,
+  `numberOfChildren` INT(2) NOT NULL,
+  PRIMARY KEY (`userId`))
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `tausurvey`.`children` (
+  `userId` VARCHAR(45) NOT NULL,
+  `childName` VARCHAR(60) NOT NULL,
+  `childGender` VARCHAR(8) NOT NULL,
+  `childAge` INT NOT NULL,
+  PRIMARY KEY (`userId`, `childName`),
+  CONSTRAINT `fk_userId`
+    FOREIGN KEY (`userId`)
+    REFERENCES `tausurvey`.`main` (`userId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;

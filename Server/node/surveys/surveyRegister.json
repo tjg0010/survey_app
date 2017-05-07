@@ -1,8 +1,9 @@
-﻿{
+{
   "metadata": {
     "title": 1,
     "startText": 2,
-    "submitBtnText": 3
+    "submitBtnText": 3,
+    "name":"registration"
   },
   "fields": [
     {"id": "gender", "mandatory": true, "title": 21, "type": "CHOICES",
@@ -10,7 +11,7 @@
         {"value": "male", "title": 22, "type": "OPTION"},
         {"value": "female", "title": 23, "type": "OPTION"}]},
     {"id": "birthDate", "mandatory": true, "title": 31, "type": "DATE"},
-    {"id": "address", "mandatory": true, "title": 41, "type": "ADDRESS"},
+    {"id": "home", "mandatory": true, "title": 41, "type": "ADDRESS"},
     {"id": "homeType", "mandatory": true, "title": 51, "type": "CHOICES",
       "choices":[
         {"value": "private", "title": 52, "type": "OPTION"},

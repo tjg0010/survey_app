@@ -1,0 +1,11 @@
+{
+  "name": "tau-survey",
+  "version": "0.0.1",
+  "dependencies": {
+    "bluebird": "latest",
+    "winston": "latest",
+    "mysql": "latest",
+    "express": "latest",
+    "body-parser": "latest"
+  }
+}
