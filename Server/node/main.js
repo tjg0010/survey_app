@@ -1,4 +1,5 @@
 // region: Dependencies
+var utils = require('./utils.js');              // Our own utils lib.
 var express = require('express');               // Express web server.
 var bodyParser = require("body-parser");        // Body parser for parsing post body.
 var fs = require('fs');                         // File system.
@@ -8,6 +9,7 @@ var db = require('./dbManager.js');             // Our own dbManager.
 var sm = require('./surveyManager.js');         // Our own surveyManager.
 // endregion
 
+utils.init();
 var app = express();
 var surveyRegister;
 
@@ -56,24 +58,33 @@ app.post('/register/:userId', function (req, res) {
 });
 
 app.post('/location/:userId', function (req, res) {
-    if (req.params.userId) {
-        winston.log('info', '/saveLocation called. User id: %s', req.params.userId);
-    }
-
-    // TODO: use the userId when saving location to db.
-    //req.params.userId
-
+    var userId = req.params.userId;
     var lat = req.body.lat;
     var long = req.body.long;
+    var time = req.body.time;
 
-    db.saveLocation(lat, long, function (isSuccess) {
-        if (isSuccess) {
-            httpHelper.sendResponseSuccess(res);
-        }
-        else {
-            httpHelper.sendResponseError(res, 500, 'Failed saving location to db.');
-        }
-    });
+    if (userId) {
+        winston.log('info', '/saveLocation called. User id: %s', userId);
+    }
+
+    // Only do something if we got all required fields.
+    if (userId && lat && long && time) {
+        db.saveLocation(userId, lat, long, time, function (isSuccess) {
+            if (isSuccess) {
+                httpHelper.sendResponseSuccess(res);
+            }
+            else {
+                httpHelper.sendResponseError(res, 500, 'Failed saving location to db.');
+            }
+        });
+    } else {
+        // Log an error and return an error response.
+        winston.log('error', '/location/:userId (GET) didn\'t get all expected parameters.',
+                    {userId: userId, lat: lat, long: long, time: time});
+        httpHelper.sendResponseError(res, 500, 'Failed saving location to db. Not all required parameters were supplied.');
+    }
+
+
 });
 
 // Start the server.

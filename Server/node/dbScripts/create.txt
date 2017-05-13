@@ -29,3 +29,17 @@ CREATE TABLE IF NOT EXISTS `tausurvey`.`children` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `tausurvey`.`locations` (
+  `locationId` INT(10) NOT NULL,
+  `userId` VARCHAR(45) NOT NULL,
+  `lat` VARCHAR(20) NOT NULL,
+  `long` VARCHAR(20) NOT NULL,
+  `time` DATETIME NOT NULL,
+  PRIMARY KEY (`locationId`),
+  CONSTRAINT `fk_userId_locations`
+    FOREIGN KEY (`userId`)
+    REFERENCES `tausurvey`.`main` (`userId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;

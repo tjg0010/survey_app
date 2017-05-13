@@ -1,6 +1,6 @@
 // region: Dependencies
-const winston = require('winston');     // Logging.
-const mysql = require("mysql");         // MySql DB connector.
+const winston = require('winston');         // Logging.
+const mysql = require("mysql");             // MySql DB connector.
 // endregion
 
 // A map that holds all table names (as values) and their name representation in the json file (as keys).
@@ -31,10 +31,13 @@ exports.disconnect = function(){
     });
 };
 
-exports.saveLocation = function(lat, long, callback){
+exports.saveLocation = function(userId, lat, long, time, callback){
+    // Convert the given time in UTC format, to mySql DATETIME format.
+    var datetime = new Date(mysql.escape(time)).toMysqlDateTime();
+
     con.query(
-        'INSERT INTO `testschema`.`locations` (`lat`,`long`) VALUES (?, ?);',
-        [mysql.escape(lat), mysql.escape(long)],
+        'INSERT INTO `tausurvey`.`locations` (`userId`,`lat`,`long`,`time`) VALUES (?, ?);',
+        [mysql.escape(userId), mysql.escape(lat), mysql.escape(long), mysql.escape(datetime)],
         function(err,res){
             if(err) {
                 winston.log('error', 'Error saving location.', {error: err});
@@ -96,11 +99,11 @@ exports.saveSurveyGroup = function(surveyName, paramNames, paramValuesGroup, use
             + ' VALUES ' + paramValuesStrings.join(',') + ';',              // param values arrays.
             function(err,res){
                 if(err) {
-                    winston.log('error', 'Error saving survey.', {error: err});
+                    winston.log('error', 'Error saving survey group.', {error: err});
                     callback(err);
                 }
                 else {
-                    winston.log('info', 'Data inserted to DB (saveSurvey).', {id: res.insertId});
+                    winston.log('info', 'Data inserted to DB (saveSurveyGroup).', {id: res.insertId});
                     callback();
                 }
             });

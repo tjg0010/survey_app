@@ -207,22 +207,3 @@ function parseGroupParamValues(paramValues, paramNamesLength) {
 
     return groupedValues;
 }
-
-/**
- * Pads a given digit to 2 numbers.
- * @param d - the digit to pad.
- * @returns {*}
- */
-function twoDigits(d) {
-    if(0 <= d && d < 10) return "0" + d.toString();
-    if(-10 < d && d < 0) return "-0" + (-1*d).toString();
-    return d.toString();
-}
-
-/**
- * Converts the date to its mySql format.
- * @returns {string}
- */
-Date.prototype.toMysqlDate = function() {
-    return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + twoDigits(this.getUTCDate());
-};
