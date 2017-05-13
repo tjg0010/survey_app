@@ -139,7 +139,11 @@ public class SurveyBuilder {
             }
             else if (fieldType == FieldType.INT) {
                 EditText editText = (EditText)view;
-                return new FieldSubmission<Integer>(Integer.class, fieldId, Integer.parseInt(editText.getText().toString()), field.groupId);
+                String intString = editText.getText().toString();
+                if (!TextUtils.isEmpty(intString)) {
+                    return new FieldSubmission<Integer>(Integer.class, fieldId, Integer.parseInt(intString), field.groupId);
+                }
+                return null;
             }
             else if (fieldType == FieldType.STRING) {
                 EditText editText = (EditText)view;
@@ -165,7 +169,13 @@ public class SurveyBuilder {
             }
             else if (fieldType == FieldType.DATE) {
                 TextView dateText = (TextView)view;
-                return new FieldSubmission<String>(String.class, fieldId, dateText.getText().toString(), field.groupId);
+                String dateString = dateText.getText().toString();
+                // The date is saved as a long in the tag in key 0.
+                Object tag = dateText.getTag(R.id.tau_date_tag);
+                if (!TextUtils.isEmpty(dateString) && tag != null) {
+                    return new FieldSubmission<Long>(Long.class, fieldId, (long)tag, field.groupId);
+                }
+                return null;
             }
             else if (fieldType == FieldType.GROUP) {
                 // We don't handle groups here! Only groups' fields are handled.
@@ -322,7 +332,8 @@ public class SurveyBuilder {
         radioButtonYes.setText(activity.getResources().getString(R.string.boolean_true));
         radioButtonYes.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, locale));
         // We will need an id to figure out later which radio button was selected.
-        radioButtonYes.setId(0);
+        //noinspection ResourceType
+        radioButtonYes.setId(1);
         radioButtonYes.setTag("true");
         booleanGroup.addView(radioButtonYes);
 
@@ -332,8 +343,8 @@ public class SurveyBuilder {
         radioButtonNo.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, locale));
         // We will need an id to figure out later which radio button was selected.
         //noinspection ResourceType
-        radioButtonNo.setId(1);
-        radioButtonYes.setTag("false");
+        radioButtonNo.setId(0);
+        radioButtonNo.setTag("false");
         booleanGroup.addView(radioButtonNo);
 
         return booleanGroup;
@@ -620,6 +631,7 @@ public class SurveyBuilder {
      */
     private void clearGroupFields(String groupId) {
         ArrayList<String> fieldIdsToDelete = new ArrayList<String>();
+        ArrayList<Integer> viewIdsToDelete = new ArrayList<Integer>();
 
         // Go over all fields.
         for(Map.Entry<String, Field> idFieldPair: fieldIdToFieldMap.entrySet()) {
@@ -630,24 +642,34 @@ public class SurveyBuilder {
             if (!TextUtils.isEmpty(field.groupId) && field.groupId.equalsIgnoreCase(groupId)) {
                 // Add this field id to the delete targets (we don't delete it now to not mess up the dictionary while iterating over it.
                 fieldIdsToDelete.add(fieldId);
+
+                // Go over all the view ids and remove those with the current field id to remove.
+                // We need to do it that way, because we might have multiple views for one field id (repeated group'd field).
+                for(int i = 0; i < viewIdToFieldIdMap.size(); i++) {
+                    int viewId = viewIdToFieldIdMap.keyAt(i);
+                    String viewFieldId = viewIdToFieldIdMap.get(viewId);
+
+                    // If we found a view with the current field id, remove it.
+                    if (viewId != 0 && viewFieldId == fieldId) {
+                        // Mark this viewId to be deleted.
+                        viewIdsToDelete.add(viewId);
+                    }
+                }
             }
         }
 
-        // Go over the deletion list and delete what's needed.
+        // Go over the field id deletion list and delete what's needed.
         for (String fieldId: fieldIdsToDelete) {
-            // Get this fieldId related viewId;
-            Integer viewId = fieldIdToViewIdMap.get(fieldId);
-
-            // If we found a viewId for this fieldId.
-            if (viewId != null && viewId != 0) {
-                // Remove this viewId from both viewIdToFieldIdMap and viewIdToRegisteredGroupViewId.
-                viewIdToFieldIdMap.remove(viewId);
-                viewIdToRegisteredGroupViewId.remove(viewId);
-            }
-
             // Remove this field id from both fieldIdToFieldMap and fieldIdToViewIdMap.
             fieldIdToFieldMap.remove(fieldId);
             fieldIdToViewIdMap.remove(fieldId);
+        }
+
+        // Go over the view id deletion list and delete what's needed.
+        for (Integer viewId: viewIdsToDelete) {
+            // Remove this viewId from both viewIdToFieldIdMap and viewIdToRegisteredGroupViewId.
+            viewIdToFieldIdMap.remove(viewId);
+            viewIdToRegisteredGroupViewId.remove(viewId);
         }
     }
 

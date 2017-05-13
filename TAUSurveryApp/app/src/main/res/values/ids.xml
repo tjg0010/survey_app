@@ -3,4 +3,5 @@
     <item name="tau_error_msg" type="id">901</item>
     <item name="tau_error_msg_title" type="id">902</item>
     <item name="tau_error_msg_body" type="id">903</item>
+    <item name="tau_date_tag" type="id">904</item>
 </resources>

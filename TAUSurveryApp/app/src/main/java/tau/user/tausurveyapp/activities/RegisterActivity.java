@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -52,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         sb = new SurveyBuilder();
 
-        NetworkManager.getInstance().GetRegistrationSurvey(this, new NetworkCallback<Survey>() {
+        NetworkManager.getInstance().getRegistrationSurvey(this, new NetworkCallback<Survey>() {
             @Override
             public void onResponse(Survey survey) {
                 sb.buildSurvey(RegisterActivity.this, survey, (LinearLayout)findViewById(R.id.contentView), TauLocale.IL);

@@ -5,6 +5,9 @@ import android.widget.TextView;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import tau.user.tausurveyapp.R;
+import tau.user.tausurveyapp.Utils;
+
 /**
  * Created by ran on 17/04/2017.
  */
@@ -25,7 +28,10 @@ public class TauDateListener implements DatePickerDialog.OnDateSetListener {
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         String date = makeTwoDigits(dayOfMonth)+"/"+makeTwoDigits(monthOfYear+1)+"/"+year;
+        // Set the user text of the selected date.
         dateTextView.setText(date);
+        // Save the actual time (unix time) as the text view first tag.
+        dateTextView.setTag(R.id.tau_date_tag, Utils.getUnixDate(year, monthOfYear, dayOfMonth));
         // Make the dateTextView visible, now that it holds a date.
         dateTextView.setVisibility(View.VISIBLE);
     }

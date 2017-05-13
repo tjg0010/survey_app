@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import java.util.Date;
+
 import tau.user.tausurveyapp.types.NetworkCallback;
 
 /**
@@ -42,7 +44,8 @@ public class TrackingService extends IntentService {
             public void run(String latitude, String longitude) {
                 if (latitude != null && longitude != null) {
                     // Send the location to the server.
-                    NetworkManager.getInstance().sendLocation(_this, latitude, longitude, new NetworkCallback<String>() {
+                    NetworkManager.getInstance().sendLocation(_this, latitude, longitude, new Date().getTime(),
+                            new NetworkCallback<String>() {
                         @Override
                         public void onResponse(String response) {
                             // Stop the service since it's no longer needed.

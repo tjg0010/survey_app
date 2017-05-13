@@ -11,6 +11,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
 /**
  * Created by ran on 17/04/2017.
  */
@@ -24,6 +26,22 @@ public class Utils {
         catch (NumberFormatException e) {
             return null;
         }
+    }
+
+    /**
+     * A helper function that gets the a date as a long (unix time) according to the given year, month and day.
+     * @return the given year month and day as UNIX time.
+     */
+    public static long getUnixDate(int year, int month, int day) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTimeInMillis();
     }
 
     public static void initializeErrorMsg(Activity activity, String title, String body) {

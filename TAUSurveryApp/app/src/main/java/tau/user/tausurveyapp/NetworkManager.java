@@ -53,7 +53,7 @@ public class NetworkManager {
         service = retrofit.create(TauService.class);
     }
 
-    private String GetUserId(Context context) {
+    private String getUserId(Context context) {
         // If we don't have a userId, try to get it from the preferences.
         if (TextUtils.isEmpty(userId)) {
             SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -75,7 +75,7 @@ public class NetworkManager {
 
     // region: API functions
 
-    public void GetRegistrationSurvey(Context context, final NetworkCallback<Survey> callback) {
+    public void getRegistrationSurvey(Context context, final NetworkCallback<Survey> callback) {
         Call<Survey> call = service.getRegistrationSurvey();
         call.enqueue(new Callback<Survey>() {
             @Override
@@ -92,8 +92,8 @@ public class NetworkManager {
         });
     }
 
-    public void sendLocation(Context context, String latitude, String longitude, final NetworkCallback<String> callback) {
-        Call<Void> call = service.sendLocation(GetUserId(context), latitude, longitude);
+    public void sendLocation(Context context, String latitude, String longitude, long time, final NetworkCallback<String> callback) {
+        Call<Void> call = service.sendLocation(getUserId(context), latitude, longitude, time);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -114,7 +114,7 @@ public class NetworkManager {
      * NOTE: this function is synchronous!
      */
     public boolean submitRegistration(Context context, ArrayList<FieldSubmission> fieldSubmissions) {
-        Call<Void> call = service.submitRegistration(GetUserId(context), fieldSubmissions);
+        Call<Void> call = service.submitRegistration(getUserId(context), fieldSubmissions);
         try {
             // Call the API synchronously.
             Response response = call.execute();
@@ -140,7 +140,8 @@ public class NetworkManager {
 
         @FormUrlEncoded
         @POST("location/{userId}")
-        Call<Void> sendLocation(@Path("userId") String userId, @Field("lat") String latitude, @Field("long") String longitude);
+        Call<Void> sendLocation(@Path("userId") String userId, @Field("lat") String latitude, @Field("long") String longitude,
+                                @Field("time") long time);
 
         @POST("register/{userId}")
         Call<Void> submitRegistration(@Path("userId") String userId, @Body List<FieldSubmission> fieldSubmissions);
