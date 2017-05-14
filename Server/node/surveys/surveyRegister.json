@@ -22,7 +22,7 @@
         {"value": "religious", "title": 63, "type": "OPTION"},
         {"value": "non-religious", "title": 64, "type": "OPTION"},
         {"value": "arab", "title": 65, "type": "OPTION"},
-        {"value": "other", "title": 65, "type": "OTHER"}]},
+        {"value": "other", "title": 66, "type": "OTHER"}]},
     {"id": "occupation", "mandatory": true, "title": 71, "type": "CHOICES",
       "choices":[
         {"value": "soldier", "title": 72, "type": "OPTION"},

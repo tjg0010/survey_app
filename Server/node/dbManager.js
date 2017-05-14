@@ -33,14 +33,15 @@ exports.disconnect = function(){
 
 exports.saveLocation = function(userId, lat, long, time, callback){
     // Convert the given time in UTC format, to mySql DATETIME format.
-    var datetime = new Date(mysql.escape(time)).toMysqlDateTime();
+    var datetime = new Date(parseInt(time)).toMysqlDateTime();
 
     con.query(
-        'INSERT INTO `tausurvey`.`locations` (`userId`,`lat`,`long`,`time`) VALUES (?, ?);',
-        [mysql.escape(userId), mysql.escape(lat), mysql.escape(long), mysql.escape(datetime)],
+        // Using ? to supply values auto escapes them to a sql injection safe format.
+        'INSERT INTO `tausurvey`.`locations` (`userId`,`lat`,`long`,`time`) VALUES (?, ?, ?, ?);',
+        [userId, lat, long, datetime],
         function(err,res){
             if(err) {
-                winston.log('error', 'Error saving location.', {error: err});
+                logError('Error saving location.', err);
                 callback(err);
             }
             else {
@@ -61,7 +62,7 @@ exports.saveSurvey = function(surveyName, paramNames, paramValues, callback) {
             + ' VALUES ( ' + parsedValues.join(',') + ');',                 // param values.
             function(err,res){
                 if(err) {
-                    winston.log('error', 'Error saving survey.', {error: err});
+                    logError('Error saving survey.', err);
                     callback(err);
                 }
                 else {
@@ -99,7 +100,7 @@ exports.saveSurveyGroup = function(surveyName, paramNames, paramValuesGroup, use
             + ' VALUES ' + paramValuesStrings.join(',') + ';',              // param values arrays.
             function(err,res){
                 if(err) {
-                    winston.log('error', 'Error saving survey group.', {error: err});
+                    logError('Error saving survey group.', err);
                     callback(err);
                 }
                 else {
@@ -129,4 +130,11 @@ function escapeDataArray(dataArray) {
     }
 
     return escapedArray;
+}
+
+function logError(title, err) {
+    winston.log('error', title, {error: err});
+    if (err.message) {
+        winston.log('error', 'error message', {message: err.message});
+    }
 }

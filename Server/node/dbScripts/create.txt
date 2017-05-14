@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `tausurvey`.`children` (
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `tausurvey`.`locations` (
-  `locationId` INT(10) NOT NULL,
+  `locationId` INT(10) NOT NULL AUTO_INCREMENT,
   `userId` VARCHAR(45) NOT NULL,
   `lat` VARCHAR(20) NOT NULL,
   `long` VARCHAR(20) NOT NULL,
