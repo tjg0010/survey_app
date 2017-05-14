@@ -2,6 +2,7 @@ package tau.user.tausurveyapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
@@ -48,6 +49,7 @@ import tau.user.tausurveyapp.uiClasses.TauDateListener;
 public class SurveyBuilder {
 
     private final float titleTextSize = 22;
+    private final float normalTextSize = 16;
     private int idsCounter;
 
     private HashMap<String, Field> fieldIdToFieldMap;
@@ -73,6 +75,12 @@ public class SurveyBuilder {
         // Set the submit button text.
         Button submitButton = (Button)activity.findViewById(R.id.btn_submit);
         submitButton.setText(survey.getString(locale, survey.metadata.submitBtnText));
+
+        // Set the start text of the survey.
+        TextView startText = createTextView(activity, survey.getString(locale, survey.metadata.startText));
+        startText.setTextColor(Color.BLACK);
+        startText.setTextSize(normalTextSize);
+        view.addView(startText);
 
         // Go over all the survey fields and create its layout.
         if (survey != null && survey.fields != null && !survey.fields.isEmpty()) {
