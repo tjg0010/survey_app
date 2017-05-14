@@ -50,6 +50,7 @@ public class SurveyBuilder {
 
     private final float titleTextSize = 22;
     private final float normalTextSize = 16;
+    private final float subtitleTextSize = 20;
     private int idsCounter;
 
     private HashMap<String, Field> fieldIdToFieldMap;
@@ -105,7 +106,7 @@ public class SurveyBuilder {
             Field field = fieldIdToFieldMap.get(fieldId);
 
             // Only do something if this is not a group field.
-            if (field.getType() != FieldType.GROUP) {
+            if (field.getType() != FieldType.GROUP && field.getType() != FieldType.TITLE) {
                 // Get the input the user has set.
                 FieldSubmission fieldSubmission = getFieldValue(fieldId, field, viewId, activity);
 
@@ -145,7 +146,7 @@ public class SurveyBuilder {
                 String city = ((SearchableSpinner)addressContainer.findViewById(2)).getSelectedItem().toString();
                 return new FieldSubmission<Address>(Address.class, fieldId, new Address(streetName, streetNumber, city), field.groupId);
             }
-            else if (fieldType == FieldType.INT) {
+            else if (fieldType == FieldType.INT || fieldType == FieldType.TALBEINT) {
                 EditText editText = (EditText)view;
                 String intString = editText.getText().toString();
                 if (!TextUtils.isEmpty(intString)) {
@@ -186,8 +187,13 @@ public class SurveyBuilder {
                 return null;
             }
             else if (fieldType == FieldType.GROUP) {
-                // We don't handle groups here! Only groups' fields are handled.
+                // We don't handle groups here. Only groups' fields are handled.
                 Log.e("Developer Error", "Tried processing a group field where groups are ignored");
+                return null;
+            }
+            else if (fieldType == FieldType.TITLE) {
+                // We don't handle titles here.
+                Log.e("Developer Error", "Tried processing a title field where titles are ignored");
                 return null;
             }
         }
@@ -234,7 +240,8 @@ public class SurveyBuilder {
         LinearLayout ll = createWrapperLinearLayout(activity, locale);
 
         // If the field has a title and it's not a group - create and add it.
-        if (field.getTitleId() > 0 && field.getType() != FieldType.GROUP) {
+        if (field.getTitleId() > 0 && field.getType() != FieldType.GROUP
+            && field.getType() != FieldType.TITLE && field.getType() != FieldType.TALBEINT) {
             // Get the title according to the given locale.
             String title = survey.getString(locale, field.getTitleId());
 
@@ -276,6 +283,12 @@ public class SurveyBuilder {
                 LinearLayout groupView = createGroupView(activity, survey, field, locale);
                 ll.addView(groupView);
                 break;
+            case TITLE:
+                TextView subtitle = createSubtitle(activity, survey, field, locale);
+                ll.addView(subtitle);
+            case TALBEINT:
+                LinearLayout tableInt = createTableInt(activity, survey, field, locale);
+                ll.addView(tableInt);
         }
 
         return ll;
@@ -290,6 +303,18 @@ public class SurveyBuilder {
         linearLayout.setLayoutParams(layoutParams);
 
         return linearLayout;
+    }
+
+    private TextView createSubtitle(Context context, Survey survey, Field field, TauLocale locale) {
+        TextView textView = new TextView(context);
+        textView.setText(survey.getString(locale, field.getTitleId()));
+        textView.setTextSize(subtitleTextSize);
+        textView.setTextColor(Color.BLACK);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        textView.setLayoutParams(layoutParams);
+
+        return textView;
     }
 
     private TextView createTextView(Context context, String text) {
@@ -489,8 +514,8 @@ public class SurveyBuilder {
         container.setVisibility(View.GONE);
 
         // Register this view (if it has a conditionOn value and what he's conditioning on exists).
-        if (!TextUtils.isEmpty(field.conditionOn) && fieldIdToViewIdMap.containsKey(field.conditionOn)) {
-            Integer conditionedViewId = fieldIdToViewIdMap.get(field.conditionOn);
+        if (field.condition != null && !TextUtils.isEmpty(field.condition.conditionOn) && fieldIdToViewIdMap.containsKey(field.condition.conditionOn)) {
+            Integer conditionedViewId = fieldIdToViewIdMap.get(field.condition.conditionOn);
 
             List<Integer> registeredIds = viewIdToRegisteredGroupViewId.get(conditionedViewId, new ArrayList<Integer>());
             registeredIds.add(groupViewId);
@@ -524,6 +549,33 @@ public class SurveyBuilder {
         }
 
         return container;
+    }
+
+    private LinearLayout createTableInt(Activity activity, Survey survey, Field field, TauLocale locale) {
+        // Create a container for this table int value.
+        LinearLayout tableRow = new LinearLayout(activity);
+        tableRow.setOrientation(LinearLayout.HORIZONTAL);
+        tableRow.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
+
+        // Create the row title text view.
+        TextView rowTitle = new TextView(activity);
+        rowTitle.setTextColor(Color.BLACK);
+        rowTitle.setText(survey.getString(locale, field.getTitleId()));
+        rowTitle.setLayoutParams(createLinearLayoutParamsWithWeight(0.6));
+        tableRow.addView(rowTitle);
+        // Create the row int input.
+        EditText rowInput = new EditText(activity);
+        rowInput.setId(getViewId(field));
+        rowInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+        rowInput.setSingleLine();
+        //rowInput.setHint(R.string.address_street_number);
+        rowInput.setLayoutParams(createLinearLayoutParamsWithWeight(0.4));
+        InputFilter[] filterArray = new InputFilter[1];
+        filterArray[0] = new InputFilter.LengthFilter(4); // Set maximum length of the int value to a thousand.
+        rowInput.setFilters(filterArray);
+        tableRow.addView(rowInput);
+
+        return tableRow;
     }
 
     // region: Helper functions
@@ -592,16 +644,16 @@ public class SurveyBuilder {
                     }
 
                     // Create the group's layout according to its type.
-                    switch (group.conditionType) {
+                    switch (group.condition.type) {
                         case REPEAT:
                             Integer number = Utils.tryParse(text);
                             if (shouldShow && number != null && number > 0) {
                                 // A group is actually a second survey - build its layout (as many times as requested).
                                 for (int i = 0; i < number; i++) {
                                     // Add the repeated title (if exists).
-                                    if (group.repeatText > 0) {
+                                    if (group.condition.repeatText > 0) {
                                         // Add the given repeatText before the group fields, replacing the ## joker with the current number.
-                                        String repeatedTitle = survey.getString(locale, group.repeatText).replace("##", Integer.toString(i+1));
+                                        String repeatedTitle = survey.getString(locale, group.condition.repeatText).replace("##", Integer.toString(i+1));
                                         TextView repeatedTitleView = createTextView(activity, repeatedTitle);
                                         repeatedTitleView.setPaintFlags(repeatedTitleView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                                         repeatedTitleView.setTextColor(Color.BLACK);

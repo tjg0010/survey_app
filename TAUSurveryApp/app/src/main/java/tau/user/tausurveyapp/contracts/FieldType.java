@@ -7,5 +7,7 @@ public enum FieldType {
     DATE,
     ADDRESS,
     CHOICES,
-    GROUP
+    GROUP,
+    TITLE,
+    TALBEINT
 }

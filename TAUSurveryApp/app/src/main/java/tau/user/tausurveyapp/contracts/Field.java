@@ -22,11 +22,7 @@ public class Field {
     @Expose
     public Choice[] choices;
     @Expose
-    public String conditionOn;
-    @Expose
-    public ConditionType conditionType;
-    @Expose
-    public int repeatText;
+    public FieldCondition condition;
     @Expose
     public List<Field> fields;
 
