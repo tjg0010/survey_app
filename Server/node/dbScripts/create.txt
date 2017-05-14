@@ -43,3 +43,52 @@ CREATE TABLE IF NOT EXISTS `tausurvey`.`locations` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `tausurvey`.`diaries` (
+  `diaryId` INT(10) NOT NULL AUTO_INCREMENT,
+  `userId` VARCHAR(45) NOT NULL,
+  `time` DATETIME NOT NULL,
+  `home0to5` INT(4) NOT NULL,
+  `home5to18` INT(4) NOT NULL,
+  `home18to35` INT(4) NOT NULL,
+  `home35to50` INT(4) NOT NULL,
+  `home50to65` INT(4) NOT NULL,
+  `home65to120` INT(4) NOT NULL,
+  `work0to5` INT(4) NOT NULL,
+  `work5to18` INT(4) NOT NULL,
+  `work18to35` INT(4) NOT NULL,
+  `work35to50` INT(4) NOT NULL,
+  `work50to65` INT(4) NOT NULL,
+  `work65to120` INT(4) NOT NULL,
+  `leisure0to5` INT(4) NOT NULL,
+  `leisure5to18` INT(4) NOT NULL,
+  `leisure18to35` INT(4) NOT NULL,
+  `leisure35to50` INT(4) NOT NULL,
+  `leisure50to65` INT(4) NOT NULL,
+  `leisure65to120` INT(4) NOT NULL,
+  PRIMARY KEY (`diaryId`),
+  CONSTRAINT `fk_userId_diaries`
+    FOREIGN KEY (`userId`)
+    REFERENCES `tausurvey`.`main` (`userId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `tausurvey`.`children_diaries` (
+  `childDiaryId` INT(10) NOT NULL AUTO_INCREMENT,
+  `userId` VARCHAR(45) NOT NULL,
+  `childName` VARCHAR(60) NOT NULL,
+  `time` DATETIME NOT NULL,
+  `contacts0to5` INT(4) NOT NULL,
+  `contacts5to18` INT(4) NOT NULL,
+  `contacts18to35` INT(4) NOT NULL,
+  `contacts35to50` INT(4) NOT NULL,
+  `contacts50to65` INT(4) NOT NULL,
+  `contacts65to120` INT(4) NOT NULL,
+  PRIMARY KEY (`childDiaryId`),
+  CONSTRAINT `fk_children_diaries`
+    FOREIGN KEY (`userId`, `childName`)
+    REFERENCES `tausurvey`.`children` (`userId`, `childName`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
