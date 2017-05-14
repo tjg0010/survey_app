@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.view.View;
@@ -99,5 +100,57 @@ public class Utils {
         // 4. Get the AlertDialog from create().
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    /**
+     * Gets the string with the given key (resId) from the shared preferences.
+     * @param context - the current context. Used to get resource strings.
+     * @param resId - the resId of the desired key from preferences.
+     * @return the found result or an empty string if not found.
+     */
+    public static String getStringFromPrefs(Context context, @StringRes int resId) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String result = prefs.getString(context.getString(resId), "");
+
+        return result;
+    }
+
+    /**
+     * Sets a new string value to the given key (resId) in the shared preferences.
+     * @param context - the current context. Used to get resource strings.
+     * @param resId - the resId of the desired key from preferences.
+     * @param value - the new value to write in the given key.
+     */
+    public static void setStringToPrefs(Context context, @StringRes int resId, String value) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(context.getString(resId), value);
+        editor.apply();
+    }
+
+    /**
+     * Gets the boolean value with the given key (resId) from the shared preferences.
+     * @param context - the current context. Used to get resource strings.
+     * @param resId - the resId of the desired key from preferences.
+     * @return the found result or an empty string if not found.
+     */
+    public static boolean getBooleanFromPrefs(Context context, @StringRes int resId) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        boolean result = prefs.getBoolean(context.getString(resId), false);
+
+        return result;
+    }
+
+    /**
+     * Sets a new boolean value to the given key (resId) in the shared preferences.
+     * @param context - the current context. Used to get resource strings.
+     * @param resId - the resId of the desired key from preferences.
+     * @param value - the new value to write in the given key.
+     */
+    public static void setBooleanToPrefs(Context context, @StringRes int resId, boolean value) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(context.getString(resId), value);
+        editor.apply();
     }
 }

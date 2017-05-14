@@ -2,6 +2,7 @@ package tau.user.tausurveyapp.activities;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
@@ -20,7 +21,6 @@ import tau.user.tausurveyapp.types.NetworkCallback;
 import tau.user.tausurveyapp.NetworkManager;
 import tau.user.tausurveyapp.R;
 import tau.user.tausurveyapp.SurveyBuilder;
-import tau.user.tausurveyapp.TrackingRepeater;
 import tau.user.tausurveyapp.Utils;
 import tau.user.tausurveyapp.contracts.TauLocale;
 import tau.user.tausurveyapp.contracts.Survey;
@@ -75,13 +75,6 @@ public class RegisterActivity extends AppCompatActivity {
             // If we don't have permissions, request them.
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION);
         }
-        // If we do have permissions.
-        else {
-            // Start the tracking.
-            TrackingRepeater.getInstance().startRepeatedTracking(this, false);
-
-            // TODO: add this logic to the info screen as well once it's all set up.
-        }
     }
 
     @Override
@@ -99,10 +92,10 @@ public class RegisterActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted!
-                    TrackingRepeater.getInstance().startRepeatedTracking(this, false);
                 }
                 else {
                     // Permission denied! Do nothing...
+                    // TODO: Add a message saying we really really need location permissions.
                 }
                 return;
             }
@@ -133,7 +126,12 @@ public class RegisterActivity extends AppCompatActivity {
 
                 // If registration was completed successfully.
                 if (surveySubmitResult.isSuccess()) {
-                    // TODO: Go to next activity.
+                    // Save a flag that indicates the user is registered.
+                    Utils.setBooleanToPrefs(RegisterActivity.this, R.string.key_is_registered, true);
+
+                    // Go to the info screen.
+                    Intent intent = new Intent(RegisterActivity.this, InfoActivity.class);
+                    startActivity(intent);
                 }
                 // If an error occurred (network error, empty mandatory field was found, etc...)
                 else {

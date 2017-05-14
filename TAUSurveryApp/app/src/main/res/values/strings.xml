@@ -23,6 +23,8 @@
     <string name="survey_error_title">שגיאת הרשמה</string>
     <string name="survey_error_button">סגור</string>
 
+    <string name="info_survey_title">סיום הרשמה</string>
+    <string name="info_survey_text">תודה רבה על הרשמתך!</string>
 
     <string name="Terms_and_Conditions">
 

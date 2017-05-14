@@ -1,7 +1,6 @@
 package tau.user.tausurveyapp;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -10,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,17 +56,20 @@ public class NetworkManager {
     private String getUserId(Context context) {
         // If we don't have a userId, try to get it from the preferences.
         if (TextUtils.isEmpty(userId)) {
-            SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-            userId = prefs.getString(context.getString(R.string.key_user_id), "");
+            userId = Utils.getStringFromPrefs(context, R.string.key_user_id);
 
             // If we still don't have the user id, get it from the device's account.
             if (TextUtils.isEmpty(userId)) {
                 userId = Utils.getUserId(context);
+                // Save the user id we found in the prefs.
+                Utils.setStringToPrefs(context, R.string.key_user_id, userId);
             }
 
-            // TODO: For testing uses. Remove when done!!!
+            // If we still didn't manage to get a user id, generate a UUID instead and save it.
             if (TextUtils.isEmpty(userId)) {
-                userId ="TEST";
+                userId = UUID.randomUUID().toString();
+                // Save the user id we found in the prefs.
+                Utils.setStringToPrefs(context, R.string.key_user_id, userId);
             }
         }
 
