@@ -66,6 +66,11 @@ CREATE TABLE IF NOT EXISTS `tausurvey`.`diaries` (
   `leisure35to50` INT(4) NOT NULL,
   `leisure50to65` INT(4) NOT NULL,
   `leisure65to120` INT(4) NOT NULL,
+  `orthodox` INT(4) NOT NULL,
+  `religious` INT(4) NOT NULL,
+  `nonReligious` INT(4) NOT NULL,
+  `arab` INT(4) NOT NULL,
+  `other` INT(4) NOT NULL,
   PRIMARY KEY (`diaryId`),
   CONSTRAINT `fk_userId_diaries`
     FOREIGN KEY (`userId`)

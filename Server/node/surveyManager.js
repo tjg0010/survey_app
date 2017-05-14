@@ -101,6 +101,66 @@ exports.saveSurvey = function(surveyName, userId, fieldSubmissions, callback) {
 };
 
 /**
+ * Goes over a given survey and enriches it with data from the db according to the given userId.
+ * @param survey - the survey to enrich.
+ * @param userId - the userId we need to enrich the survey data with.
+ * @param callback - a callback to be called when done.
+ */
+exports.enrichSurvey = function (survey, userId, callback) {
+    var serverGroupFound = false;
+
+    if (userId && survey && survey.fields) {
+        // Go over the survey's fields and check if any of them is a group field with condition.source marked as "SERVER".
+        for (var i = 0; i < survey.fields.length; i++) {
+            var field = survey.fields[i];
+
+            if (field.type === fieldTypes.group && field.condition.source === 'SERVER') {
+                serverGroupFound = true;
+
+                // 1st param: the table name is assumed to be the group's id.
+                // 2nd param: the param name we want to return from the db is condition.conditionOn
+                db.getSurveyEnrichmentData(field.id, field.condition.conditionOn, userId, function(err, rows) {
+                    if (err) {
+                        callback(err);
+                        return;
+                    }
+
+                    // No rows were found, return 0 repetitions and an empty values array.
+                    if (!rows) {
+                        field.condition.repetitions = 0;
+                        field.condition.values = [];
+                    } else {
+                        field.condition.repetitions = rows.length;
+
+                        for (var j = 0; j < rows.length; j++) {
+                            var row = rows[j];
+
+                            // Create the values array if it doesn't exist.
+                            if (!field.condition.values) {
+                                field.condition.values = [];
+                            }
+                            // Push the row value to the values array.
+                            field.condition.values.push(row[field.condition.conditionOn]);
+                        }
+                    }
+
+                    callback(err, survey);
+                });
+            }
+        }
+
+        // If no group with type SERVER was found, we didn't call the callback yet. Call it now.
+        if (!serverGroupFound) {
+            callback(null, survey);
+        }
+    }
+    else {
+        winston.log('error', 'surveyManager.enrichSurvey was called with an empty survey or userId.', {userId: userId, survey: survey});
+        callback('Error - empty userId or survey');
+    }
+};
+
+/**
  * Saves the given survey's fields to the surveysFields dictionary to the given survey name's key.
  * This function runs recursively and saves the survey's groups' fields as well to the dictionary.
  * @param surveyName - the survey name. Instructs where in the surveysFields dictionary should the fields be saved.

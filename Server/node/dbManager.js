@@ -116,6 +116,21 @@ exports.saveSurveyGroup = function(surveyName, paramNames, paramValuesGroup, use
     }
 };
 
+exports.getSurveyEnrichmentData = function(tableName, paramName, userId, callback) {
+    winston.log('info', 'dbManager.getSurveyEnrichmentData called.', {tableName: tableName, paramName: paramName, userId: userId});
+
+    con.query('SELECT ' + paramName + ' FROM tausurvey.' + tableName + ' WHERE userId = ?', userId, function(err, rows){
+        if(err) {
+            logError('Error selecting survey enrichment data.', err);
+            callback(err);
+        }
+        else {
+            winston.log('info', 'dbManager.getSurveyEnrichmentData found ' + rows.length + 'results.');
+            callback(null, rows);
+        }
+    });
+};
+
 /**
  * Goes over the given data array and runs mysql.escape on each value.
  * @param dataArray - the array to escape for the db.

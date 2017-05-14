@@ -43,8 +43,8 @@
         {"value": "divorced", "title": 104, "type": "OPTION"},
         {"value": "widowed", "title": 105, "type": "OPTION"}]},
     {"id": "numberOfChildren", "mandatory": true, "title": 111, "type": "INT"},
-    {"id": "children", "mandatory": true, "type": "GROUP", "conditionOn": "numberOfChildren",
-      "conditionType": "REPEAT", "repeatText": 122,
+    {"id": "children", "mandatory": true, "type": "GROUP",
+      "condition": {"type": "REPEAT", "repeatText": 122, "source": "CLIENT", "conditionOn": "numberOfChildren"},
       "fields":[
         {"id": "childName", "mandatory": true, "title": 131, "type": "STRING"},
         {"id": "childGender", "mandatory": true, "title": 141, "type": "CHOICES",

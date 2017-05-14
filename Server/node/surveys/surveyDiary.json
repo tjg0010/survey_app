@@ -1,0 +1,80 @@
+{
+  "metadata": {
+    "title": 1,
+    "startText": 2,
+    "submitBtnText": 3,
+    "name":"diaries"
+  },
+  "fields": [
+    {"id": "titleHome", "title": 21, "type": "TITLE"},
+    {"id": "home0to5", "mandatory": true, "title": 31, "type": "TABLE_INT"},
+    {"id": "home5to18", "mandatory": true, "title": 32, "type": "TABLE_INT"},
+    {"id": "home18to35", "mandatory": true, "title": 33, "type": "TABLE_INT"},
+    {"id": "home35to50", "mandatory": true, "title": 34, "type": "TABLE_INT"},
+    {"id": "home50to65", "mandatory": true, "title": 35, "type": "TABLE_INT"},
+    {"id": "home65to120", "mandatory": true, "title": 36, "type": "TABLE_INT"},
+    {"id": "titleWork", "title": 41, "type": "TITLE"},
+    {"id": "work0to5", "mandatory": true, "title": 31, "type": "TABLE_INT"},
+    {"id": "work5to18", "mandatory": true, "title": 32, "type": "TABLE_INT"},
+    {"id": "work18to35", "mandatory": true, "title": 33, "type": "TABLE_INT"},
+    {"id": "work35to50", "mandatory": true, "title": 34, "type": "TABLE_INT"},
+    {"id": "work50to65", "mandatory": true, "title": 35, "type": "TABLE_INT"},
+    {"id": "work65to120", "mandatory": true, "title": 36, "type": "TABLE_INT"},
+    {"id": "titleLeisure", "title": 51, "type": "TITLE"},
+    {"id": "leisure0to5", "mandatory": true, "title": 31, "type": "TABLE_INT"},
+    {"id": "leisure5to18", "mandatory": true, "title": 32, "type": "TABLE_INT"},
+    {"id": "leisure18to35", "mandatory": true, "title": 33, "type": "TABLE_INT"},
+    {"id": "leisure35to50", "mandatory": true, "title": 34, "type": "TABLE_INT"},
+    {"id": "leisure50to65", "mandatory": true, "title": 35, "type": "TABLE_INT"},
+    {"id": "leisure65to120", "mandatory": true, "title": 36, "type": "TABLE_INT"},
+    {"id": "titlePopulation", "title": 61, "type": "TITLE"},
+    {"id": "orthodox", "mandatory": true, "title": 71, "type": "TABLE_INT"},
+    {"id": "religious", "mandatory": true, "title": 72, "type": "TABLE_INT"},
+    {"id": "nonReligious", "mandatory": true, "title": 73, "type": "TABLE_INT"},
+    {"id": "arab", "mandatory": true, "title": 74, "type": "TABLE_INT"},
+    {"id": "other", "mandatory": true, "title": 75, "type": "TABLE_INT"},
+    {"id": "titleChildren", "title": 81, "type": "TITLE"},
+    {"id": "leisure0to5", "mandatory": true, "title": 31, "type": "TABLE_INT"},
+    {"id": "leisure5to18", "mandatory": true, "title": 32, "type": "TABLE_INT"},
+    {"id": "leisure18to35", "mandatory": true, "title": 33, "type": "TABLE_INT"},
+    {"id": "leisure35to50", "mandatory": true, "title": 34, "type": "TABLE_INT"},
+    {"id": "leisure50to65", "mandatory": true, "title": 35, "type": "TABLE_INT"},
+    {"id": "leisure65to120", "mandatory": true, "title": 36, "type": "TABLE_INT"},
+    {"id": "children", "mandatory": true, "type": "GROUP",
+      "condition": {"type": "REPEAT", "repeatText": 81, "repetitions": 0, "source": "SERVER", "conditionOn": "childName", "values": []},
+      "fields":[
+        {"id": "contacts0to5", "mandatory": true, "title": 31, "type": "TABLE_INT"},
+        {"id": "contacts5to18", "mandatory": true, "title": 32, "type": "TABLE_INT"},
+        {"id": "contacts18to35", "mandatory": true, "title": 33, "type": "TABLE_INT"},
+        {"id": "contacts35to50", "mandatory": true, "title": 34, "type": "TABLE_INT"},
+        {"id": "contacts50to65", "mandatory": true, "title": 35, "type": "TABLE_INT"},
+        {"id": "contacts65to120", "mandatory": true, "title": 36, "type": "TABLE_INT"}
+      ]}
+  ],
+  "strings": {
+    "IL": {
+      "1": "הרשמה לסקר",
+      "2": "על מנת להירשם לסקר, אנא מלא/י את הפרטים הבאים:",
+      "3": "שלח",
+      "21": "עם כמה אנשים נפגשת באיזור הבית:",
+      "31": "ילדים 0-5",
+      "32": "ילדים 5-18",
+      "33": "מבוגרים 18-35",
+      "34": "מבוגרים 35-50",
+      "35": "מבוגרים 50-65",
+      "36": "מבוגרים מעבר ל-65",
+      "41": "עם כמה אנשים נפגשת בעבודה, בדרך לעבודה ובדרך חזרה:",
+      "51": "עם כמה אנשים נפגשת במקומות אחרים ובשעות הפנאי (בערב, בלילה וכו'):",
+      "61": "נסה להגדיר עם כמה אנשים מכל קבוצת אוכלוסייה באת במגע במהלך כל היום:",
+      "71": "יהודים חרדים",
+      "72": "יהודים דתיים חובשי כיפה",
+      "73": "יהודים מסורתיים/חילונים",
+      "74": "ערבים",
+      "75": "קבוצה אחרת",
+      "81": "נסה להעריך, ככל הידוע לך, עם כמה אנשים בא/ה ### במגע ב-24 שעות האחרונות:"
+    },
+    "EN": {
+
+    }
+  }
+}

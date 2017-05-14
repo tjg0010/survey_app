@@ -12,6 +12,7 @@ var sm = require('./surveyManager.js');         // Our own surveyManager.
 utils.init();
 var app = express();
 var surveyRegister;
+var surveyDiary;
 
 // This is needed to parse post body.
 app.use(bodyParser.urlencoded({extended: false}));
@@ -69,8 +70,8 @@ app.post('/location/:userId', function (req, res) {
 
     // Only do something if we got all required fields.
     if (userId && lat && long && time) {
-        db.saveLocation(userId, lat, long, time, function (isSuccess) {
-            if (isSuccess) {
+        db.saveLocation(userId, lat, long, time, function (err) {
+            if (!err) {
                 httpHelper.sendResponseSuccess(res);
             }
             else {
@@ -87,6 +88,29 @@ app.post('/location/:userId', function (req, res) {
 
 });
 
+app.get('/diary/:userId', function (req, res) {
+    var userId = req.params.userId;
+
+    winston.log('info', '/diary/:userId (GET) called', {userId: userId});
+
+    // Only do something if we got a user id.
+    if (userId) {
+        sm.enrichSurvey(surveyDiary, userId, function(err, data) {
+            // If the enrichment didn't have any errors and we got the data (which is the survey enriched).
+            if (!err && data) {
+                httpHelper.sendTextResponseSuccess(res, data);
+            } else {
+                // Otherwise, send an error back.
+                httpHelper.sendResponseError(res, 500, 'Failed saving location to db.' + err);
+            }
+        });
+    } else {
+        // Log an error and return an error response.
+        winston.log('error', '/diary/:userId (GET) called without a user id.');
+        httpHelper.sendResponseError(res, 400, 'Failed loading the survey. User ID is missing.');
+    }
+});
+
 // Start the server.
 var server = app.listen(8888, function () {
 
@@ -100,9 +124,11 @@ var server = app.listen(8888, function () {
     // To support hebrew, the surveryRegister.json file was saved with UTF-8 encoding.
     // We use fs.readFileSync with utf8 encoding, and parse the file with JSON.parse.
     surveyRegister = JSON.parse(fs.readFileSync('surveys/surveyRegister.json', 'utf8'));
+    surveyDiary = JSON.parse(fs.readFileSync('surveys/surveyDiary.json', 'utf8'));
 
     // Feed the survey manager with this survey, so it can later handle it on save.
     sm.loadSurvey(surveyRegister);
+    sm.loadSurvey(surveyDiary);
 
     winston.log('info', 'App is listening at http://%s:%s', host, port);
 });
