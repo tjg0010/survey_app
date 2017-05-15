@@ -117,9 +117,10 @@ exports.enrichSurvey = function (survey, userId, callback) {
             if (field.type === fieldTypes.group && field.condition.source === 'SERVER') {
                 serverGroupFound = true;
 
-                // 1st param: the table name is assumed to be the group's id.
-                // 2nd param: the param name we want to return from the db is condition.conditionOn
-                db.getSurveyEnrichmentData(field.id, field.condition.conditionOn, userId, function(err, rows) {
+                // 1st param: the table name is assumed to be the first part of the condition.conditionOn attribute (the part before the dot).
+                // 2nd param: the param name we want to return from the db is assumed to be the second part of the condition.conditionOn attribute (the part after the dot).
+                var dbData = field.condition.conditionOn.split('.');
+                db.getSurveyEnrichmentData(dbData[0], dbData[1], userId, function(err, rows) {
                     if (err) {
                         callback(err);
                         return;
@@ -131,16 +132,14 @@ exports.enrichSurvey = function (survey, userId, callback) {
                         field.condition.values = [];
                     } else {
                         field.condition.repetitions = rows.length;
+                        // Reset the values array.
+                        field.condition.values = [];
 
                         for (var j = 0; j < rows.length; j++) {
                             var row = rows[j];
 
-                            // Create the values array if it doesn't exist.
-                            if (!field.condition.values) {
-                                field.condition.values = [];
-                            }
                             // Push the row value to the values array.
-                            field.condition.values.push(row[field.condition.conditionOn]);
+                            field.condition.values.push(row[dbData[1]]);
                         }
                     }
 

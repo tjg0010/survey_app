@@ -125,7 +125,7 @@ exports.getSurveyEnrichmentData = function(tableName, paramName, userId, callbac
             callback(err);
         }
         else {
-            winston.log('info', 'dbManager.getSurveyEnrichmentData found ' + rows.length + 'results.');
+            winston.log('info', 'dbManager.getSurveyEnrichmentData found ' + rows.length + ' results.');
             callback(null, rows);
         }
     });
