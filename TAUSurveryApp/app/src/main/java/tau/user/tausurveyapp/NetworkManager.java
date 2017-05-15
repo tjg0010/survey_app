@@ -133,6 +133,23 @@ public class NetworkManager {
         }
     }
 
+    public void getDiarySurvey(Context context, final NetworkCallback<Survey> callback) {
+        Call<Survey> call = service.getDiarySurvey(getUserId(context));
+        call.enqueue(new Callback<Survey>() {
+            @Override
+            public void onResponse(Call<Survey> call, Response<Survey> response) {
+                // The network call was a success and we got a response.
+                callback.onResponse(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Survey> call, Throwable t) {
+                // the network call was a failure
+                callback.onFailure(t.getMessage());
+            }
+        });
+    }
+
     // endregion
 
     // region: TauService RetroFit Interface
@@ -148,6 +165,9 @@ public class NetworkManager {
 
         @POST("register/{userId}")
         Call<Void> submitRegistration(@Path("userId") String userId, @Body List<FieldSubmission> fieldSubmissions);
+
+        @GET("diary/{userId}")
+        Call<Survey> getDiarySurvey(@Path("userId") String userId);
     }
 
     // endregion

@@ -2,7 +2,6 @@ package tau.user.tausurveyapp;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
@@ -34,6 +33,7 @@ import java.util.Map;
 import tau.user.tausurveyapp.contracts.Address;
 import tau.user.tausurveyapp.contracts.Choice;
 import tau.user.tausurveyapp.contracts.Field;
+import tau.user.tausurveyapp.contracts.FieldConditionSource;
 import tau.user.tausurveyapp.contracts.FieldSubmission;
 import tau.user.tausurveyapp.contracts.FieldType;
 import tau.user.tausurveyapp.contracts.TauLocale;
@@ -47,10 +47,10 @@ import tau.user.tausurveyapp.uiClasses.TauDateListener;
  */
 
 public class SurveyBuilder {
-
     private final float titleTextSize = 22;
+    private final float subtitleTextSize = 19;
     private final float normalTextSize = 16;
-    private final float subtitleTextSize = 20;
+
     private int idsCounter;
 
     private HashMap<String, Field> fieldIdToFieldMap;
@@ -146,7 +146,7 @@ public class SurveyBuilder {
                 String city = ((SearchableSpinner)addressContainer.findViewById(2)).getSelectedItem().toString();
                 return new FieldSubmission<Address>(Address.class, fieldId, new Address(streetName, streetNumber, city), field.groupId);
             }
-            else if (fieldType == FieldType.INT || fieldType == FieldType.TALBEINT) {
+            else if (fieldType == FieldType.INT || fieldType == FieldType.TABLE_INT) {
                 EditText editText = (EditText)view;
                 String intString = editText.getText().toString();
                 if (!TextUtils.isEmpty(intString)) {
@@ -241,7 +241,7 @@ public class SurveyBuilder {
 
         // If the field has a title and it's not a group - create and add it.
         if (field.getTitleId() > 0 && field.getType() != FieldType.GROUP
-            && field.getType() != FieldType.TITLE && field.getType() != FieldType.TALBEINT) {
+            && field.getType() != FieldType.TITLE && field.getType() != FieldType.TABLE_INT) {
             // Get the title according to the given locale.
             String title = survey.getString(locale, field.getTitleId());
 
@@ -286,9 +286,11 @@ public class SurveyBuilder {
             case TITLE:
                 TextView subtitle = createSubtitle(activity, survey, field, locale);
                 ll.addView(subtitle);
-            case TALBEINT:
+                break;
+            case TABLE_INT:
                 LinearLayout tableInt = createTableInt(activity, survey, field, locale);
                 ll.addView(tableInt);
+                break;
         }
 
         return ll;
@@ -510,41 +512,59 @@ public class SurveyBuilder {
         container.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
         int groupViewId = getViewId(field);
         container.setId(groupViewId);
-        // By default, we hide the created group.
-        container.setVisibility(View.GONE);
 
-        // Register this view (if it has a conditionOn value and what he's conditioning on exists).
-        if (field.condition != null && !TextUtils.isEmpty(field.condition.conditionOn) && fieldIdToViewIdMap.containsKey(field.condition.conditionOn)) {
-            Integer conditionedViewId = fieldIdToViewIdMap.get(field.condition.conditionOn);
+        // Only continue if we got a condition.
+        if (field.condition != null) {
 
-            List<Integer> registeredIds = viewIdToRegisteredGroupViewId.get(conditionedViewId, new ArrayList<Integer>());
-            registeredIds.add(groupViewId);
-            viewIdToRegisteredGroupViewId.put(conditionedViewId, registeredIds);
+            // If this is a client condition, register this view (if it has a conditionOn value and what he's conditioning on exists).
+            if (field.condition.source == FieldConditionSource.CLIENT
+                && !TextUtils.isEmpty(field.condition.conditionOn) && fieldIdToViewIdMap.containsKey(field.condition.conditionOn))
+            {
+                // By default, we hide the created group for client side groups.
+                container.setVisibility(View.GONE);
 
-            // Get the conditioned view.
-            View conditionedViewRaw = activity.findViewById(conditionedViewId);
-            if (conditionedViewRaw != null) {
-                // Cast the conditioned view to EditText.
-                final EditText conditionedView = (EditText) conditionedViewRaw;
+                Integer conditionedViewId = fieldIdToViewIdMap.get(field.condition.conditionOn);
 
-                // We should make sure the conditioned view can not hold a number too big. Limit it to 20 at max.
-                conditionedView.setFilters(new InputFilter[]{ new InputFilterMinMax(0, 21)});
+                List<Integer> registeredIds = viewIdToRegisteredGroupViewId.get(conditionedViewId, new ArrayList<Integer>());
+                registeredIds.add(groupViewId);
+                viewIdToRegisteredGroupViewId.put(conditionedViewId, registeredIds);
 
-                // Also, add a text changed listener (if it doesn't exist yet - if a tag wasn't added before).
-                if (conditionedView.getTag() == null) {
-                    // Set the tag so we won't set the watcher again in the future.
-                    conditionedView.setTag("hasTextChangedListener");
+                // Get the conditioned view.
+                View conditionedViewRaw = activity.findViewById(conditionedViewId);
+                if (conditionedViewRaw != null) {
+                    // Cast the conditioned view to EditText.
+                    final EditText conditionedView = (EditText) conditionedViewRaw;
 
-                    conditionedView.addTextChangedListener(new TextWatcher() {
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            // Check if there's a group we should show or hide.
-                            recalculateGroups(conditionedView, activity, survey, locale);
-                        }
+                    // We should make sure the conditioned view can not hold a number too big. Limit it to 20 at max.
+                    conditionedView.setFilters(new InputFilter[]{ new InputFilterMinMax(0, 21)});
 
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                        public void afterTextChanged(Editable s) {}
-                    });
+                    // Also, add a text changed listener (if it doesn't exist yet - if a tag wasn't added before).
+                    if (conditionedView.getTag() == null) {
+                        // Set the tag so we won't set the watcher again in the future.
+                        conditionedView.setTag("hasTextChangedListener");
+
+                        conditionedView.addTextChangedListener(new TextWatcher() {
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                // Check if there's a group we should show or hide.
+                                recalculateGroups(conditionedView, activity, survey, locale);
+                            }
+
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                            public void afterTextChanged(Editable s) {}
+                        });
+                    }
                 }
+            }
+            else if (field.condition.source == FieldConditionSource.SERVER && field.condition.values != null
+                    && field.condition.repetitions > 0) {
+                // First, add the group field title (if exists).
+                if (field.getTitleId() > 0) {
+                    // Create a text view for this title, and add it to the layout.
+                    TextView titleView = createTextView(activity, survey.getString(locale, field.getTitleId()));
+                    container.addView(titleView);
+                }
+
+                buildGroupFields(field, field.condition.repetitions, container, survey, locale, activity);
             }
         }
 
@@ -643,35 +663,9 @@ public class SurveyBuilder {
                         }
                     }
 
-                    // Create the group's layout according to its type.
-                    switch (group.condition.type) {
-                        case REPEAT:
-                            Integer number = Utils.tryParse(text);
-                            if (shouldShow && number != null && number > 0) {
-                                // A group is actually a second survey - build its layout (as many times as requested).
-                                for (int i = 0; i < number; i++) {
-                                    // Add the repeated title (if exists).
-                                    if (group.condition.repeatText > 0) {
-                                        // Add the given repeatText before the group fields, replacing the ## joker with the current number.
-                                        String repeatedTitle = survey.getString(locale, group.condition.repeatText).replace("##", Integer.toString(i+1));
-                                        TextView repeatedTitleView = createTextView(activity, repeatedTitle);
-                                        repeatedTitleView.setPaintFlags(repeatedTitleView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-                                        repeatedTitleView.setTextColor(Color.BLACK);
-                                        groupLinearLayout.addView(repeatedTitleView);
-                                    }
-                                    // Create and add the group's fields.
-                                    this.buildSurveyFields(activity, group.fields, survey, groupLinearLayout, locale, groupId);
-                                }
-                            }
-                            break;
-                        case SHOW:
-                        default:
-                            // If repeat not requested - only create the layout once.
-                            if (shouldShow) {
-                                // A group is actually a second survey - build its layout.
-                                this.buildSurveyFields(activity, group.fields, survey, groupLinearLayout, locale, groupId);
-                            }
-                            break;
+                    if (shouldShow) {
+                        Integer repetitions = Utils.tryParse(text);
+                        buildGroupFields(group, repetitions, groupLinearLayout, survey, locale, activity);
                     }
 
                     // Show or hide the group.
@@ -683,6 +677,44 @@ public class SurveyBuilder {
                     }
                 }
             }
+        }
+    }
+
+    private void buildGroupFields(Field group, Integer repetitions, LinearLayout groupLinearLayout, Survey survey, TauLocale locale, Activity activity) {
+        // Create the group's layout according to its type.
+        switch (group.condition.type) {
+            case REPEAT:
+
+                if (repetitions != null && repetitions > 0) {
+                    // A group is actually a second survey - build its layout (as many times as requested).
+                    for (int i = 0; i < repetitions; i++) {
+                        // Add the repeated title (if exists).
+                        if (group.condition.repeatText > 0) {
+                            // Add the given repeatText before the group fields,
+                            // replacing the ## joker with the current number or with the corresponding value from the condition values list.
+                            // Take the current iteration number as the default text.
+                            String text = Integer.toString(i+1);
+                            // If we've got a matching value in the values list, use it instead.
+                            if (group.condition.values != null && (group.condition.values.size() - 1) >= i) {
+                                text = group.condition.values.get(i);
+                            }
+                            String repeatedTitle = survey.getString(locale, group.condition.repeatText).replace("##", text);
+                            TextView repeatedTitleView = createTextView(activity, repeatedTitle);
+                            repeatedTitleView.setTextSize(subtitleTextSize);
+                            // repeatedTitleView.setPaintFlags(repeatedTitleView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                            repeatedTitleView.setTextColor(Color.BLACK);
+                            groupLinearLayout.addView(repeatedTitleView);
+                        }
+                        // Create and add the group's fields.
+                        this.buildSurveyFields(activity, group.fields, survey, groupLinearLayout, locale, group.id);
+                    }
+                }
+                break;
+            case SHOW:
+            default:
+                // A group is actually a second survey - build its layout.
+                this.buildSurveyFields(activity, group.fields, survey, groupLinearLayout, locale, group.id);
+                break;
         }
     }
 

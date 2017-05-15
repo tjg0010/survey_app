@@ -9,5 +9,5 @@ public enum FieldType {
     CHOICES,
     GROUP,
     TITLE,
-    TALBEINT
+    TABLE_INT
 }

@@ -14,19 +14,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="tau.user.tausurveyapp.activities.MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="tau.user.tausurveyapp.activities.InfoActivity" />
-        <activity android:name="tau.user.tausurveyapp.activities.RegisterActivity" />
-        <activity android:name="tau.user.tausurveyapp.activities.IAgreeActivity" />
+        <activity android:name=".activities.InfoActivity" />
+        <activity android:name=".activities.RegisterActivity" />
+        <activity android:name=".activities.IAgreeActivity" />
 
         <receiver
-            android:name="tau.user.tausurveyapp.BootReceiver"
+            android:name=".BootReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -34,9 +34,10 @@
         </receiver>
 
         <service
-            android:name="tau.user.tausurveyapp.TrackingService"
+            android:name=".TrackingService"
             android:exported="false" />
 
+        <activity android:name=".activities.DiaryActivity"></activity>
     </application>
 
 </manifest>

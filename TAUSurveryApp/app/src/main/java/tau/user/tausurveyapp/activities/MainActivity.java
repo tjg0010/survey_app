@@ -28,8 +28,12 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             // Go to info activity.
-            Intent intent = new Intent(this, InfoActivity.class);
-            startActivity(intent);
+            // Intent intent = new Intent(this, InfoActivity.class);
+            // startActivity(intent);
+
+            // TODO: change this back to call the info activity after done with testing.
+             Intent intent = new Intent(this, DiaryActivity.class);
+             startActivity(intent);
         }
     }
 }
