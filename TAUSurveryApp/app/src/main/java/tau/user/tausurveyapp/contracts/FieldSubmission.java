@@ -22,14 +22,14 @@ public class FieldSubmission<T> {
     public String groupId;
 
     @Expose
-    public String groupPart;
+    public String groupRepetitionValue;
 
-    public FieldSubmission(Class<T> type, String id, T value, String groupId, String groupPartIdentifier) {
+    public FieldSubmission(Class<T> type, String id, T value, String groupId, String groupRepetitionValue) {
         this.type = type;
         this.id = id;
         this.value = value;
         this.groupId = groupId;
-        this.groupPart = groupPartIdentifier;
+        this.groupRepetitionValue = groupRepetitionValue;
     }
 
     public boolean isValueEmpty(Activity activity) {

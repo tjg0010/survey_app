@@ -207,7 +207,7 @@ public class SurveyBuilder {
      * Goes over the given fields and creates them inside the given activity and view, using the given survey and locale.
      * This function can also be used to create sub-surveys (groups), giving it any fields list and any view wanted.
      */
-    private void buildSurveyFields(Activity activity, List<Field> fields, Survey survey, LinearLayout view, TauLocale locale, String groupId, String groupPartIdentifier) {
+    private void buildSurveyFields(Activity activity, List<Field> fields, Survey survey, LinearLayout view, TauLocale locale, String groupId, String groupRepetitionValue) {
         for (Field field : fields) {
             // Only do something if the field has an id and a type.
             if (!TextUtils.isEmpty(field.id) && field.getType() != null) {
@@ -220,7 +220,7 @@ public class SurveyBuilder {
                 fieldIdToFieldMap.put(field.id, field);
 
                 // Create the field's layout and add it to the view.
-                LinearLayout fieldLayout = createFieldLayout(survey, field, activity, locale, groupPartIdentifier);
+                LinearLayout fieldLayout = createFieldLayout(survey, field, activity, locale, groupRepetitionValue);
 
                 // Add the field to the view.
                 view.addView(fieldLayout);
@@ -235,7 +235,7 @@ public class SurveyBuilder {
         buildSurveyFields(activity, fields, survey, view, locale, null, null);
     }
 
-    private LinearLayout createFieldLayout(Survey survey, Field field, Activity activity, TauLocale locale, String groupPartIdentifier) {
+    private LinearLayout createFieldLayout(Survey survey, Field field, Activity activity, TauLocale locale, String groupRepetitionValue) {
         // We put each field inside a linear layout.
         LinearLayout ll = createWrapperLinearLayout(activity, locale);
 
@@ -254,41 +254,41 @@ public class SurveyBuilder {
 
         switch (field.getType()) {
             case ADDRESS:
-                LinearLayout addressGroup = createAddressGroup(activity, survey, field, locale, groupPartIdentifier);
+                LinearLayout addressGroup = createAddressGroup(activity, survey, field, locale, groupRepetitionValue);
                 ll.addView(addressGroup);
                 break;
             case STRING:
-                EditText stringInput = createStringInput(activity, survey, field, locale, groupPartIdentifier);
+                EditText stringInput = createStringInput(activity, survey, field, locale, groupRepetitionValue);
                 ll.addView(stringInput);
                 break;
             case INT:
-                EditText integerInput = createIntegerInput(activity, survey, field, locale, groupPartIdentifier);
+                EditText integerInput = createIntegerInput(activity, survey, field, locale, groupRepetitionValue);
                 ll.addView(integerInput);
                 break;
             case BOOLEAN:
-                RadioGroup booleanGroup = createBooleanRadioButtons(activity, survey, field, locale, groupPartIdentifier);
+                RadioGroup booleanGroup = createBooleanRadioButtons(activity, survey, field, locale, groupRepetitionValue);
                 ll.addView(booleanGroup);
                 break;
             case DATE:
-                LinearLayout dateInput = createDateInput(activity, survey, field, locale, groupPartIdentifier);
+                LinearLayout dateInput = createDateInput(activity, survey, field, locale, groupRepetitionValue);
                 ll.addView(dateInput);
                 break;
             case CHOICES:
                 if (field.choices != null && field.choices.length > 0) {
-                    RadioGroup choicesGroup = createRadioButtons(activity, survey, field, locale, groupPartIdentifier);
+                    RadioGroup choicesGroup = createRadioButtons(activity, survey, field, locale, groupRepetitionValue);
                     ll.addView(choicesGroup);
                 }
                 break;
             case GROUP:
-                LinearLayout groupView = createGroupView(activity, survey, field, locale, groupPartIdentifier);
+                LinearLayout groupView = createGroupView(activity, survey, field, locale, groupRepetitionValue);
                 ll.addView(groupView);
                 break;
             case TITLE:
-                TextView subtitle = createSubtitle(activity, survey, field, locale, groupPartIdentifier);
+                TextView subtitle = createSubtitle(activity, survey, field, locale, groupRepetitionValue);
                 ll.addView(subtitle);
                 break;
             case TABLE_INT:
-                LinearLayout tableInt = createTableInt(activity, survey, field, locale, groupPartIdentifier);
+                LinearLayout tableInt = createTableInt(activity, survey, field, locale, groupRepetitionValue);
                 ll.addView(tableInt);
                 break;
         }
@@ -307,12 +307,12 @@ public class SurveyBuilder {
         return linearLayout;
     }
 
-    private TextView createSubtitle(Context context, Survey survey, Field field, TauLocale locale, String groupPartIdentifier) {
+    private TextView createSubtitle(Context context, Survey survey, Field field, TauLocale locale, String groupRepetitionValue) {
         TextView textView = new TextView(context);
         textView.setText(survey.getString(locale, field.getTitleId()));
         textView.setTextSize(subtitleTextSize);
         textView.setTextColor(Color.BLACK);
-        textView.setTag(1, groupPartIdentifier); // We always store the group part identifier in a tag at key 1.
+        textView.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         textView.setLayoutParams(layoutParams);
@@ -331,7 +331,7 @@ public class SurveyBuilder {
         return textView;
     }
 
-    private RadioGroup createRadioButtons(Context context, Survey survey, Field field, TauLocale locale, String groupPartIdentifier) {
+    private RadioGroup createRadioButtons(Context context, Survey survey, Field field, TauLocale locale, String groupRepetitionValue) {
         // First create the radio group to which we'll add the radio buttons.
         RadioGroup radioGroup = new RadioGroup(context);
         radioGroup.setId(getViewId(field));
@@ -349,14 +349,14 @@ public class SurveyBuilder {
             // We will need an id to figure out later which radio button was selected.
             radioButton.setId(i);
             radioButton.setTag(0, choice.value); // We always store the value in a tag with key 0.
-            radioButton.setTag(1, groupPartIdentifier); // We always store the group part identifier in a tag at key 1.
+            radioButton.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
             radioGroup.addView(radioButton);
         }
 
         return radioGroup;
     }
 
-    private RadioGroup createBooleanRadioButtons(Activity activity, Survey survey, Field field, TauLocale locale, String groupPartIdentifier) {
+    private RadioGroup createBooleanRadioButtons(Activity activity, Survey survey, Field field, TauLocale locale, String groupRepetitionValue) {
         // First create the radio group to which we'll add the radio buttons.
         RadioGroup booleanGroup = new RadioGroup(activity);
         booleanGroup.setId(getViewId(field));
@@ -372,7 +372,7 @@ public class SurveyBuilder {
         //noinspection ResourceType
         radioButtonYes.setId(1);
         radioButtonYes.setTag(0, "true"); // We always store the value in a tag with key 0.
-        radioButtonYes.setTag(1, groupPartIdentifier); // We always store the group part identifier in a tag at key 1.
+        radioButtonYes.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
         booleanGroup.addView(radioButtonYes);
 
         // No radio button.
@@ -383,13 +383,13 @@ public class SurveyBuilder {
         //noinspection ResourceType
         radioButtonNo.setId(0);
         radioButtonNo.setTag(0, "false"); // We always store the value in a tag with key 0.
-        radioButtonNo.setTag(1, groupPartIdentifier); // We always store the group part identifier in a tag at key 1.
+        radioButtonNo.setTag(1, groupRepetitionValue); // We always store the group part identifier in a tag at key 1.
         booleanGroup.addView(radioButtonNo);
 
         return booleanGroup;
     }
 
-    private LinearLayout createDateInput(final Activity activity, Survey survey, Field field, TauLocale locale, String groupPartIdentifier) {
+    private LinearLayout createDateInput(final Activity activity, Survey survey, Field field, TauLocale locale, String groupRepetitionValue) {
         // Create a container for the "add date" button.
         LinearLayout container = new LinearLayout(activity);
         container.setOrientation(LinearLayout.HORIZONTAL);
@@ -404,7 +404,7 @@ public class SurveyBuilder {
         LinearLayout.LayoutParams dateTextParams = createLinearLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT);
         dateTextParams.setMarginStart(70);
         dateText.setLayoutParams(dateTextParams);
-        dateText.setTag(1, groupPartIdentifier); // We always store the group part identifier in a tag at key 1.
+        dateText.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
 
         // Create a button that the user can click to add a date via a dialog.
         Button dateButton = new Button(activity);
@@ -438,13 +438,13 @@ public class SurveyBuilder {
     }
 
     @SuppressWarnings("ResourceType")
-    private LinearLayout createAddressGroup(Context context, Survey survey, Field field, TauLocale locale, String groupPartIdentifier) {
+    private LinearLayout createAddressGroup(Context context, Survey survey, Field field, TauLocale locale, String groupRepetitionValue) {
         // Create a container for the whole address input group.
         LinearLayout container = new LinearLayout(context);
         container.setOrientation(LinearLayout.VERTICAL);
         container.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
         container.setId(getViewId(field));
-        container.setTag(1, groupPartIdentifier); // We always store the group part identifier in a tag at key 1.
+        container.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
 
         // Create a container for "street" and "street number" (which are side by side).
         LinearLayout streetContainer = new LinearLayout(context);
@@ -491,36 +491,36 @@ public class SurveyBuilder {
         return container;
     }
 
-    private EditText createIntegerInput(final Activity activity, final Survey survey, Field field, final TauLocale locale, String groupPartIdentifier) {
+    private EditText createIntegerInput(final Activity activity, final Survey survey, Field field, final TauLocale locale, String groupRepetitionValue) {
         EditText editText = new EditText(activity);
         editText.setId(getViewId(field));
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setSingleLine();
         editText.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
-        editText.setTag(1, groupPartIdentifier); // We always store the group part identifier in a tag at key 1.
+        editText.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
 
         return editText;
     }
 
-    private EditText createStringInput(Context context, Survey survey, Field field, TauLocale locale, String groupPartIdentifier) {
+    private EditText createStringInput(Context context, Survey survey, Field field, TauLocale locale, String groupRepetitionValue) {
         EditText editText = new EditText(context);
         editText.setId(getViewId(field));
         editText.setInputType(InputType.TYPE_CLASS_TEXT);
         editText.setSingleLine();
         editText.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
-        editText.setTag(1, groupPartIdentifier); // We always store the group part identifier in a tag at key 1.
+        editText.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
 
         return editText;
     }
 
-    private LinearLayout createGroupView(final Activity activity, final Survey survey, Field field, final TauLocale locale, String groupPartIdentifier) {
+    private LinearLayout createGroupView(final Activity activity, final Survey survey, Field field, final TauLocale locale, String groupRepetitionValue) {
         // Create a linear layout that will hold the group.
         LinearLayout container = new LinearLayout(activity);
         container.setOrientation(LinearLayout.VERTICAL);
         container.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
         int groupViewId = getViewId(field);
         container.setId(groupViewId);
-        container.setTag(1, groupPartIdentifier); // We always store the group part identifier in a tag at key 1.
+        container.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
 
         // Only continue if we got a condition.
         if (field.condition != null) {
@@ -580,7 +580,7 @@ public class SurveyBuilder {
         return container;
     }
 
-    private LinearLayout createTableInt(Activity activity, Survey survey, Field field, TauLocale locale, String groupPartIdentifier) {
+    private LinearLayout createTableInt(Activity activity, Survey survey, Field field, TauLocale locale, String groupRepetitionValue) {
         // Create a container for this table int value.
         LinearLayout tableRow = new LinearLayout(activity);
         tableRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -597,7 +597,7 @@ public class SurveyBuilder {
         rowInput.setId(getViewId(field));
         rowInput.setInputType(InputType.TYPE_CLASS_NUMBER);
         rowInput.setSingleLine();
-        rowInput.setTag(1, groupPartIdentifier); // We always store the group part identifier in a tag at key 1.
+        rowInput.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
         rowInput.setLayoutParams(createLinearLayoutParamsWithWeight(0.4));
         InputFilter[] filterArray = new InputFilter[1];
         filterArray[0] = new InputFilter.LengthFilter(4); // Set maximum length of the int value to a thousand.
@@ -698,18 +698,18 @@ public class SurveyBuilder {
                     // A group is actually a second survey - build its layout (as many times as requested).
                     for (int i = 0; i < repetitions; i++) {
                         // Add the repeated title (if exists).
-                        String groupIdentifier = null;
+                        String repetitionValue = null;
 
                         if (group.condition.repeatText > 0) {
                             // Add the given repeatText before the group fields,
                             // replacing the ## joker with the current number or with the corresponding value from the condition values list.
                             // Take the current iteration number as the default text.
-                            groupIdentifier = Integer.toString(i+1);
+                            repetitionValue = Integer.toString(i+1);
                             // If we've got a matching value in the values list, use it instead.
                             if (group.condition.values != null && (group.condition.values.size() - 1) >= i) {
-                                groupIdentifier = group.condition.values.get(i);
+                                repetitionValue = group.condition.values.get(i);
                             }
-                            String repeatedTitle = survey.getString(locale, group.condition.repeatText).replace("##", groupIdentifier);
+                            String repeatedTitle = survey.getString(locale, group.condition.repeatText).replace("##", repetitionValue);
                             TextView repeatedTitleView = createTextView(activity, repeatedTitle);
                             repeatedTitleView.setTextSize(subtitleTextSize);
                             // repeatedTitleView.setPaintFlags(repeatedTitleView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -717,7 +717,7 @@ public class SurveyBuilder {
                             groupLinearLayout.addView(repeatedTitleView);
                         }
                         // Create and add the group's fields.
-                        this.buildSurveyFields(activity, group.fields, survey, groupLinearLayout, locale, group.id, groupIdentifier);
+                        this.buildSurveyFields(activity, group.fields, survey, groupLinearLayout, locale, group.id, repetitionValue);
                     }
                 }
                 break;
