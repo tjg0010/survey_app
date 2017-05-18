@@ -21,11 +21,15 @@ public class FieldSubmission<T> {
     @Expose
     public String groupId;
 
-    public FieldSubmission(Class<T> type, String id, T value, String groupId) {
+    @Expose
+    public String groupPart;
+
+    public FieldSubmission(Class<T> type, String id, T value, String groupId, String groupPartIdentifier) {
         this.type = type;
         this.id = id;
         this.value = value;
         this.groupId = groupId;
+        this.groupPart = groupPartIdentifier;
     }
 
     public boolean isValueEmpty(Activity activity) {
