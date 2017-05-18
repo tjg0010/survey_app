@@ -4,7 +4,6 @@ const mysql = require("mysql");             // MySql DB connector.
 // endregion
 
 // A map that holds all table names (as values) and their name representation in the json file (as keys).
-var surveyTableMap = { registration: 'main', children: 'children' };
 
 var con = mysql.createConnection({
     host: "localhost",
@@ -53,11 +52,11 @@ exports.saveLocation = function(userId, lat, long, time, callback){
 
 exports.saveSurvey = function(surveyName, paramNames, paramValues, callback) {
     // Only do something if we got a recognized survey.
-    if (surveyName && surveyTableMap[surveyName]) {
+    if (surveyName) {
         var parsedValues = escapeDataArray(paramValues);
 
         con.query(
-            'INSERT INTO `tausurvey`.`' + surveyTableMap[surveyName] + '` ' // the table name.
+            'INSERT INTO `tausurvey`.`' + surveyName + '` '                 // the table name.
             + '(' + paramNames.join(',') + ')'                              // param names.
             + ' VALUES ( ' + parsedValues.join(',') + ');',                 // param values.
             function(err,res){
@@ -80,7 +79,7 @@ exports.saveSurvey = function(surveyName, paramNames, paramValues, callback) {
 
 exports.saveSurveyGroup = function(surveyName, paramNames, paramValuesGroup, userId, callback) {
     // Only do something if we got a recognized survey.
-    if (surveyName && surveyTableMap[surveyName]) {
+    if (surveyName) {
         // Add the userId to the param names.
         paramNames.push('userId');
 
@@ -95,7 +94,7 @@ exports.saveSurveyGroup = function(surveyName, paramNames, paramValuesGroup, use
         }
 
         con.query(
-            'INSERT INTO `tausurvey`.`' + surveyTableMap[surveyName] + '` ' // the table name.
+            'INSERT INTO `tausurvey`.`' + surveyName + '` '                 // the table name.
             + '(' + paramNames.join(',') + ')'                              // param names.
             + ' VALUES ' + paramValuesStrings.join(',') + ';',              // param values arrays.
             function(err,res){

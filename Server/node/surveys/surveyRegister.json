@@ -3,7 +3,7 @@
     "title": 1,
     "startText": 2,
     "submitBtnText": 3,
-    "name":"registration"
+    "name":"main"
   },
   "fields": [
     {"id": "gender", "mandatory": true, "title": 21, "type": "CHOICES",

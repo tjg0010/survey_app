@@ -57,18 +57,25 @@ exports.saveSurvey = function(surveyName, userId, fieldSubmissions, callback) {
                 // Treatment for fields which are not part of a group.
                 if (!fieldSub.groupId) {
                     // Add the field submission to the paramNames and paramValues lists of the main survey.
-                    addFieldToDbLists(fieldSub, expectedFields[fieldSub.id], paramsDict.main.paramNames, paramsDict.main.paramValues);
+                    addFieldToDbLists(fieldSub, expectedFields[fieldSub.id].type, paramsDict.main.paramNames, paramsDict.main.paramValues);
                 }
                 // Treatment for fields which ARE a part of a group.
                 else {
                     var groupId = fieldSub.groupId;
-                    // Create lists for this group id they do not exist.
+                    // We store the group's fields data in a different data structure, since they may come in repetitions.
                     if (!paramsDict[groupId]) {
-                        paramsDict[groupId] = { paramNames: [], paramValues: [] };
+                        // tauServerParamNames is used to collect the param names of this group, so we can later on form an insert query for those params.
+                        paramsDict[groupId] = { tauServerParamNames: {} };
                     }
-
-                    // Add the field submission to the paramNames and paramValues lists of this group.
-                    addFieldToDbLists(fieldSub, expectedFields[fieldSub.id], paramsDict[groupId].paramNames, paramsDict[groupId].paramValues);
+                    // 1 is the first repetition (repetitions are not zero based). We set 1 as the default value (for cases in which we didn't get a repetitionValue).
+                    var repetitionValue = fieldSub.groupRepetitionValue || 1;
+                    if (!paramsDict[groupId][repetitionValue]) {
+                        paramsDict[groupId][repetitionValue] = {};
+                    }
+                    // Add this field submission value according to it's param name to the dict. We will later use it.
+                    paramsDict[groupId][repetitionValue][fieldSub.id] = fieldSub.value;
+                    // Mark this param name as being used.
+                    paramsDict[groupId].tauServerParamNames[fieldSub.id] = fieldSub;
                 }
             }
         }
@@ -84,9 +91,11 @@ exports.saveSurvey = function(surveyName, userId, fieldSubmissions, callback) {
         for (var group in paramsDict) {
             // Skip the main survey since it's already handled.
             if (paramsDict.hasOwnProperty(group) && group !== 'main') {
+                var parsedParamNames = [];
+                var parsedParamValues = [];
+                parseGroupParams(expectedFields[group], paramsDict[group], parsedParamNames, parsedParamValues);
                 // Call saveSurvey with the groupName instead of the surveyName.
-                var parsedParamNames = parseGroupParamNames(paramsDict[group].paramNames);
-                promises.push(db.saveSurveyGroupAsync(group, parsedParamNames, parseGroupParamValues(paramsDict[group].paramValues, parsedParamNames.length), userId));
+                promises.push(db.saveSurveyGroupAsync(group, parsedParamNames, parsedParamValues, userId));
             }
         }
 
@@ -137,7 +146,6 @@ exports.enrichSurvey = function (survey, userId, callback) {
 
                         for (var j = 0; j < rows.length; j++) {
                             var row = rows[j];
-
                             // Push the row value to the values array.
                             field.condition.values.push(row[dbData[1]]);
                         }
@@ -171,7 +179,7 @@ function saveSurveyFields(surveyName, survey){
         var field = survey.fields[i];
 
         // Add this field to the survey dictionary.
-        surveysFields[surveyName][field.id] = field.type;
+        surveysFields[surveyName][field.id] = field;
 
         // If this is a group, we should run recursively on his fields and add them too.
         if (field.type === fieldTypes.group) {
@@ -182,6 +190,7 @@ function saveSurveyFields(surveyName, survey){
 
 /**
  * A helper function that adds a given field submission to the given paramNames and paramValues lists.
+ * Wraps addParamNameToDbList and addParamValueToDbList to a single function.
  * This function is used to prepare the data to be saved into the db.
  * @param fieldSub - the field submission data.
  * @param fieldType - the field type (from fieldTypes).
@@ -189,34 +198,79 @@ function saveSurveyFields(surveyName, survey){
  * @param paramValues - the paramValues list to add the given fieldSub to.
  */
 function addFieldToDbLists(fieldSub, fieldType, paramNames, paramValues) {
+    addParamNameToDbList(fieldSub.id, fieldType, paramNames);
+    addParamValueToDbList(fieldSub.value, fieldType, paramValues);
+}
+
+/**
+ * A helper function that adds a given field submission to the given paramNames lists.
+ * This can be used when you want to add the param names separately from the param values.
+ * This function is used to prepare the data to be saved into the db.
+ * @param fieldId - the field submission id.
+ * @param fieldType - the field type (from fieldTypes).
+ * @param paramNames - the paramNames list to add the given fieldSub to.
+ */
+function addParamNameToDbList(fieldId, fieldType, paramNames) {
     // Special treatment for boolean fields values.
     if (fieldType === fieldTypes.boolean) {
-        paramNames.push(fieldSub.id);
-        paramValues.push(fieldSub.value ? 1 : 0);
+        paramNames.push(fieldId);
     }
     // Special treatment for address fields values.
     else if (fieldType === fieldTypes.address) {
         // We assume the db is ready to receive this field. If not, it will fail so we can later fix it.
         // Add city.
-        paramNames.push(fieldSub.id+'City');
-        paramValues.push(fieldSub.value.city);
+        paramNames.push(fieldId+'City');
         // Add street.
-        paramNames.push(fieldSub.id+'Street');
-        paramValues.push(fieldSub.value.street);
+        paramNames.push(fieldId+'Street');
         // Add number.
-        paramNames.push(fieldSub.id+'Number');
-        paramValues.push(fieldSub.value.number);
+        paramNames.push(fieldId+'Number');
     }
     // Special treatment for date fields values.
     else if (fieldType === fieldTypes.date) {
-        var date = new Date(fieldSub.value);
-        paramNames.push(fieldSub.id);
-        paramValues.push(date.toMysqlDate())
+        paramNames.push(fieldId);
     }
     // All other fields are strings, no need to manipulate the param name, and we can just take the value as is.
     else {
-        paramNames.push(fieldSub.id);
-        paramValues.push(fieldSub.value)
+        paramNames.push(fieldId);
+    }
+}
+
+/**
+ * A helper function that adds a given field submission to the given paramValues lists.
+ * This can be used when you want to add the param names separately from the param values.
+ * This function is used to prepare the data to be saved into the db.
+ * @param fieldValue - the field submission value.
+ * @param fieldType - the field type (from fieldTypes).
+ * @param paramValues - the paramValues list to add the given fieldSub to.
+ */
+function addParamValueToDbList(fieldValue, fieldType, paramValues) {
+    // Special treatment for boolean fields values.
+    if (fieldType === fieldTypes.boolean) {
+        var value = fieldValue ? 1 : (fieldValue === null ? null : 0);
+        paramValues.push(value);
+    }
+    // Special treatment for address fields values.
+    else if (fieldType === fieldTypes.address) {
+        // We assume the db is ready to receive this field. If not, it will fail so we can later fix it.
+        // Add city.
+        paramValues.push(fieldValue ? fieldValue.city : null);
+        // Add street.
+        paramValues.push(fieldValue ? fieldValue.street : null);
+        // Add number.
+        paramValues.push(fieldValue ? fieldValue.number : null);
+    }
+    // Special treatment for date fields values.
+    else if (fieldType === fieldTypes.date) {
+        if (fieldValue) {
+            var date = new Date(fieldValue);
+            paramValues.push(date.toMysqlDate())
+        } else {
+            paramValues.push(null)
+        }
+    }
+    // All other fields are strings, no need to manipulate the param name, and we can just take the value as is (even if it's null).
+    else {
+        paramValues.push(fieldValue)
     }
 }
 
@@ -232,22 +286,59 @@ function addUserIdToDbLists(userId, paramNames, paramValues) {
 }
 
 /**
- * Goes over the given param names, and return a new param names array with unique names.
- * @returns {Array}
+ * Goes over the groupParams dictionary and created both resultParamNames and resultParamValues to use when saving to the db.
+ * @param group - the group for which we are creating the params.
+ * @param groupParams - the groupParams dict as described and built in the saveSurvey function.
+ * @param resultParamNames - an array of param names for the db insert query.
+ * @param resultParamValues - an array of value arrays, that holds the values we want to save to the db. Might have null values.
  */
-function parseGroupParamNames(paramNames) {
-    var namesDict = {};
-    var uniqueNames = [];
+function parseGroupParams(group, groupParams, resultParamNames, resultParamValues) {
+    var tempRepetitions = {};
+    var repetition;
 
-    for (var i = 0; i < paramNames.length; i++) {
-        var name = paramNames[i];
-        if (!namesDict[name]) {
-            namesDict[name] = true;
-            uniqueNames.push(name);
+    if (group) {
+        // Go over all of the param names of this group.
+        for (var paramName in groupParams.tauServerParamNames) {
+            if (groupParams.tauServerParamNames.hasOwnProperty(paramName)) {
+                var fieldSub = groupParams.tauServerParamNames[paramName];
+                // Add the param name to the resultParamNames list.
+                addParamNameToDbList(paramName, fieldSub.type, resultParamNames);
+
+                // Go over all of this group's repetitions and add the value (if exists) to the repetitions temp dict.
+                for (repetition in groupParams) {
+                    if (groupParams.hasOwnProperty(repetition) && repetition != 'tauServerParamNames') {
+                        // Initialize in the repetitions temp dict if not yet initialized.
+                        if (!tempRepetitions[repetition]) {
+                            tempRepetitions[repetition] = [];
+                        }
+                        // Add the field's value for this param if exists in this repetition. If it doesn't exist, add null.
+                        addParamValueToDbList(groupParams[repetition][paramName] ? groupParams[repetition][paramName] : null, fieldSub.type, tempRepetitions[repetition]);
+                    }
+                }
+            }
+        }
+
+        // Now go over the repetitions and add the repetition value with the paramName, but only if this is a server group.
+        if (group.condition.source == "SERVER" && group.condition.conditionOn) {
+            // Add the column name. It is expected to be the value after the dot in the conditionOn attribute (the value before is the table).
+            resultParamNames.push(group.condition.conditionOn.split('.')[1]);
+
+            // Add the repetition value to each repetition.
+            for (repetition in groupParams) {
+                if (groupParams.hasOwnProperty(repetition) && repetition != 'tauServerParamNames') {
+                    tempRepetitions[repetition].push(repetition);
+                }
+            }
+        }
+
+        // resultParamValues should be an array that holds arrays of values. Simply convert the temp repetitions dict to this structure.
+        // Add the repetition value to each repetition.
+        for (repetition in groupParams) {
+            if (groupParams.hasOwnProperty(repetition) && repetition != 'tauServerParamNames') {
+                resultParamValues.push(tempRepetitions[repetition]);
+            }
         }
     }
-
-    return uniqueNames;
 }
 
 /**
@@ -255,13 +346,13 @@ function parseGroupParamNames(paramNames) {
  * @returns {Array}
  */
 function parseGroupParamValues(paramValues, paramNamesLength) {
-    var i, j, temparray;
+    var i, j, tempArray;
     var chunk = paramNamesLength;
     var groupedValues = [];
 
     for (i = 0, j = paramValues.length; i < j; i += chunk) {
-        temparray = paramValues.slice(i,i+chunk);
-        groupedValues.push(temparray)
+        tempArray = paramValues.slice(i,i+chunk);
+        groupedValues.push(tempArray)
     }
 
     return groupedValues;

@@ -26,36 +26,7 @@ app.get('/register', function (req, res) {
 });
 
 app.post('/register/:userId', function (req, res) {
-    // Parameter validations.
-    if (!req.params.userId) {
-        winston.log('error', '/register (POST) called without mandatory parameter.', {missingParameter: 'params.userId'});
-        httpHelper.sendResponseError(res, 400, 'request.params.userId was null or empty');
-        return;
-    }
-    if (!req.body  || !req.body.length) {
-        winston.log('error', '/register (POST) called without mandatory parameter.', {missingParameter: 'body'});
-        httpHelper.sendResponseError(res, 400, 'request.body was null or empty');
-        return;
-    }
-
-    // Save parameters.
-    var userId = req.params.userId;
-    var fieldSubmissions = req.body;
-
-    winston.log('info', '/register (POST) called. User id: %s', userId);
-
-    // Save the submissions to db using the surveyManager.
-    sm.saveSurvey(surveyRegister.metadata.name, userId, fieldSubmissions, function(err) {
-        if (!err) {
-            // Send an empty successful response.
-            httpHelper.sendResponseSuccess(res);
-        }
-        else {
-            // Send an error response and log it.
-            winston.log('error', '/register/:userId (POST) failed to save registration data to db.', {error: err});
-            httpHelper.sendResponseError(res, 500, 'failed to save registration to db');
-        }
-    });
+    saveSurvey(req, res, '/register (POST)', surveyRegister);
 });
 
 app.post('/location/:userId', function (req, res) {
@@ -111,6 +82,10 @@ app.get('/diary/:userId', function (req, res) {
     }
 });
 
+app.post('/diary/:userId', function (req, res) {
+    saveSurvey(req, res, '/diary (POST)', surveyDiary);
+});
+
 // Start the server.
 var server = app.listen(8888, function () {
 
@@ -132,3 +107,37 @@ var server = app.listen(8888, function () {
 
     winston.log('info', 'App is listening at http://%s:%s', host, port);
 });
+
+
+function saveSurvey(req, res, apiName, survey) {
+    // Parameter validations.
+    if (!req.params.userId) {
+        winston.log('error', apiName +' called without mandatory parameter.', {missingParameter: 'params.userId'});
+        httpHelper.sendResponseError(res, 400, 'request.params.userId was null or empty');
+        return;
+    }
+    if (!req.body  || !req.body.length) {
+        winston.log('error', apiName + ' called without mandatory parameter.', {missingParameter: 'body'});
+        httpHelper.sendResponseError(res, 400, 'request.body was null or empty');
+        return;
+    }
+
+    // Save parameters.
+    var userId = req.params.userId;
+    var fieldSubmissions = req.body;
+
+    winston.log('info', apiName + ' called. User id: %s', userId);
+
+    // Save the submissions to db using the surveyManager.
+    sm.saveSurvey(survey.metadata.name, userId, fieldSubmissions, function(err) {
+        if (!err) {
+            // Send an empty successful response.
+            httpHelper.sendResponseSuccess(res);
+        }
+        else {
+            // Send an error response and log it.
+            winston.log('error', apiName +' (POST) failed to save registration data to db.', {error: err});
+            httpHelper.sendResponseError(res, 500, 'failed to save registration to db');
+        }
+    });
+}
