@@ -39,6 +39,7 @@ import tau.user.tausurveyapp.contracts.FieldType;
 import tau.user.tausurveyapp.contracts.TauLocale;
 import tau.user.tausurveyapp.contracts.Survey;
 import tau.user.tausurveyapp.types.SurveySubmitResult;
+import tau.user.tausurveyapp.types.SurveyType;
 import tau.user.tausurveyapp.uiClasses.InputFilterMinMax;
 import tau.user.tausurveyapp.uiClasses.TauDateListener;
 
@@ -93,7 +94,7 @@ public class SurveyBuilder {
      * Goes over all fields, collects their values and send it to the server.
      * If a field is mandatory and was not filled - a failure is called in the supplied callback.
      */
-    public SurveySubmitResult submitSurvey(Activity activity) {
+    public SurveySubmitResult submitSurvey(Activity activity, SurveyType surveyType) {
         // Create the user submission result list we send to the server.
         ArrayList<FieldSubmission> submissions = new ArrayList<>();
 
@@ -108,7 +109,7 @@ public class SurveyBuilder {
             // Only do something if this is not a group field or a title field.
             if (field.getType() != FieldType.GROUP && field.getType() != FieldType.TITLE) {
                 // Get the input the user has set.
-                FieldSubmission fieldSubmission = getFieldValue(fieldId, field, viewId, activity);
+                FieldSubmission fieldSubmission = getFieldValue(field, viewId, activity);
 
                 // If the field is mandatory but empty, return a result with an error.
                 if (field.mandatory && (fieldSubmission == null || fieldSubmission.isValueEmpty(activity))) {
@@ -124,15 +125,21 @@ public class SurveyBuilder {
         }
 
         // If we got here, all fields were filled as expected. Send them to the server.
-        // Send the location to the server (this is a synchronous call to the API since we assume we are already being called async).
-        boolean isSuccess = NetworkManager.getInstance().submitRegistration(activity, submissions);
+        // Send the submission data to the server (this is a synchronous call to the API since we assume we are already being called async).
+        boolean isSuccess;
+        if (surveyType == SurveyType.REGISTER) {
+            isSuccess= NetworkManager.getInstance().submitRegistration(activity, submissions);
+        } else {
+            // if (surveyType == SurveyType.DIARY)
+            isSuccess= NetworkManager.getInstance().submitDiarySurvey(activity, submissions);
+        }
 
         // Return a result according to the success of the API call.
         return new SurveySubmitResult(isSuccess, activity.getString(R.string.survey_network_error), null);
     }
 
     @SuppressWarnings("ResourceType")
-    private FieldSubmission getFieldValue(String fieldId, Field field, int viewId, Activity activity) {
+    private FieldSubmission getFieldValue(Field field, int viewId, Activity activity) {
         // Get the view id by the given field id, and find the view.
         View view = activity.findViewById(viewId);
 
@@ -144,26 +151,28 @@ public class SurveyBuilder {
                 String streetName = ((EditText)addressContainer.findViewById(0)).getText().toString();
                 int streetNumber = Integer.parseInt(((EditText)addressContainer.findViewById(1)).getText().toString());
                 String city = ((SearchableSpinner)addressContainer.findViewById(2)).getSelectedItem().toString();
-                return new FieldSubmission<Address>(Address.class, fieldId, new Address(streetName, streetNumber, city), field.groupId, addressContainer.getTag(1).toString());
+                return new FieldSubmission<Address>(Address.class, field, new Address(streetName, streetNumber, city),
+                                                    addressContainer.getTag(R.id.tau_groupRepetitionValue_tag));
             }
             else if (fieldType == FieldType.INT || fieldType == FieldType.TABLE_INT) {
                 EditText editText = (EditText)view;
                 String intString = editText.getText().toString();
                 if (!TextUtils.isEmpty(intString)) {
-                    return new FieldSubmission<Integer>(Integer.class, fieldId, Integer.parseInt(intString), field.groupId, editText.getTag(1).toString());
+                    return new FieldSubmission<Integer>(Integer.class, field, Integer.parseInt(intString), editText.getTag(R.id.tau_groupRepetitionValue_tag));
                 }
                 return null;
             }
             else if (fieldType == FieldType.STRING) {
                 EditText editText = (EditText)view;
-                return new FieldSubmission<String>(String.class, fieldId, editText.getText().toString(), field.groupId, editText.getTag(1).toString());
+                return new FieldSubmission<String>(String.class, field, editText.getText().toString(), editText.getTag(R.id.tau_groupRepetitionValue_tag));
             }
             else if (fieldType == FieldType.CHOICES) {
                 RadioGroup radioGroup = (RadioGroup)view;
                 int radioButtonID = radioGroup.getCheckedRadioButtonId();
                 View radioButton = radioGroup.findViewById(radioButtonID);
                 if (radioButton != null) {
-                    return new FieldSubmission<String>(String.class, fieldId, radioButton.getTag(0).toString(), field.groupId, radioButton.getTag(1).toString());
+                    return new FieldSubmission<String>(String.class, field, radioButton.getTag(R.id.tau_value_tag).toString(),
+                                                        radioButton.getTag(R.id.tau_groupRepetitionValue_tag));
                 }
                 return null;
             }
@@ -172,7 +181,8 @@ public class SurveyBuilder {
                 int booleanRadioButtonID = booleanGroup.getCheckedRadioButtonId();
                 View booleanRadioButton = booleanGroup.findViewById(booleanRadioButtonID);
                 if (booleanRadioButton != null) {
-                    return new FieldSubmission<Boolean>(Boolean.class, fieldId, Boolean.parseBoolean(booleanRadioButton.getTag(0).toString()), field.groupId, booleanRadioButton.getTag(1).toString());
+                    return new FieldSubmission<Boolean>(Boolean.class, field, Boolean.parseBoolean(booleanRadioButton.getTag(R.id.tau_value_tag).toString()),
+                                                        booleanRadioButton.getTag(R.id.tau_groupRepetitionValue_tag));
                 }
                 return null;
             }
@@ -182,7 +192,7 @@ public class SurveyBuilder {
                 // The date is saved as a long in the tag in key equals to R.id.tau_date_tag.
                 Object tag = dateText.getTag(R.id.tau_date_tag);
                 if (!TextUtils.isEmpty(dateString) && tag != null) {
-                    return new FieldSubmission<Long>(Long.class, fieldId, (long)tag, field.groupId, dateText.getTag(1).toString());
+                    return new FieldSubmission<Long>(Long.class, field, (long)tag, dateText.getTag(R.id.tau_groupRepetitionValue_tag));
                 }
                 return null;
             }
@@ -312,7 +322,7 @@ public class SurveyBuilder {
         textView.setText(survey.getString(locale, field.getTitleId()));
         textView.setTextSize(subtitleTextSize);
         textView.setTextColor(Color.BLACK);
-        textView.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
+        textView.setTag(R.id.tau_groupRepetitionValue_tag, groupRepetitionValue);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         textView.setLayoutParams(layoutParams);
@@ -348,8 +358,8 @@ public class SurveyBuilder {
             radioButton.setLayoutParams(layoutParams);
             // We will need an id to figure out later which radio button was selected.
             radioButton.setId(i);
-            radioButton.setTag(0, choice.value); // We always store the value in a tag with key 0.
-            radioButton.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
+            radioButton.setTag(R.id.tau_value_tag, choice.value);
+            radioButton.setTag(R.id.tau_groupRepetitionValue_tag, groupRepetitionValue);
             radioGroup.addView(radioButton);
         }
 
@@ -371,8 +381,8 @@ public class SurveyBuilder {
         // We will need an id to figure out later which radio button was selected.
         //noinspection ResourceType
         radioButtonYes.setId(1);
-        radioButtonYes.setTag(0, "true"); // We always store the value in a tag with key 0.
-        radioButtonYes.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
+        radioButtonYes.setTag(R.id.tau_value_tag, "true");
+        radioButtonYes.setTag(R.id.tau_groupRepetitionValue_tag, groupRepetitionValue);
         booleanGroup.addView(radioButtonYes);
 
         // No radio button.
@@ -382,8 +392,8 @@ public class SurveyBuilder {
         // We will need an id to figure out later which radio button was selected.
         //noinspection ResourceType
         radioButtonNo.setId(0);
-        radioButtonNo.setTag(0, "false"); // We always store the value in a tag with key 0.
-        radioButtonNo.setTag(1, groupRepetitionValue); // We always store the group part identifier in a tag at key 1.
+        radioButtonNo.setTag(R.id.tau_value_tag, "false");
+        radioButtonNo.setTag(R.id.tau_groupRepetitionValue_tag, groupRepetitionValue);
         booleanGroup.addView(radioButtonNo);
 
         return booleanGroup;
@@ -404,7 +414,7 @@ public class SurveyBuilder {
         LinearLayout.LayoutParams dateTextParams = createLinearLayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT);
         dateTextParams.setMarginStart(70);
         dateText.setLayoutParams(dateTextParams);
-        dateText.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
+        dateText.setTag(R.id.tau_groupRepetitionValue_tag, groupRepetitionValue);
 
         // Create a button that the user can click to add a date via a dialog.
         Button dateButton = new Button(activity);
@@ -444,7 +454,7 @@ public class SurveyBuilder {
         container.setOrientation(LinearLayout.VERTICAL);
         container.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
         container.setId(getViewId(field));
-        container.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
+        container.setTag(R.id.tau_groupRepetitionValue_tag, groupRepetitionValue);
 
         // Create a container for "street" and "street number" (which are side by side).
         LinearLayout streetContainer = new LinearLayout(context);
@@ -497,7 +507,7 @@ public class SurveyBuilder {
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setSingleLine();
         editText.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
-        editText.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
+        editText.setTag(R.id.tau_groupRepetitionValue_tag, groupRepetitionValue);
 
         return editText;
     }
@@ -508,7 +518,7 @@ public class SurveyBuilder {
         editText.setInputType(InputType.TYPE_CLASS_TEXT);
         editText.setSingleLine();
         editText.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
-        editText.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
+        editText.setTag(R.id.tau_groupRepetitionValue_tag, groupRepetitionValue);
 
         return editText;
     }
@@ -520,7 +530,7 @@ public class SurveyBuilder {
         container.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
         int groupViewId = getViewId(field);
         container.setId(groupViewId);
-        container.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
+        container.setTag(R.id.tau_groupRepetitionValue_tag, groupRepetitionValue);
 
         // Only continue if we got a condition.
         if (field.condition != null) {
@@ -597,7 +607,7 @@ public class SurveyBuilder {
         rowInput.setId(getViewId(field));
         rowInput.setInputType(InputType.TYPE_CLASS_NUMBER);
         rowInput.setSingleLine();
-        rowInput.setTag(1, groupRepetitionValue); // We always store the group repetition value in a tag at key 1.
+        rowInput.setTag(R.id.tau_groupRepetitionValue_tag, groupRepetitionValue);
         rowInput.setLayoutParams(createLinearLayoutParamsWithWeight(0.4));
         InputFilter[] filterArray = new InputFilter[1];
         filterArray[0] = new InputFilter.LengthFilter(4); // Set maximum length of the int value to a thousand.

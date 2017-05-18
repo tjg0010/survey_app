@@ -23,6 +23,7 @@ import tau.user.tausurveyapp.contracts.Survey;
 import tau.user.tausurveyapp.contracts.TauLocale;
 import tau.user.tausurveyapp.types.NetworkCallback;
 import tau.user.tausurveyapp.types.SurveySubmitResult;
+import tau.user.tausurveyapp.types.SurveyType;
 
 public class DiaryActivity extends AppCompatActivity {
 
@@ -89,7 +90,7 @@ public class DiaryActivity extends AppCompatActivity {
             @Override
             protected SurveySubmitResult doInBackground(Activity... params) {
                 // Call submitSurvey in our SurveyBuilder.
-                return sb.submitSurvey(DiaryActivity.this);
+                return sb.submitSurvey(DiaryActivity.this, SurveyType.DIARY);
             }
 
             @Override

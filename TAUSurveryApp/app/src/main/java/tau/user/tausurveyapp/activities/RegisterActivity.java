@@ -25,6 +25,7 @@ import tau.user.tausurveyapp.Utils;
 import tau.user.tausurveyapp.contracts.TauLocale;
 import tau.user.tausurveyapp.contracts.Survey;
 import tau.user.tausurveyapp.types.SurveySubmitResult;
+import tau.user.tausurveyapp.types.SurveyType;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -115,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             protected SurveySubmitResult doInBackground(Activity... params) {
                 // Call submitSurvey in our SurveyBuilder.
-                return sb.submitSurvey(RegisterActivity.this);
+                return sb.submitSurvey(RegisterActivity.this, SurveyType.REGISTER);
             }
 
             @Override

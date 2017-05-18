@@ -150,6 +150,27 @@ public class NetworkManager {
         });
     }
 
+    /**
+     * Submits the given field submission list to the server.
+     * NOTE: this function is synchronous!
+     */
+    public boolean submitDiarySurvey(Context context, ArrayList<FieldSubmission> fieldSubmissions) {
+        Call<Void> call = service.submitDiary(getUserId(context), fieldSubmissions);
+        try {
+            // Call the API synchronously.
+            Response response = call.execute();
+            return response.isSuccessful();
+        }
+        catch (IOException e) {
+            Log.e("NetworkManager", "submitRegistration timeout", e);
+            return false;
+        }
+        catch (Exception e){
+            Log.e("NetworkManager", "submitRegistration unexpected exception: ", e);
+            return false;
+        }
+    }
+
     // endregion
 
     // region: TauService RetroFit Interface
@@ -168,6 +189,9 @@ public class NetworkManager {
 
         @GET("diary/{userId}")
         Call<Survey> getDiarySurvey(@Path("userId") String userId);
+
+        @POST("diary/{userId}")
+        Call<Void> submitDiary(@Path("userId") String userId, @Body List<FieldSubmission> fieldSubmissions);
     }
 
     // endregion

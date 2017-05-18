@@ -24,12 +24,12 @@ public class FieldSubmission<T> {
     @Expose
     public String groupRepetitionValue;
 
-    public FieldSubmission(Class<T> type, String id, T value, String groupId, String groupRepetitionValue) {
+    public FieldSubmission(Class<T> type, Field field, T value, Object groupRepetitionTag) {
         this.type = type;
-        this.id = id;
+        this.id = field.id;
         this.value = value;
-        this.groupId = groupId;
-        this.groupRepetitionValue = groupRepetitionValue;
+        this.groupId = field.groupId;
+        this.groupRepetitionValue = groupRepetitionTag == null ? null : groupRepetitionTag.toString();
     }
 
     public boolean isValueEmpty(Activity activity) {

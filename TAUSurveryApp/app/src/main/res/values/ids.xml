@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="tau_value_tag" type="id">801</item>
+    <item name="tau_groupRepetitionValue_tag" type="id">802</item>
+    <item name="tau_date_tag" type="id">803</item>
+
     <item name="tau_error_msg" type="id">901</item>
     <item name="tau_error_msg_title" type="id">902</item>
     <item name="tau_error_msg_body" type="id">903</item>
-    <item name="tau_date_tag" type="id">904</item>
 </resources>
