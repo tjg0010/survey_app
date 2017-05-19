@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
+import tau.user.tausurveyapp.NotificationsManager;
 import tau.user.tausurveyapp.SurveyManager;
 import tau.user.tausurveyapp.types.NetworkCallback;
 import tau.user.tausurveyapp.NetworkManager;
@@ -130,10 +131,15 @@ public class RegisterActivity extends AppCompatActivity {
                 // If registration was completed successfully.
                 if (surveySubmitResult.isSuccess()) {
                     // Save a flag that indicates the user is registered.
-                    Utils.setToPrefs(PreferencesType.BOOLEAN, RegisterActivity.this, R.string.key_is_registered, true);
+                    Utils.setBooleanToPrefs(RegisterActivity.this, R.string.key_is_registered, true);
 
                     // Mark the survey as started (it will only run for 7 days).
                     SurveyManager.getInstance().surveyStarted(RegisterActivity.this);
+
+                    // Set the notification dates, and activate the notifications.
+                    // TODO: change the null of the dates to data from the server.
+                    NotificationsManager.getInstance().setDates(RegisterActivity.this, null);
+                    NotificationsManager.getInstance().activateNotifications(RegisterActivity.this);
 
                     // Go to the info screen.
                     Intent intent = new Intent(RegisterActivity.this, InfoActivity.class);

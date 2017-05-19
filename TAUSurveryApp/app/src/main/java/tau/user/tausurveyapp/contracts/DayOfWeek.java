@@ -19,5 +19,4 @@ public enum DayOfWeek {
     public int getValue() {
         return value;
     }
-
 }

@@ -103,7 +103,7 @@ public class DiaryActivity extends AppCompatActivity {
                 // If registration was completed successfully.
                 if (surveySubmitResult.isSuccess()) {
                     // Save a flag that indicates the user is registered.
-                    Utils.setToPrefs(PreferencesType.BOOLEAN, DiaryActivity.this, R.string.key_is_diary1_answered, true);
+                    Utils.setBooleanToPrefs(DiaryActivity.this, R.string.key_is_diary1_answered, true);
 
                     // TODO: if diary 1 is marked as answered, mark diary 2 as answered.
 

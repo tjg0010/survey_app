@@ -57,20 +57,20 @@ public class NetworkManager {
     private String getUserId(Context context) {
         // If we don't have a userId, try to get it from the preferences.
         if (TextUtils.isEmpty(userId)) {
-            userId = (String)Utils.getFromPrefs(PreferencesType.STRING, context, R.string.key_user_id);
+            userId = Utils.getStringFromPrefs(context, R.string.key_user_id);
 
             // If we still don't have the user id, get it from the device's account.
             if (TextUtils.isEmpty(userId)) {
                 userId = Utils.getUserId(context);
                 // Save the user id we found in the prefs.
-                Utils.setToPrefs(PreferencesType.STRING, context, R.string.key_user_id, userId);
+                Utils.setStringToPrefs(context, R.string.key_user_id, userId);
             }
 
             // If we still didn't manage to get a user id, generate a UUID instead and save it.
             if (TextUtils.isEmpty(userId)) {
                 userId = UUID.randomUUID().toString();
                 // Save the user id we found in the prefs.
-                Utils.setToPrefs(PreferencesType.STRING, context, R.string.key_user_id, userId);
+                Utils.setStringToPrefs(context, R.string.key_user_id, userId);
             }
         }
 

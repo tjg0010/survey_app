@@ -12,7 +12,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import tau.user.tausurveyapp.types.PreferencesType;
 
@@ -30,6 +34,24 @@ public class Utils {
             return null;
         }
     }
+
+    public static List<String> convertToStringList(List<Long> list) {
+        ArrayList<String> result = new ArrayList<>();
+        for (long item: list) {
+            result.add(Long.toString(item));
+        }
+        return result;
+    }
+
+    public static List<Long> convertToLongList(List<String> list) {
+        ArrayList<Long> result = new ArrayList<>();
+        for (String item: list) {
+            result.add(Long.parseLong(item));
+        }
+        return result;
+    }
+
+
 
     /**
      * A helper function that gets the a date as a long (unix time) according to the given year, month and day.
@@ -52,9 +74,33 @@ public class Utils {
         return cal.getTimeInMillis();
     }
 
-    public static long getFutureTimeInMillis(int daysToAdd) {
+    public static long getFutureMillisTimeByDays(int daysToAdd) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, daysToAdd);
+        return cal.getTimeInMillis();
+    }
+
+    public static long getFutureMillisTimeByHours(int hoursToAdd) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.HOUR_OF_DAY, hoursToAdd);
+        return cal.getTimeInMillis();
+    }
+
+    public static long getFutureMillisTimeByMinutes(int minutesToAdd) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MINUTE, minutesToAdd);
+        return cal.getTimeInMillis();
+    }
+
+    public static long getFutureMillisTimeByHourInDay(int hourInDay) {
+        Calendar cal = Calendar.getInstance();
+
+        while (cal.get(Calendar.HOUR_OF_DAY) != hourInDay) {
+            cal.add(Calendar.HOUR_OF_DAY, 1);
+        }
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+
         return cal.getTimeInMillis();
     }
 
@@ -117,7 +163,52 @@ public class Utils {
         dialog.show();
     }
 
+    public static String getStringFromPrefs(Context context, @StringRes int resId) {
+        return (String)getFromPrefs(PreferencesType.STRING, context, resId);
+    }
 
+    public static void setStringToPrefs(Context context, @StringRes int resId, String value) {
+        setToPrefs(PreferencesType.STRING, context, resId, value);
+    }
+
+    public static int getIntFromPrefs(Context context, @StringRes int resId) {
+        return (int)getFromPrefs(PreferencesType.INT, context, resId);
+    }
+
+    public static void setIntToPrefs(Context context, @StringRes int resId, int value) {
+        setToPrefs(PreferencesType.INT, context, resId, value);
+    }
+
+    public static long getLongFromPrefs(Context context, @StringRes int resId) {
+        return (long)getFromPrefs(PreferencesType.LONG, context, resId);
+    }
+
+    public static void setLongToPrefs(Context context, @StringRes int resId, long value) {
+        setToPrefs(PreferencesType.LONG, context, resId, value);
+    }
+
+    public static boolean getBooleanFromPrefs(Context context, @StringRes int resId) {
+        return (boolean)getFromPrefs(PreferencesType.BOOLEAN, context, resId);
+    }
+
+    public static void setBooleanToPrefs(Context context, @StringRes int resId, boolean value) {
+        setToPrefs(PreferencesType.BOOLEAN, context, resId, value);
+    }
+
+    public static List<String> getStringListFromPrefs(Context context, @StringRes int resId) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        Set<String> stringSet = prefs.getStringSet(context.getString(resId), new HashSet<String>());
+        ArrayList<String> results = new ArrayList<String>();
+        results.addAll(stringSet);
+        return results;
+    }
+
+    public static void setStringListToPrefs(Context context, @StringRes int resId, List<String> list) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putStringSet(context.getString(resId), new HashSet<String>(list));
+        editor.apply();
+    }
 
     /**
      * Gets the object with the given key (resId) and given PreferencesType from the shared preferences.
@@ -126,7 +217,7 @@ public class Utils {
      * @param resId - the resId of the desired key from preferences.
      * @return the found result or an empty value if not found. If an unknown type is requested, null will be returned.
      */
-    public static Object getFromPrefs(PreferencesType prefsType, Context context, @StringRes int resId) {
+    private static Object getFromPrefs(PreferencesType prefsType, Context context, @StringRes int resId) {
         SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         Object result = null;
 
@@ -155,7 +246,7 @@ public class Utils {
      * @param resId - the resId of the desired key from preferences.
      * @param value - the new value to write in the given key.
      */
-    public static void setToPrefs(PreferencesType prefsType, Context context, @StringRes int resId, Object value) {
+    private static void setToPrefs(PreferencesType prefsType, Context context, @StringRes int resId, Object value) {
         SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 

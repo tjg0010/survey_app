@@ -128,10 +128,10 @@ public class SurveyBuilder {
         // Send the submission data to the server (this is a synchronous call to the API since we assume we are already being called async).
         boolean isSuccess;
         if (surveyType == SurveyType.REGISTER) {
-            isSuccess= NetworkManager.getInstance().submitRegistration(activity, submissions);
+            isSuccess = NetworkManager.getInstance().submitRegistration(activity, submissions);
         } else {
             // if (surveyType == SurveyType.DIARY)
-            isSuccess= NetworkManager.getInstance().submitDiarySurvey(activity, submissions);
+            isSuccess = NetworkManager.getInstance().submitDiarySurvey(activity, submissions);
         }
 
         // Return a result according to the success of the API call.

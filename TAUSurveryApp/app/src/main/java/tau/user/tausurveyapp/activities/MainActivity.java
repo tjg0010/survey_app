@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Get the shared preferences (key-value pairs). This file is shared between the different activities.
-        boolean isRegistered = (Boolean)Utils.getFromPrefs(PreferencesType.BOOLEAN, MainActivity.this, R.string.key_is_registered);
+        boolean isRegistered = Utils.getBooleanFromPrefs(MainActivity.this, R.string.key_is_registered);
 
         if (!isRegistered) {
             // Go to registration activity.
@@ -29,11 +29,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             // Go to info activity.
-            // Intent intent = new Intent(this, InfoActivity.class);
-            // startActivity(intent);
-
-            // TODO: change this back to call the info activity after done with testing.
-             Intent intent = new Intent(this, DiaryActivity.class);
+             Intent intent = new Intent(this, InfoActivity.class);
              startActivity(intent);
         }
     }

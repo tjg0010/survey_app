@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">TAU Survery App</string>
+    <string name="preference_file_key">preference_file_key</string>
     <string name="key_is_registered">key_is_registered</string>
     <string name="key_survey_end_time">key_survey_end_time</string>
+    <string name="key_survey_notifications_saved">key_survey_notifications_saved</string>
+    <string name="key_survey_notifications_times">key_survey_notifications_times</string>
+    <string name="key_survey_notifications_snooze_count">key_survey_notifications_snooze_count</string>
     <string name="key_is_diary1_answered">key_is_diary1_answered</string>
     <string name="key_is_diary2_answered">key_is_diary2_answered</string>
-    <string name="preference_file_key">preference_file_key</string>
     <string name="key_was_tracking_started">key_was_tracking_started</string>
     <string name="key_user_id">key_user_id</string>
 
@@ -34,6 +37,12 @@
     <string name="diary_survey_default_title">מפגשים</string>
     <string name="diary_survey_default_submit">שלח</string>
     <string name="diary_error_title">שגיאה בסקר</string>
+
+    <string name="notification_title">אוניברסיטת תל אביב</string>
+    <string name="notification_body">שאלון מפגשים יומי מוכן למענה. לחצ/י כדי למלא את השאלון.</string>
+    <string name="notification_ok_btn">מענה על השאלון</string>
+    <string name="notification_snooze_btn">דחה בחצי שעה</string>
+    <string name="notification_snooze_morning_btn">דחה לבוקר</string>
 
     <string name="Terms_and_Conditions">
 
