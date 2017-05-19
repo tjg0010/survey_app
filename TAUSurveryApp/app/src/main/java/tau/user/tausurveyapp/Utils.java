@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
+import tau.user.tausurveyapp.types.PreferencesType;
+
 /**
  * Created by ran on 17/04/2017.
  */
@@ -44,6 +46,19 @@ public class Utils {
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTimeInMillis();
     }
+
+    public static long getCurrentTimeInMillis() {
+        Calendar cal = Calendar.getInstance();
+        return cal.getTimeInMillis();
+    }
+
+    public static long getFutureTimeInMillis(int daysToAdd) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, daysToAdd);
+        return cal.getTimeInMillis();
+    }
+
+
 
     public static void initializeErrorMsg(Activity activity, String title, String body) {
         if (activity != null) {
@@ -102,55 +117,62 @@ public class Utils {
         dialog.show();
     }
 
+
+
     /**
-     * Gets the string with the given key (resId) from the shared preferences.
+     * Gets the object with the given key (resId) and given PreferencesType from the shared preferences.
+     * @param prefsType - the preferences type to get.
      * @param context - the current context. Used to get resource strings.
      * @param resId - the resId of the desired key from preferences.
-     * @return the found result or an empty string if not found.
+     * @return the found result or an empty value if not found. If an unknown type is requested, null will be returned.
      */
-    public static String getStringFromPrefs(Context context, @StringRes int resId) {
+    public static Object getFromPrefs(PreferencesType prefsType, Context context, @StringRes int resId) {
         SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String result = prefs.getString(context.getString(resId), "");
+        Object result = null;
+
+        switch (prefsType) {
+            case STRING:
+                result = prefs.getString(context.getString(resId), "");
+                break;
+            case INT:
+                result = prefs.getInt(context.getString(resId), 0);
+                break;
+            case LONG:
+                result = prefs.getLong(context.getString(resId), 0);
+                break;
+            case BOOLEAN:
+                result = prefs.getBoolean(context.getString(resId), false);
+                break;
+        }
 
         return result;
     }
 
     /**
-     * Sets a new string value to the given key (resId) in the shared preferences.
+     * Sets a new object value to the given key (resId) in the shared preferences.
+     * @param prefsType - the object's type to save. The object will be casted to the requested type.
      * @param context - the current context. Used to get resource strings.
      * @param resId - the resId of the desired key from preferences.
      * @param value - the new value to write in the given key.
      */
-    public static void setStringToPrefs(Context context, @StringRes int resId, String value) {
+    public static void setToPrefs(PreferencesType prefsType, Context context, @StringRes int resId, Object value) {
         SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(context.getString(resId), value);
-        editor.apply();
-    }
 
-    /**
-     * Gets the boolean value with the given key (resId) from the shared preferences.
-     * @param context - the current context. Used to get resource strings.
-     * @param resId - the resId of the desired key from preferences.
-     * @return the found result or an empty string if not found.
-     */
-    public static boolean getBooleanFromPrefs(Context context, @StringRes int resId) {
-        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        boolean result = prefs.getBoolean(context.getString(resId), false);
-
-        return result;
-    }
-
-    /**
-     * Sets a new boolean value to the given key (resId) in the shared preferences.
-     * @param context - the current context. Used to get resource strings.
-     * @param resId - the resId of the desired key from preferences.
-     * @param value - the new value to write in the given key.
-     */
-    public static void setBooleanToPrefs(Context context, @StringRes int resId, boolean value) {
-        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(context.getString(resId), value);
-        editor.apply();
+        switch (prefsType) {
+            case STRING:
+                editor.putString(context.getString(resId), (String)value);
+                editor.apply();
+                break;
+            case INT:
+                editor.putInt(context.getString(resId), (Integer)value);
+                break;
+            case LONG:
+                editor.putLong(context.getString(resId), (Long)value);
+                break;
+            case BOOLEAN:
+                editor.putBoolean(context.getString(resId), (Boolean)value);
+                break;
+        }
     }
 }

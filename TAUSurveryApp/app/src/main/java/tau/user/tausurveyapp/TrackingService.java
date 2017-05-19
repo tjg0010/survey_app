@@ -24,7 +24,14 @@ public class TrackingService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            track();
+            // Only track if the survey time is not finished.
+            if (!SurveyManager.getInstance().isSurveyFinished(this)) {
+                track();
+            }
+            else {
+                // If the survey time is finished, stop the repeated tracking.
+                TrackingRepeater.getInstance().stopRepeatedTracking(this);
+            }
         }
     }
 

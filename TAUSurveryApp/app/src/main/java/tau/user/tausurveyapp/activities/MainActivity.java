@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 
 import tau.user.tausurveyapp.R;
 import tau.user.tausurveyapp.Utils;
+import tau.user.tausurveyapp.types.PreferencesType;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Get the shared preferences (key-value pairs). This file is shared between the different activities.
-        boolean isRegistered = Utils.getBooleanFromPrefs(MainActivity.this, R.string.key_is_registered);
+        boolean isRegistered = (Boolean)Utils.getFromPrefs(PreferencesType.BOOLEAN, MainActivity.this, R.string.key_is_registered);
 
         if (!isRegistered) {
             // Go to registration activity.

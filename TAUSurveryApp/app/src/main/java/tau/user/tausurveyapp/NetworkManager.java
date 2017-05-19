@@ -25,6 +25,7 @@ import retrofit2.http.Path;
 import tau.user.tausurveyapp.contracts.FieldSubmission;
 import tau.user.tausurveyapp.contracts.Survey;
 import tau.user.tausurveyapp.types.NetworkCallback;
+import tau.user.tausurveyapp.types.PreferencesType;
 
 /**
  * Created by ran on 11/04/2017.
@@ -56,20 +57,20 @@ public class NetworkManager {
     private String getUserId(Context context) {
         // If we don't have a userId, try to get it from the preferences.
         if (TextUtils.isEmpty(userId)) {
-            userId = Utils.getStringFromPrefs(context, R.string.key_user_id);
+            userId = (String)Utils.getFromPrefs(PreferencesType.STRING, context, R.string.key_user_id);
 
             // If we still don't have the user id, get it from the device's account.
             if (TextUtils.isEmpty(userId)) {
                 userId = Utils.getUserId(context);
                 // Save the user id we found in the prefs.
-                Utils.setStringToPrefs(context, R.string.key_user_id, userId);
+                Utils.setToPrefs(PreferencesType.STRING, context, R.string.key_user_id, userId);
             }
 
             // If we still didn't manage to get a user id, generate a UUID instead and save it.
             if (TextUtils.isEmpty(userId)) {
                 userId = UUID.randomUUID().toString();
                 // Save the user id we found in the prefs.
-                Utils.setStringToPrefs(context, R.string.key_user_id, userId);
+                Utils.setToPrefs(PreferencesType.STRING, context, R.string.key_user_id, userId);
             }
         }
 

@@ -22,6 +22,7 @@ import tau.user.tausurveyapp.Utils;
 import tau.user.tausurveyapp.contracts.Survey;
 import tau.user.tausurveyapp.contracts.TauLocale;
 import tau.user.tausurveyapp.types.NetworkCallback;
+import tau.user.tausurveyapp.types.PreferencesType;
 import tau.user.tausurveyapp.types.SurveySubmitResult;
 import tau.user.tausurveyapp.types.SurveyType;
 
@@ -102,7 +103,7 @@ public class DiaryActivity extends AppCompatActivity {
                 // If registration was completed successfully.
                 if (surveySubmitResult.isSuccess()) {
                     // Save a flag that indicates the user is registered.
-                    Utils.setBooleanToPrefs(DiaryActivity.this, R.string.key_is_diary1_answered, true);
+                    Utils.setToPrefs(PreferencesType.BOOLEAN, DiaryActivity.this, R.string.key_is_diary1_answered, true);
 
                     // TODO: if diary 1 is marked as answered, mark diary 2 as answered.
 
