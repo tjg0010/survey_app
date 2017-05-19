@@ -47,7 +47,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `tausurvey`.`diaries` (
   `diaryId` INT(10) NOT NULL AUTO_INCREMENT,
   `userId` VARCHAR(45) NOT NULL,
-  `time` DATETIME NOT NULL,
+  `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `home0to5` INT(4) NOT NULL,
   `home5to18` INT(4) NOT NULL,
   `home18to35` INT(4) NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `tausurvey`.`children_diaries` (
   `childDiaryId` INT(10) NOT NULL AUTO_INCREMENT,
   `userId` VARCHAR(45) NOT NULL,
   `childName` VARCHAR(60) NOT NULL,
-  `time` DATETIME NOT NULL,
+  `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `contacts0to5` INT(4) NOT NULL,
   `contacts5to18` INT(4) NOT NULL,
   `contacts18to35` INT(4) NOT NULL,
