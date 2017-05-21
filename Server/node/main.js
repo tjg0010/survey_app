@@ -55,7 +55,35 @@ app.post('/location/:userId', function (req, res) {
                     {userId: userId, lat: lat, long: long, time: time});
         httpHelper.sendResponseError(res, 500, 'Failed saving location to db. Not all required parameters were supplied.');
     }
+});
 
+app.post('/location/:userId/bulk', function (req, res) {
+    // Parameter validations.
+    if (!req.params.userId) {
+        winston.log('error', '/location/:userId/bulk (POST) called without mandatory parameter.', {missingParameter: 'params.userId'});
+        httpHelper.sendResponseError(res, 400, 'userId was null or empty');
+        return;
+    }
+    if (!req.body  || !req.body.length) {
+        winston.log('error', '/location/:userId/bulk (POST) called without mandatory parameter.', {missingParameter: 'body'});
+        httpHelper.sendResponseError(res, 400, 'body was null or empty');
+        return;
+    }
+
+    // Extract parameters.
+    var userId = req.params.userId;
+    var locations = req.body;
+
+    winston.log('info', '/location/:userId/bulk (POST) called. User id: %s', userId);
+
+    db.saveLocationsBulk(userId, locations, function (err) {
+        if (!err) {
+            httpHelper.sendResponseSuccess(res);
+        }
+        else {
+            httpHelper.sendResponseError(res, 500, 'Failed saving locations to db.');
+        }
+    });
 
 });
 
@@ -87,7 +115,7 @@ app.post('/diary/:userId', function (req, res) {
 });
 
 // Start the server.
-var server = app.listen(8888, function () {
+var server = app.listen(8090, function () {
 
     var host = server.address().address;
     var port = server.address().port;
@@ -113,16 +141,16 @@ function saveSurvey(req, res, apiName, survey) {
     // Parameter validations.
     if (!req.params.userId) {
         winston.log('error', apiName +' called without mandatory parameter.', {missingParameter: 'params.userId'});
-        httpHelper.sendResponseError(res, 400, 'request.params.userId was null or empty');
+        httpHelper.sendResponseError(res, 400, 'userId was null or empty');
         return;
     }
     if (!req.body  || !req.body.length) {
         winston.log('error', apiName + ' called without mandatory parameter.', {missingParameter: 'body'});
-        httpHelper.sendResponseError(res, 400, 'request.body was null or empty');
+        httpHelper.sendResponseError(res, 400, 'body was null or empty');
         return;
     }
 
-    // Save parameters.
+    // Extract parameters.
     var userId = req.params.userId;
     var fieldSubmissions = req.body;
 

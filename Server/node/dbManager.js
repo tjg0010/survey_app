@@ -50,6 +50,36 @@ exports.saveLocation = function(userId, lat, long, time, callback){
     });
 };
 
+exports.saveLocationsBulk = function(userId, locations, callback) {
+    var paramValuesStrings = [];
+
+    // The paramValuesGroup is an array of paramValues arrays, since groups can have repeated items.
+    // We parse each paramValues list separately.
+    for (var i = 0; i < locations.length; i++) {
+        var location = locations[i];
+        // Only add this location if all of its parameters are valid.
+        if (location && location.latitude && location.longitude && location.time) {
+            // Convert the given time in UTC format, to mySql DATETIME format.
+            var datetime = new Date(parseInt(location.time)).toMysqlDateTime();
+            var parsedValues = escapeDataArray([userId, location.latitude, location.longitude, datetime]);
+            paramValuesStrings.push('(' + parsedValues.join(',') + ')');
+        }
+    }
+
+    con.query(
+        'INSERT INTO `tausurvey`.`locations` (`userId`,`lat`,`long`,`time`)' + ' VALUES ' + paramValuesStrings.join(',') + ';',
+            function(err,res){
+                if(err) {
+                    logError('Error saving location.', err);
+                    callback(err);
+                }
+                else {
+                    winston.log('info', 'Data inserted to DB.', {id: res.insertId});
+                    callback();
+                }
+            });
+};
+
 exports.saveSurvey = function(surveyName, paramNames, paramValues, callback) {
     // Only do something if we got a recognized survey.
     if (surveyName) {
