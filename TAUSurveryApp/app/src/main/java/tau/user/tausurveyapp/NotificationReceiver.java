@@ -121,7 +121,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         int btnTextResId = snoozeCount == maxSnoozes ? R.string.notification_snooze_morning_btn : R.string.notification_snooze_btn;
 
         return new NotificationCompat.Action(
-                R.drawable.googleg_standard_color_18,
+                R.drawable.tau_transparent_pixel,
                 context.getString(btnTextResId),
                 pendingIntent);
     }
@@ -140,7 +140,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         return new NotificationCompat.Action(
-                R.drawable.googleg_standard_color_18,
+                R.drawable.tau_transparent_pixel,
                 context.getString(R.string.notification_ok_btn),
                 resultPendingIntent);
     }
