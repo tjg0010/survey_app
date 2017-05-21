@@ -25,14 +25,21 @@ public class NotificationsManager {
 
     private NotificationsManager() {
         defaultTimes = new ArrayList<>(2);
-        // TODO: uncomment this and delete what's under!
-        //defaultTimes.add(new NotificationTime(DayOfWeek.WEDNESDAY, 20, 0));
-        //defaultTimes.add(new NotificationTime(DayOfWeek.SATURDAY, 21, 0));
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, 1);
-        defaultTimes.add(new NotificationTime(DayOfWeek.SUNDAY, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)));
-        cal.add(Calendar.HOUR, 2);
-        defaultTimes.add(new NotificationTime(DayOfWeek.SUNDAY, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)));
+        defaultTimes.add(new NotificationTime(DayOfWeek.WEDNESDAY, 20, 0));
+        defaultTimes.add(new NotificationTime(DayOfWeek.SATURDAY, 21, 0));
+        // TODO: delete these! for now we add a daily notification.
+        defaultTimes.add(new NotificationTime(DayOfWeek.SUNDAY, 21, 0));
+        defaultTimes.add(new NotificationTime(DayOfWeek.MONDAY, 21, 0));
+        defaultTimes.add(new NotificationTime(DayOfWeek.TUESDAY, 21, 0));
+        defaultTimes.add(new NotificationTime(DayOfWeek.THURSDAY, 21, 0));
+        defaultTimes.add(new NotificationTime(DayOfWeek.FRIDAY, 21, 0));
+
+        // Un-comment for debugging.
+        //Calendar cal = Calendar.getInstance();
+        //cal.add(Calendar.MINUTE, 1);
+        //defaultTimes.add(new NotificationTime(DayOfWeek.SUNDAY, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)));
+        //cal.add(Calendar.HOUR, 2);
+        //defaultTimes.add(new NotificationTime(DayOfWeek.SUNDAY, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)));
     }
 
     /**
@@ -82,23 +89,37 @@ public class NotificationsManager {
     }
 
     /**
-     * Used to clear the notifications in the next day.
+     * Used to clear the notifications in the next 16 hours.
      * This is needed after a diary is answered and we want to make sure the user won't get a notification.
      */
     public void clearUpcomingNotifications(Context context) {
         List<Long> times = Utils.convertToLongList(Utils.getUniqueStringListFromPrefs(context, R.string.key_survey_notifications_times));
         ArrayList<Long> newTimes = new ArrayList<Long>();
-        long timeInOneDay = Utils.getFutureMillisTimeByDays(1);
+        long timeIn16Hours = Utils.getFutureMillisTimeByHours(16);
 
         // Go over the existing notification times and only add the ones that happen after a day from now.
         // This way we remove old notifications from the list.
         for (long time: times) {
-            if (time >= timeInOneDay) {
+            if (time >= timeIn16Hours) {
+                // Add this time (do not cancel it).
                 newTimes.add(time);
+            } else {
+                // Cancel any pending alarm for this time.
+                cancelPendingNotificationAlarm(context, time);
             }
         }
 
         Utils.setUniqueStringListToPrefs(context, R.string.key_survey_notifications_times, Utils.convertToStringList(newTimes));
+    }
+
+    private void cancelPendingNotificationAlarm(Context context, long time) {
+        Intent notificationIntent = new Intent(context, NotificationReceiver.class);
+        notificationIntent.setAction("tau.user.tausurveyapp.action.NOTIFICATION");
+        // Create a pending intent with an id equals to the time (but in int).
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)time, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // Create the alarm manager and give it the pending intent and time.
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
     }
 
     @SuppressWarnings("WrongConstant")

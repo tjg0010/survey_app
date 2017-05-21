@@ -20,7 +20,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     private final int notificationId = 101;
     private final int snoozeIntentId = 102;
     private final int maxSnoozes = 3;
-    private final int snoozeTime = 1; // 1 minute for now. TODO: change this to 30 minutes!!!
+    private final int snoozeTime = 4; // 4 minute for now. TODO: change this to 30 minutes!!!
     private final int snoozeTimeMorning = 9; // Set the morning snooze to 9AM;
 
     public static String IS_SNOOZE_CLICKED_ID = "is_snooze_clicked_id";
@@ -78,7 +78,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     private void showNotification(Context context, int snoozeCount) {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                                                    .setSmallIcon(R.drawable.tau_logo)
+                                                    .setSmallIcon(R.drawable.tau_logo_round)
                                                     .setContentTitle(context.getString(R.string.notification_title))
                                                     .setContentText(context.getString(R.string.notification_body))
                                                     .addAction(createOkAction(context)) // Create ok button.
