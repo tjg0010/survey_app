@@ -12,6 +12,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -141,6 +145,31 @@ public class Utils {
         return null;
     }
 
+    public static String hashStringMD5(String str) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash.
+            MessageDigest digest = java.security.MessageDigest.getInstance(MD5);
+            digest.update(str.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String.
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        // If we failed, return a normal string hash.
+        return String.valueOf(str.hashCode());
+    }
+
     public static void showAlertBox(Activity activity, String title, String message, @StringRes int buttonTxt) {
         // From: https://developer.android.com/guide/topics/ui/dialogs.html
 
@@ -195,19 +224,69 @@ public class Utils {
         setToPrefs(PreferencesType.BOOLEAN, context, resId, value);
     }
 
-    public static List<String> getStringListFromPrefs(Context context, @StringRes int resId) {
+    public static List<String> getUniqueStringListFromPrefs(Context context, @StringRes int resId) {
+        return getUniqueStringListFromPrefs(context, context.getString(resId));
+    }
+
+    public static void setUniqueStringListToPrefs(Context context, @StringRes int resId, List<String> list) {
+        setUniqueStringListToPrefs(context, context.getString(resId), list);
+    }
+
+    public static List<String> getUniqueStringListFromPrefs(Context context, String id) {
         SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        Set<String> stringSet = prefs.getStringSet(context.getString(resId), new HashSet<String>());
+        Set<String> stringSet = prefs.getStringSet(id, new HashSet<String>());
         ArrayList<String> results = new ArrayList<String>();
         results.addAll(stringSet);
         return results;
     }
 
-    public static void setStringListToPrefs(Context context, @StringRes int resId, List<String> list) {
+    public static void setUniqueStringListToPrefs(Context context, String id, List<String> list) {
         SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putStringSet(context.getString(resId), new HashSet<String>(list));
+        editor.putStringSet(id, list == null ? null : new HashSet<String>(list));
         editor.apply();
+    }
+
+    public static <T> List<T> geObjectListFromPrefs(Class cls, Context context, @StringRes int resId) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        Set<String> stringSet = prefs.getStringSet(context.getString(resId), new HashSet<String>());
+        // Convert to the requested object list using gson.
+        ArrayList<T> resultList = new ArrayList<T>();
+
+        for (String item: stringSet) {
+            Gson gson = new Gson();
+            resultList.add((T)gson.fromJson(item, cls));
+        }
+
+        return resultList;
+    }
+
+    public static <T> void setObjectListToPrefs(Context context, @StringRes int resId, List<T> list) {
+        // Prepare the prefs editor.
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        // Handle null (used to clear the key)
+        if (list == null) {
+            editor.putStringSet(context.getString(resId), null);
+            editor.apply();
+            return;
+        }
+
+        // Prepare the set (create a string set from the given List<T> with gson).
+        HashSet<String> set = new HashSet<String>();
+        for (T item: list) {
+            Gson gson = new Gson();
+            set.add(gson.toJson(item));
+        }
+
+        // Save the set to the prefs.
+        editor.putStringSet(context.getString(resId), set);
+        editor.apply();
+    }
+
+    public static boolean prefsContain(Context context, @StringRes int resId) {
+        SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        return prefs.contains(context.getString(resId));
     }
 
     /**
@@ -257,12 +336,15 @@ public class Utils {
                 break;
             case INT:
                 editor.putInt(context.getString(resId), (Integer)value);
+                editor.apply();
                 break;
             case LONG:
                 editor.putLong(context.getString(resId), (Long)value);
+                editor.apply();
                 break;
             case BOOLEAN:
                 editor.putBoolean(context.getString(resId), (Boolean)value);
+                editor.apply();
                 break;
         }
     }

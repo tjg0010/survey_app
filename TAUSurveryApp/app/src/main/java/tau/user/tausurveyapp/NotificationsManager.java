@@ -29,9 +29,10 @@ public class NotificationsManager {
         //defaultTimes.add(new NotificationTime(DayOfWeek.WEDNESDAY, 20, 0));
         //defaultTimes.add(new NotificationTime(DayOfWeek.SATURDAY, 21, 0));
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, 2);
-        defaultTimes.add(new NotificationTime(DayOfWeek.FRIDAY, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)));
-        defaultTimes.add(new NotificationTime(DayOfWeek.FRIDAY, 22, 30));
+        cal.add(Calendar.MINUTE, 1);
+        defaultTimes.add(new NotificationTime(DayOfWeek.SUNDAY, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)));
+        cal.add(Calendar.HOUR, 2);
+        defaultTimes.add(new NotificationTime(DayOfWeek.SUNDAY, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)));
     }
 
     /**
@@ -46,7 +47,7 @@ public class NotificationsManager {
             List<Long> unixTimes = convertNotificationTimesToMillisDate((times == null || times.isEmpty()) ? this.defaultTimes : times);
 
             // Save the dates to the prefs (in case we will get booted and need to re-set the alarms).
-            Utils.setStringListToPrefs(context, R.string.key_survey_notifications_times, Utils.convertToStringList(unixTimes));
+            Utils.setUniqueStringListToPrefs(context, R.string.key_survey_notifications_times, Utils.convertToStringList(unixTimes));
 
             // Mark the dates as set.
             Utils.setBooleanToPrefs(context, R.string.key_survey_notifications_saved, true);
@@ -55,28 +56,49 @@ public class NotificationsManager {
 
     public void activateNotifications(Context context) {
         // Only do something if the dates were saved.
-        if (!Utils.getBooleanFromPrefs(context, R.string.key_survey_notifications_saved)) {
+        if (Utils.getBooleanFromPrefs(context, R.string.key_survey_notifications_saved)) {
             // Get the dates from the preferences (notice that this list can be empty, since we delete dates for notifications that are done).
             ArrayList<Long> times = new ArrayList<>();
-            List<String> timesPrefs = Utils.getStringListFromPrefs(context, R.string.key_survey_notifications_times);
+            List<String> timesPrefs = Utils.getUniqueStringListFromPrefs(context, R.string.key_survey_notifications_times);
             times.addAll(Utils.convertToLongList(timesPrefs));
 
             // Go over the notification times we found and set an alarm for each one (with different ids).
             for (long time: times) {
                 // Create the intent and tell it to active the NotificationReceiver.
                 Intent notificationIntent = new Intent(context, NotificationReceiver.class);
+                notificationIntent.setAction("tau.user.tausurveyapp.action.NOTIFICATION");
                 // Create a pending intent with an id equals to the time (but in int).
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)time, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 // Create the alarm manager and give it the pending intent and time.
                 AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, time, pendingIntent);
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
                 }
                 else {
-                    alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, time, pendingIntent);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
                 }
             }
         }
+    }
+
+    /**
+     * Used to clear the notifications in the next day.
+     * This is needed after a diary is answered and we want to make sure the user won't get a notification.
+     */
+    public void clearUpcomingNotifications(Context context) {
+        List<Long> times = Utils.convertToLongList(Utils.getUniqueStringListFromPrefs(context, R.string.key_survey_notifications_times));
+        ArrayList<Long> newTimes = new ArrayList<Long>();
+        long timeInOneDay = Utils.getFutureMillisTimeByDays(1);
+
+        // Go over the existing notification times and only add the ones that happen after a day from now.
+        // This way we remove old notifications from the list.
+        for (long time: times) {
+            if (time >= timeInOneDay) {
+                newTimes.add(time);
+            }
+        }
+
+        Utils.setUniqueStringListToPrefs(context, R.string.key_survey_notifications_times, Utils.convertToStringList(newTimes));
     }
 
     @SuppressWarnings("WrongConstant")

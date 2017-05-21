@@ -2,6 +2,8 @@ package tau.user.tausurveyapp.activities;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
@@ -16,13 +18,13 @@ import android.widget.ProgressBar;
 import java.util.ArrayList;
 
 import tau.user.tausurveyapp.NetworkManager;
+import tau.user.tausurveyapp.NotificationsManager;
 import tau.user.tausurveyapp.R;
 import tau.user.tausurveyapp.SurveyBuilder;
 import tau.user.tausurveyapp.Utils;
 import tau.user.tausurveyapp.contracts.Survey;
 import tau.user.tausurveyapp.contracts.TauLocale;
 import tau.user.tausurveyapp.types.NetworkCallback;
-import tau.user.tausurveyapp.types.PreferencesType;
 import tau.user.tausurveyapp.types.SurveySubmitResult;
 import tau.user.tausurveyapp.types.SurveyType;
 
@@ -47,13 +49,17 @@ public class DiaryActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progress_spinner);
         progressBar.setVisibility(View.VISIBLE);
 
+        // Remove the notification from display (if any).
+        NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancelAll();
+
         Utils.initializeErrorMsg(this,getString(R.string.diary_survey_error_title), getString(R.string.diary_survey_error_body));
 
         sb = new SurveyBuilder();
 
         NetworkManager.getInstance().getDiarySurvey(this, new NetworkCallback<Survey>() {
             @Override
-            public void onResponse(Survey survey) {
+            public void onResponse(Survey survey, boolean isSuccessful) {
                 sb.buildSurvey(DiaryActivity.this, survey, (LinearLayout)findViewById(R.id.contentView), TauLocale.IL);
                 progressBar.setVisibility(View.GONE);
                 Utils.toggleErrorMsg(DiaryActivity.this, false);
@@ -80,9 +86,10 @@ public class DiaryActivity extends AppCompatActivity {
 
     /**
      * Fired when the user clicks the submit button.
-     * @param view - the view that was clicked (the button).
+     * @param button - the view that was clicked (the button).
      */
-    public void submit(View view) {
+    public void submit(final View button) {
+        button.setEnabled(false);
         // Show loading.
         progressBar.setVisibility(View.VISIBLE);
 
@@ -102,18 +109,17 @@ public class DiaryActivity extends AppCompatActivity {
 
                 // If registration was completed successfully.
                 if (surveySubmitResult.isSuccess()) {
-                    // Save a flag that indicates the user is registered.
-                    Utils.setBooleanToPrefs(DiaryActivity.this, R.string.key_is_diary1_answered, true);
-
-                    // TODO: if diary 1 is marked as answered, mark diary 2 as answered.
+                    // Clear all notifications in the next day since this diary is answered.
+                    NotificationsManager.getInstance().clearUpcomingNotifications(DiaryActivity.this);
 
                     // Go to the info screen.
-                    // TODO: The info screen should change its text according to the flags in the storage.
+                    // TODO: The info screen should change its text according to flags in the storage?
                     Intent intent = new Intent(DiaryActivity.this, InfoActivity.class);
                     startActivity(intent);
                 }
                 // If an error occurred (network error, empty mandatory field was found, etc...)
                 else {
+                    button.setEnabled(true);
                     // Show an alert box with the error message.
                     Utils.showAlertBox(DiaryActivity.this, DiaryActivity.this.getString(R.string.survey_error_title),
                             surveySubmitResult.getErrorMessage(), R.string.survey_error_button);

@@ -40,6 +40,9 @@
         <activity android:name="tau.user.tausurveyapp.activities.DiaryActivity" />
 
         <receiver android:name="tau.user.tausurveyapp.NotificationReceiver" android:enabled="true">
+            <intent-filter>
+                <action android:name="tau.user.tausurveyapp.action.NOTIFICATION" />
+            </intent-filter>
         </receiver>
     </application>
 

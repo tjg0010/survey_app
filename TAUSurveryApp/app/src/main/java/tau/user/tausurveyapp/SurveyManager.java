@@ -32,7 +32,7 @@ public class SurveyManager {
             return false;
         }
 
-        // Otherwise, the survey should continue if the current time is less than the end date (they are both longs in millis).
-        return Utils.getCurrentTimeInMillis() <= surveyEndTime;
+        // Otherwise, the survey is finished if the current time is bigger than the end date (they are both longs in millis).
+        return Utils.getCurrentTimeInMillis() > surveyEndTime;
     }
 }

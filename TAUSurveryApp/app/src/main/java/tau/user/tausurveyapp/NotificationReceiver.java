@@ -54,7 +54,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     times.add(Utils.getFutureMillisTimeByMinutes(snoozeTime));
                 }
                 // Save the updated times to the prefs.
-                Utils.setStringListToPrefs(context, R.string.key_survey_notifications_times, Utils.convertToStringList(times));
+                Utils.setUniqueStringListToPrefs(context, R.string.key_survey_notifications_times, Utils.convertToStringList(times));
 
                 // Increment auto snooze count in the preferences.
                 snoozeCount++;
@@ -113,6 +113,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     private NotificationCompat.Action createSnoozeAction(Context context, int snoozeCount) {
         // Create the intent and tell it to active the NotificationReceiver (we call ourselves but with a snooze flag).
         Intent snoozeIntent = new Intent(context, NotificationReceiver.class);
+        snoozeIntent.putExtra(IS_SNOOZE_CLICKED_ID, true);
         // Create a pending intent with an id equals to the time (but in int).
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, snoozeIntentId, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -120,7 +121,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         int btnTextResId = snoozeCount == maxSnoozes ? R.string.notification_snooze_morning_btn : R.string.notification_snooze_btn;
 
         return new NotificationCompat.Action(
-                R.drawable.cast_ic_notification_forward,
+                R.drawable.googleg_standard_color_18,
                 context.getString(btnTextResId),
                 pendingIntent);
     }
@@ -139,13 +140,13 @@ public class NotificationReceiver extends BroadcastReceiver {
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         return new NotificationCompat.Action(
-                R.drawable.mr_ic_play_dark,
+                R.drawable.googleg_standard_color_18,
                 context.getString(R.string.notification_ok_btn),
                 resultPendingIntent);
     }
 
     private List<Long> removeOldNotificationTime(Context context) {
-        List<Long> times = Utils.convertToLongList(Utils.getStringListFromPrefs(context, R.string.key_survey_notifications_times));
+        List<Long> times = Utils.convertToLongList(Utils.getUniqueStringListFromPrefs(context, R.string.key_survey_notifications_times));
         ArrayList<Long> newTimes = new ArrayList<Long>();
         long timeInOneHour = Utils.getFutureMillisTimeByHours(1);
 
@@ -157,7 +158,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             }
         }
 
-        Utils.setStringListToPrefs(context, R.string.key_survey_notifications_times, Utils.convertToStringList(newTimes));
+        Utils.setUniqueStringListToPrefs(context, R.string.key_survey_notifications_times, Utils.convertToStringList(newTimes));
         return newTimes;
     }
 }

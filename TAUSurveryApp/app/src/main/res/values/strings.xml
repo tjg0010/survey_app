@@ -6,10 +6,9 @@
     <string name="key_survey_notifications_saved">key_survey_notifications_saved</string>
     <string name="key_survey_notifications_times">key_survey_notifications_times</string>
     <string name="key_survey_notifications_snooze_count">key_survey_notifications_snooze_count</string>
-    <string name="key_is_diary1_answered">key_is_diary1_answered</string>
-    <string name="key_is_diary2_answered">key_is_diary2_answered</string>
     <string name="key_was_tracking_started">key_was_tracking_started</string>
     <string name="key_user_id">key_user_id</string>
+    <string name="key_saved_locations">key_saved_locations</string>
 
 
     <string name="register_survey_error_title">לא ניתן לטעון את טופס ההרשמה כעת</string>

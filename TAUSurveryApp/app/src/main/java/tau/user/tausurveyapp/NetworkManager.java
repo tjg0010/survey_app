@@ -23,9 +23,9 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import tau.user.tausurveyapp.contracts.FieldSubmission;
+import tau.user.tausurveyapp.contracts.Location;
 import tau.user.tausurveyapp.contracts.Survey;
 import tau.user.tausurveyapp.types.NetworkCallback;
-import tau.user.tausurveyapp.types.PreferencesType;
 
 /**
  * Created by ran on 11/04/2017.
@@ -36,7 +36,8 @@ import tau.user.tausurveyapp.types.PreferencesType;
  */
 public class NetworkManager {
     private static final NetworkManager ourInstance = new NetworkManager();
-    private final String baseUrl = "http://10.0.2.2:8888";
+//    private final String baseUrl = "http://10.0.2.2:8090";
+    private final String baseUrl = "http://a6df5815.ngrok.io";
     private TauService service;
 
     private String userId;
@@ -62,6 +63,10 @@ public class NetworkManager {
             // If we still don't have the user id, get it from the device's account.
             if (TextUtils.isEmpty(userId)) {
                 userId = Utils.getUserId(context);
+                // Hash the user id if we managed to get it.
+                if (!TextUtils.isEmpty(userId)) {
+                    userId = Utils.hashStringMD5(userId);
+                }
                 // Save the user id we found in the prefs.
                 Utils.setStringToPrefs(context, R.string.key_user_id, userId);
             }
@@ -85,7 +90,7 @@ public class NetworkManager {
             @Override
             public void onResponse(Call<Survey> call, Response<Survey> response) {
                 // The network call was a success and we got a response.
-                callback.onResponse(response.body());
+                callback.onResponse(response.body(), response.isSuccessful());
             }
 
             @Override
@@ -102,7 +107,24 @@ public class NetworkManager {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 // The network call was a success and we got a response.
-                callback.onResponse(response.message());
+                callback.onResponse(response.message(), response.isSuccessful());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // the network call was a failure
+                callback.onFailure(t.getMessage());
+            }
+        });
+    }
+
+    public void sendLocationsBulk(Context context, List<Location> locations, final NetworkCallback<String> callback) {
+        Call<Void> call = service.sendLocationsBulk(getUserId(context), locations);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                // The network call was a success and we got a response.
+                callback.onResponse(response.message(), response.isSuccessful());
             }
 
             @Override
@@ -140,7 +162,7 @@ public class NetworkManager {
             @Override
             public void onResponse(Call<Survey> call, Response<Survey> response) {
                 // The network call was a success and we got a response.
-                callback.onResponse(response.body());
+                callback.onResponse(response.body(), response.isSuccessful());
             }
 
             @Override
@@ -184,6 +206,9 @@ public class NetworkManager {
         @POST("location/{userId}")
         Call<Void> sendLocation(@Path("userId") String userId, @Field("lat") String latitude, @Field("long") String longitude,
                                 @Field("time") long time);
+
+        @POST("location/{userId}/bulk")
+        Call<Void> sendLocationsBulk(@Path("userId") String userId, @Body List<Location> locations);
 
         @POST("register/{userId}")
         Call<Void> submitRegistration(@Path("userId") String userId, @Body List<FieldSubmission> fieldSubmissions);

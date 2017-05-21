@@ -57,7 +57,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         NetworkManager.getInstance().getRegistrationSurvey(this, new NetworkCallback<Survey>() {
             @Override
-            public void onResponse(Survey survey) {
+            public void onResponse(Survey survey, boolean isSuccessful) {
                 sb.buildSurvey(RegisterActivity.this, survey, (LinearLayout)findViewById(R.id.contentView), TauLocale.IL);
                 progressBar.setVisibility(View.GONE);
                 Utils.toggleErrorMsg(RegisterActivity.this, false);
@@ -108,9 +108,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     /**
      * Fired when the user clicks the submit button.
-     * @param view - the view that was clicked (the button).
+     * @param button - the view that was clicked (the button).
      */
-    public void submit(View view) {
+    public void submit(final View button) {
+        button.setEnabled(false);
         // Show loading.
         progressBar.setVisibility(View.VISIBLE);
 
@@ -147,6 +148,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 // If an error occurred (network error, empty mandatory field was found, etc...)
                 else {
+                    button.setEnabled(true);
                     // Show an alert box with the error message.
                     Utils.showAlertBox(RegisterActivity.this, RegisterActivity.this.getString(R.string.survey_error_title),
                                        surveySubmitResult.getErrorMessage(), R.string.survey_error_button);
