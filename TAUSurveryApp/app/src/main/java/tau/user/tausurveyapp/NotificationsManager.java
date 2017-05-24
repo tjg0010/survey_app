@@ -11,7 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import tau.user.tausurveyapp.contracts.DayOfWeek;
-import tau.user.tausurveyapp.types.NotificationTime;
+import tau.user.tausurveyapp.contracts.NotificationTime;
 
 
 public class NotificationsManager {

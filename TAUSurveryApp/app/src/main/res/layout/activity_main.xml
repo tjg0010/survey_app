@@ -1,34 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <include layout="@layout/tau_toolbar"/>
 
-    <ImageView
+    <android.support.v4.widget.Space
+        android:id="@+id/spaceTopWrapper"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:src="@drawable/tau_logo" />
+        android:layout_height="?attr/actionBarSize" />
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/tau_logo"
+        android:layout_below="@id/spaceTopWrapper"/>
 
     <TextView
-        android:text="ברוך הבא לסקר של אוניברסיטת תל אביב"
+        android:id="@+id/txtWelcome"
+        android:layout_below="@id/imgLogo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtWelcome"
+        android:text="ברוכים הבאים לסקר של אוניברסיטת תל אביב"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textAlignment="center" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:textSize="20sp"
+        android:padding="30dp"/>
 
     <ProgressBar
         style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar2" />
+        android:id="@+id/progressBarMain"
+        android:layout_below="@id/txtWelcome"/>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/errorWrapper"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progressBarMain"
+        android:orientation="vertical">
+        <include layout="@layout/tau_error_msg" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnRetry"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/main_btn_retry_txt"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:background="?attr/colorAccent"
+        android:layout_below="@id/errorWrapper"
+        android:onClick="reload"/>
+
+</RelativeLayout>

@@ -74,7 +74,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="המשך"
-                android:background="@color/colorAgree"
+                android:background="?attr/colorAccent"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:onClick="agree"
                 android:layoutDirection="rtl"
                 android:layout_gravity="end" />

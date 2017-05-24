@@ -6,4 +6,5 @@
     <color name="colorAgree">#54ba43</color>
     <color name="colorNotAgree">#d64848</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
 </resources>

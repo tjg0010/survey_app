@@ -1,10 +1,14 @@
-package tau.user.tausurveyapp.types;
+package tau.user.tausurveyapp.contracts;
 
-import tau.user.tausurveyapp.contracts.DayOfWeek;
+import com.google.gson.annotations.Expose;
+
 
 public class NotificationTime {
+    @Expose
     public DayOfWeek dayOfWeek;
+    @Expose
     public int hour;
+    @Expose
     public int minute;
 
     public NotificationTime(DayOfWeek dayOfWeek, int hour, int minute) {

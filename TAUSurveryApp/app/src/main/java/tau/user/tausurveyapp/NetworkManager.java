@@ -23,13 +23,11 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import tau.user.tausurveyapp.contracts.FieldSubmission;
+import tau.user.tausurveyapp.contracts.SurveyInfo;
 import tau.user.tausurveyapp.contracts.TauLocation;
 import tau.user.tausurveyapp.contracts.Survey;
 import tau.user.tausurveyapp.types.NetworkCallback;
 
-/**
- * Created by ran on 11/04/2017.
- */
 
 /**
  * A singleton class that manages network requests using RetroFit.
@@ -83,6 +81,23 @@ public class NetworkManager {
     }
 
     // region: API functions
+
+    public void getSurveyInfo(Context context, final NetworkCallback<SurveyInfo> callback) {
+        Call<SurveyInfo> call = service.getSurveyInfo(getUserId(context));
+        call.enqueue(new Callback<SurveyInfo>() {
+            @Override
+            public void onResponse(Call<SurveyInfo> call, Response<SurveyInfo> response) {
+                // The network call was a success and we got a response.
+                callback.onResponse(response.body(), response.isSuccessful());
+            }
+
+            @Override
+            public void onFailure(Call<SurveyInfo> call, Throwable t) {
+                // the network call was a failure
+                callback.onFailure(t.getMessage());
+            }
+        });
+    }
 
     public void getRegistrationSurvey(Context context, final NetworkCallback<Survey> callback) {
         Call<Survey> call = service.getRegistrationSurvey();
@@ -199,6 +214,9 @@ public class NetworkManager {
     // region: TauService RetroFit Interface
 
     private interface TauService {
+        @GET("hello/{userId}")
+        Call<SurveyInfo> getSurveyInfo(@Path("userId") String userId);
+
         @GET("register")
         Call<Survey> getRegistrationSurvey();
 
