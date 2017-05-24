@@ -160,6 +160,21 @@ exports.getSurveyEnrichmentData = function(tableName, paramName, userId, callbac
     });
 };
 
+exports.isUserExists = function(userId, mainTableName, callback) {
+    logger.log('info', 'dbManager.isUserExists called.', {userId: userId,mainTableName: mainTableName});
+
+    con.query('SELECT userId FROM tausurvey.' + mainTableName + ' WHERE userId = ?', userId, function(err, rows){
+        if(err) {
+            logError('Error checking if user id exists in db.', err);
+            callback(err);
+        }
+        else {
+            logger.log('info', 'dbManager.isUserExists found ' + rows.length + ' users with the given user id.');
+            callback(null, (rows.length > 0));
+        }
+    });
+};
+
 /**
  * Goes over the given data array and runs mysql.escape on each value.
  * @param dataArray - the array to escape for the db.

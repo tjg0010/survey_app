@@ -11,12 +11,39 @@ var sm = require('./surveyManager.js');         // Our own surveyManager.
 
 utils.init();
 var app = express();
+var surveysConfig;
 var surveyRegister;
 var surveyDiary;
 
 // This is needed to parse post body.
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+app.get('/hello/:userId', function (req, res) {
+    logger.log('info', '/hello/:userId (GET) called');
+
+    // Parameter validation.
+    if (!req.params.userId) {
+        logger.log('error', '/hello/:userId (GET) called without mandatory parameter.', {missingParameter: 'params.userId'});
+        httpHelper.sendResponseError(res, 400, 'userId was null or empty');
+        return;
+    }
+
+    // Extract parameter.
+    var userId = req.params.userId;
+
+    // Check if this user id already exists in the db's main table.
+    db.isUserExists(userId, surveyRegister.metadata.name, function(err, isUserExists) {
+        if (!err && isUserExists != undefined && isUserExists != null) {
+            // Mark if the user is already registered or not.
+            surveysConfig.isUserRegistered = isUserExists;
+            httpHelper.sendTextResponseSuccess(res, surveysConfig);
+        }
+        else {
+            httpHelper.sendResponseError(res, 500, 'Failed checking if user is already registered.');
+        }
+    });
+});
 
 app.get('/register', function (req, res) {
     logger.log('info', '/register (GET) called');
@@ -114,29 +141,13 @@ app.post('/diary/:userId', function (req, res) {
     saveSurvey(req, res, '/diary (POST)', surveyDiary);
 });
 
-// Start the server.
-var server = app.listen(8090, function () {
-
-    var host = server.address().address;
-    var port = server.address().port;
-
-    // Connect to db.
-    db.connect();
-
-    // Load the survey json from file system.
-    // To support hebrew, the surveryRegister.json file was saved with UTF-8 encoding.
-    // We use fs.readFileSync with utf8 encoding, and parse the file with JSON.parse.
-    surveyRegister = JSON.parse(fs.readFileSync('surveys/surveyRegister.json', 'utf8'));
-    surveyDiary = JSON.parse(fs.readFileSync('surveys/surveyDiary.json', 'utf8'));
-
-    // Feed the survey manager with this survey, so it can later handle it on save.
-    sm.loadSurvey(surveyRegister);
-    sm.loadSurvey(surveyDiary);
-
-    logger.log('info', 'App is listening at http://%s:%s', host, port);
-});
-
-
+/**
+ * A generic function to save an incoming survey. Used to save the registration survey and the diary surveys.
+ * @param req - the current request object.
+ * @param res - the current response object.
+ * @param apiName - the name of the invoked web API (for logging purposes).
+ * @param survey - the received survey.
+ */
 function saveSurvey(req, res, apiName, survey) {
     // Parameter validations.
     if (!req.params.userId) {
@@ -169,3 +180,29 @@ function saveSurvey(req, res, apiName, survey) {
         }
     });
 }
+
+/**
+ * Tha main function that starts the server listener.
+ */
+var server = app.listen(8090, function () {
+    var host = server.address().address;
+    var port = server.address().port;
+
+    // Connect to db.
+    db.connect();
+
+    // Load the survey json from file system.
+    // To support hebrew, the surveryRegister.json file was saved with UTF-8 encoding.
+    // We use fs.readFileSync with utf8 encoding, and parse the file with JSON.parse.
+    surveyRegister = JSON.parse(fs.readFileSync('surveys/surveyRegister.json', 'utf8'));
+    surveyDiary = JSON.parse(fs.readFileSync('surveys/surveyDiary.json', 'utf8'));
+
+    // Load the surveys configuration.
+    surveysConfig = JSON.parse(fs.readFileSync('surveys/config.json', 'utf8'));
+
+    // Feed the survey manager with the surveys, so it can later handle it on save and load.
+    sm.loadSurvey(surveyRegister);
+    sm.loadSurvey(surveyDiary);
+
+    logger.log('info', 'App is listening at http://%s:%s', host, port);
+});
