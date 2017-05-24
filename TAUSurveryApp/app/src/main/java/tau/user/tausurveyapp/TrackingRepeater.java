@@ -31,6 +31,9 @@ public class TrackingRepeater {
             SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
             boolean isTrackingStarted = prefs.getBoolean(context.getString(R.string.key_was_tracking_started), false);
 
+            // TODO: for debugging. DELETE THIS!
+            isBooter = true;
+
             // Also start running the service in repeat if we haven't done so yet or if this is called after device reboot.
             if (!isTrackingStarted || isBooter) {
                 // Create the intent that starts the TrackingService.

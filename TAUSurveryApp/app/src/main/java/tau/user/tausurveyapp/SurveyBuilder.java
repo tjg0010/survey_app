@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
@@ -43,9 +44,6 @@ import tau.user.tausurveyapp.types.SurveyType;
 import tau.user.tausurveyapp.uiClasses.InputFilterMinMax;
 import tau.user.tausurveyapp.uiClasses.TauDateListener;
 
-/**
- * Created by ran on 15/04/2017.
- */
 
 public class SurveyBuilder {
     private final float titleTextSize = 22;
@@ -196,6 +194,14 @@ public class SurveyBuilder {
                 }
                 return null;
             }
+            else if (fieldType == fieldType.YEAR) {
+                Spinner yearSpinner = (Spinner)view;
+                String yearString = yearSpinner.getSelectedItem().toString();
+                // If the selected year is not empty or equals to default.
+                if (!TextUtils.isEmpty(yearString) && yearString != activity.getString(R.string.year_default)) {
+                    return new FieldSubmission<Integer>(Integer.class, field, Integer.parseInt(yearString), yearSpinner.getTag(R.id.tau_groupRepetitionValue_tag));
+                }
+            }
             else if (fieldType == FieldType.GROUP) {
                 // We don't handle groups here. Only groups' fields are handled.
                 Log.e("Developer Error", "Tried processing a group field where groups are ignored");
@@ -300,6 +306,10 @@ public class SurveyBuilder {
             case TABLE_INT:
                 LinearLayout tableInt = createTableInt(activity, survey, field, locale, groupRepetitionValue);
                 ll.addView(tableInt);
+                break;
+            case YEAR:
+                Spinner yearSpinner = createYearSpinner(activity, survey, field, locale, groupRepetitionValue);
+                ll.addView(yearSpinner);
                 break;
         }
 
@@ -615,6 +625,33 @@ public class SurveyBuilder {
         tableRow.addView(rowInput);
 
         return tableRow;
+    }
+
+    private Spinner createYearSpinner(Activity activity, Survey survey, Field field, TauLocale locale, String groupRepetitionValue) {
+        // Create the spinner.
+        Spinner spinner = new Spinner(activity);
+        spinner.setId(getViewId(field));
+        spinner.setTag(R.id.tau_groupRepetitionValue_tag, groupRepetitionValue);
+        spinner.setLayoutParams(createLinearLayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, locale));
+
+        // Create the spinner array.
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        String[] yearOptions = new String[121];
+        // Set the default first value.
+        yearOptions[0] = activity.getString(R.string.year_default);
+        for (int i = 1; i < yearOptions.length; i++) {
+            yearOptions[i] = Integer.toString(currentYear);
+            currentYear--;
+        }
+
+        // Add the year options to the spinner.
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item, yearOptions);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerArrayAdapter);
+
+        // Set the spinner to start at position 0.
+        spinner.setSelection(0);
+        return spinner;
     }
 
     // region: Helper functions

@@ -22,6 +22,7 @@
     <string name="address_street">רחוב</string>
     <string name="address_street_number">מספר</string>
     <string name="address_city">עיר</string>
+    <string name="year_default">בחר/י שנה</string>
     <string name="cancel">ביטול</string>
     <string name="survey_mandatory_field_empty">יש למלא את כל שדות החובה על מנת להמשיך</string>
     <string name="survey_network_error">איראה שגיאה בעת ביצוע ההרשמה. אנא נסו שוב מאוחר יותר.</string>
