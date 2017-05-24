@@ -1,6 +1,6 @@
 // region: Dependencies
 var Promise = require("bluebird");                              // Promises lib.
-const winston = require('winston');                             // Logging.
+const logger = require('./logger.js');                          // Our own logger.
 var db = Promise.promisifyAll(require('./dbManager.js'));       // Our own dbManager.
 // endregion
 
@@ -23,7 +23,7 @@ exports.loadSurvey = function(survey) {
     }
     // If the survey is null or doesn't have fields or a name, throw an exception for this shouldn't happen.
     else {
-        winston.log('error', 'surveyManager.loadSurvey got a null survey or a survey without fields or a name');
+        logger.log('error', 'surveyManager.loadSurvey got a null survey or a survey without fields or a name');
         throw 'surveyManager.loadSurvey got a null survey or a survey without fields or a name';
     }
 };
@@ -103,7 +103,7 @@ exports.saveSurvey = function(surveyName, userId, fieldSubmissions, callback) {
         Promise.all(promises).then(function() {
             callback();
         }).error(function(err){
-            winston.log('error', 'surveyManager.saveSurvey - Error saving survey to db.', {error: err});
+            logger.log('error', 'surveyManager.saveSurvey - Error saving survey to db.', {error: err});
             callback(err);
         });
     }
@@ -162,7 +162,7 @@ exports.enrichSurvey = function (survey, userId, callback) {
         }
     }
     else {
-        winston.log('error', 'surveyManager.enrichSurvey was called with an empty survey or userId.', {userId: userId, survey: survey});
+        logger.log('error', 'surveyManager.enrichSurvey was called with an empty survey or userId.', {userId: userId, survey: survey});
         callback('Error - empty userId or survey');
     }
 };

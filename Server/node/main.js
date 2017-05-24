@@ -3,7 +3,7 @@ var utils = require('./utils.js');              // Our own utils lib.
 var express = require('express');               // Express web server.
 var bodyParser = require("body-parser");        // Body parser for parsing post body.
 var fs = require('fs');                         // File system.
-const winston = require('winston');             // Logging.
+const logger = require('./logger.js');          // Our own logger.
 var httpHelper = require('./httpHelper.js');    // Our own httpHelper.
 var db = require('./dbManager.js');             // Our own dbManager.
 var sm = require('./surveyManager.js');         // Our own surveyManager.
@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.get('/register', function (req, res) {
-    winston.log('info', '/register (GET) called');
+    logger.log('info', '/register (GET) called');
 
     // Just send the surveyRegister object as text (no need to convert it to json using sendJsonResponseSuccess since it already is json).
     httpHelper.sendTextResponseSuccess(res, surveyRegister);
@@ -36,7 +36,7 @@ app.post('/location/:userId', function (req, res) {
     var time = req.body.time;
 
     if (userId) {
-        winston.log('info', '/saveLocation called. User id: %s', userId);
+        logger.log('info', '/saveLocation called. User id: %s', userId);
     }
 
     // Only do something if we got all required fields.
@@ -51,7 +51,7 @@ app.post('/location/:userId', function (req, res) {
         });
     } else {
         // Log an error and return an error response.
-        winston.log('error', '/location/:userId (GET) didn\'t get all expected parameters.',
+        logger.log('error', '/location/:userId (GET) didn\'t get all expected parameters.',
                     {userId: userId, lat: lat, long: long, time: time});
         httpHelper.sendResponseError(res, 500, 'Failed saving location to db. Not all required parameters were supplied.');
     }
@@ -60,12 +60,12 @@ app.post('/location/:userId', function (req, res) {
 app.post('/location/:userId/bulk', function (req, res) {
     // Parameter validations.
     if (!req.params.userId) {
-        winston.log('error', '/location/:userId/bulk (POST) called without mandatory parameter.', {missingParameter: 'params.userId'});
+        logger.log('error', '/location/:userId/bulk (POST) called without mandatory parameter.', {missingParameter: 'params.userId'});
         httpHelper.sendResponseError(res, 400, 'userId was null or empty');
         return;
     }
     if (!req.body  || !req.body.length) {
-        winston.log('error', '/location/:userId/bulk (POST) called without mandatory parameter.', {missingParameter: 'body'});
+        logger.log('error', '/location/:userId/bulk (POST) called without mandatory parameter.', {missingParameter: 'body'});
         httpHelper.sendResponseError(res, 400, 'body was null or empty');
         return;
     }
@@ -74,7 +74,7 @@ app.post('/location/:userId/bulk', function (req, res) {
     var userId = req.params.userId;
     var locations = req.body;
 
-    winston.log('info', '/location/:userId/bulk (POST) called. User id: %s', userId);
+    logger.log('info', '/location/:userId/bulk (POST) called. User id: %s', userId);
 
     db.saveLocationsBulk(userId, locations, function (err) {
         if (!err) {
@@ -90,7 +90,7 @@ app.post('/location/:userId/bulk', function (req, res) {
 app.get('/diary/:userId', function (req, res) {
     var userId = req.params.userId;
 
-    winston.log('info', '/diary/:userId (GET) called', {userId: userId});
+    logger.log('info', '/diary/:userId (GET) called', {userId: userId});
 
     // Only do something if we got a user id.
     if (userId) {
@@ -105,7 +105,7 @@ app.get('/diary/:userId', function (req, res) {
         });
     } else {
         // Log an error and return an error response.
-        winston.log('error', '/diary/:userId (GET) called without a user id.');
+        logger.log('error', '/diary/:userId (GET) called without a user id.');
         httpHelper.sendResponseError(res, 400, 'Failed loading the survey. User ID is missing.');
     }
 });
@@ -133,19 +133,19 @@ var server = app.listen(8090, function () {
     sm.loadSurvey(surveyRegister);
     sm.loadSurvey(surveyDiary);
 
-    winston.log('info', 'App is listening at http://%s:%s', host, port);
+    logger.log('info', 'App is listening at http://%s:%s', host, port);
 });
 
 
 function saveSurvey(req, res, apiName, survey) {
     // Parameter validations.
     if (!req.params.userId) {
-        winston.log('error', apiName +' called without mandatory parameter.', {missingParameter: 'params.userId'});
+        logger.log('error', apiName +' called without mandatory parameter.', {missingParameter: 'params.userId'});
         httpHelper.sendResponseError(res, 400, 'userId was null or empty');
         return;
     }
     if (!req.body  || !req.body.length) {
-        winston.log('error', apiName + ' called without mandatory parameter.', {missingParameter: 'body'});
+        logger.log('error', apiName + ' called without mandatory parameter.', {missingParameter: 'body'});
         httpHelper.sendResponseError(res, 400, 'body was null or empty');
         return;
     }
@@ -154,7 +154,7 @@ function saveSurvey(req, res, apiName, survey) {
     var userId = req.params.userId;
     var fieldSubmissions = req.body;
 
-    winston.log('info', apiName + ' called. User id: %s', userId);
+    logger.log('info', apiName + ' called. User id: %s', userId);
 
     // Save the submissions to db using the surveyManager.
     sm.saveSurvey(survey.metadata.name, userId, fieldSubmissions, function(err) {
@@ -164,7 +164,7 @@ function saveSurvey(req, res, apiName, survey) {
         }
         else {
             // Send an error response and log it.
-            winston.log('error', apiName +' (POST) failed to save registration data to db.', {error: err});
+            logger.log('error', apiName +' (POST) failed to save registration data to db.', {error: err});
             httpHelper.sendResponseError(res, 500, 'failed to save registration to db');
         }
     });

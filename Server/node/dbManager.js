@@ -1,5 +1,5 @@
 // region: Dependencies
-const winston = require('winston');         // Logging.
+const logger = require('./logger.js');         // Our own logger.
 const mysql = require("mysql");             // MySql DB connector.
 // endregion
 
@@ -15,10 +15,10 @@ exports.connect = function()
 {
     con.connect(function(err){
         if(err){
-            winston.log('error', 'Error connecting to Db', {error: err});
+            logger.log('error', 'Error connecting to Db', {error: err});
             return;
         }
-        winston.log('info', 'Connection established to db');
+        logger.log('info', 'Connection established to db');
     });
 };
 
@@ -44,7 +44,7 @@ exports.saveLocation = function(userId, lat, long, time, callback){
                 callback(err);
             }
             else {
-                winston.log('info', 'Data inserted to DB.', {id: res.insertId});
+                logger.log('info', 'Data inserted to DB.', {id: res.insertId});
                 callback();
             }
     });
@@ -74,7 +74,7 @@ exports.saveLocationsBulk = function(userId, locations, callback) {
                     callback(err);
                 }
                 else {
-                    winston.log('info', 'Data inserted to DB.', {id: res.insertId});
+                    logger.log('info', 'Data inserted to DB.', {id: res.insertId});
                     callback();
                 }
             });
@@ -95,14 +95,14 @@ exports.saveSurvey = function(surveyName, paramNames, paramValues, callback) {
                     callback(err);
                 }
                 else {
-                    winston.log('info', 'Data inserted to DB (saveSurvey).', {id: res.insertId});
+                    logger.log('info', 'Data inserted to DB (saveSurvey).', {id: res.insertId});
                     callback();
                 }
             });
     }
     // Otherwise, throw an exception.
     else {
-        winston.log('error', 'dbManager.saveSurvey got a null surveyName or an unrecognized one');
+        logger.log('error', 'dbManager.saveSurvey got a null surveyName or an unrecognized one');
         throw 'dbManager.saveSurvey got a null surveyName or an unrecognized one';
     }
 };
@@ -133,20 +133,20 @@ exports.saveSurveyGroup = function(surveyName, paramNames, paramValuesGroup, use
                     callback(err);
                 }
                 else {
-                    winston.log('info', 'Data inserted to DB (saveSurveyGroup).', {id: res.insertId});
+                    logger.log('info', 'Data inserted to DB (saveSurveyGroup).', {id: res.insertId});
                     callback();
                 }
             });
     }
     // Otherwise, throw an exception.
     else {
-        winston.log('error', 'dbManager.saveSurvey got a null surveyName or an unrecognized one');
+        logger.log('error', 'dbManager.saveSurvey got a null surveyName or an unrecognized one');
         throw 'dbManager.saveSurvey got a null surveyName or an unrecognized one';
     }
 };
 
 exports.getSurveyEnrichmentData = function(tableName, paramName, userId, callback) {
-    winston.log('info', 'dbManager.getSurveyEnrichmentData called.', {tableName: tableName, paramName: paramName, userId: userId});
+    logger.log('info', 'dbManager.getSurveyEnrichmentData called.', {tableName: tableName, paramName: paramName, userId: userId});
 
     con.query('SELECT ' + paramName + ' FROM tausurvey.' + tableName + ' WHERE userId = ?', userId, function(err, rows){
         if(err) {
@@ -154,7 +154,7 @@ exports.getSurveyEnrichmentData = function(tableName, paramName, userId, callbac
             callback(err);
         }
         else {
-            winston.log('info', 'dbManager.getSurveyEnrichmentData found ' + rows.length + ' results.');
+            logger.log('info', 'dbManager.getSurveyEnrichmentData found ' + rows.length + ' results.');
             callback(null, rows);
         }
     });
@@ -177,8 +177,8 @@ function escapeDataArray(dataArray) {
 }
 
 function logError(title, err) {
-    winston.log('error', title, {error: err});
+    logger.log('error', title, {error: err});
     if (err.message) {
-        winston.log('error', 'error message', {message: err.message});
+        logger.log('error', 'error message', {message: err.message});
     }
 }
