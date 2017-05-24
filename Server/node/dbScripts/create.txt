@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS tausurvey;
 CREATE TABLE IF NOT EXISTS `tausurvey`.`main` (
   `userId` VARCHAR(45) NOT NULL,
   `gender` VARCHAR(7) NOT NULL,
-  `birthDate` DATE NOT NULL,
+  `birthYear` INT(4) NOT NULL,
   `homeCity` VARCHAR(60) NOT NULL,
   `homeStreet` VARCHAR(100) NOT NULL,
   `homeNumber` INT NOT NULL,

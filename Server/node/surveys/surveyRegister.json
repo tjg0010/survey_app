@@ -10,7 +10,7 @@
       "choices":[
         {"value": "male", "title": 22, "type": "OPTION"},
         {"value": "female", "title": 23, "type": "OPTION"}]},
-    {"id": "birthDate", "mandatory": true, "title": 31, "type": "DATE"},
+    {"id": "birthYear", "mandatory": true, "title": 31, "type": "YEAR"},
     {"id": "home", "mandatory": true, "title": 41, "type": "ADDRESS"},
     {"id": "homeType", "mandatory": true, "title": 51, "type": "CHOICES",
       "choices":[
@@ -62,7 +62,7 @@
       "21": "מין",
       "22": "זכר",
       "23": "נקבה",
-      "31": "תאריך לידה",
+      "31": "שנת לידה",
       "41": "כתובת מגורים",
       "51": "סוג מגורים",
       "52": "בית פרטי",
