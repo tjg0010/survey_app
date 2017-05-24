@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -23,11 +24,11 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import java.util.ArrayList;
 
-/**
- * Created by ran on 07/12/2016.
- */
+import tau.user.tausurveyapp.contracts.TauLocation;
 
 public class LocationManager implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+    private final int MAX_LOCATION_WAIT_TIME = 120 * 1000; // 2 minutes as maximum wait time we allow.
+
     private GoogleApiClient mGoogleApiClient = null;
 
     private ArrayList<LocationCallbackable> callbacks;
@@ -81,15 +82,16 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
         }
 
         // If we got here, we have permissions :)
+        // Try to get the last known location of the user, and take it only if it's from the last minute (it can be very old).
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (location != null) {
+        if (location != null && isLocationFresh(location)) {
             // Disconnect from GoogleApiClient.
             disconnect();
-
             // Call the callback that the caller has supplied us with, with the location we have.
             runCallback(location);
         }
         // Location was null - that means the GoogleApiClient didn't have enough time to get the current location.
+        // Location was too old - we need to get a fresh one.
         else {
             // In that case we should check if location settings are valid, and if so register to locationUpdated.
             // If the settings are not valid, we will terminate.
@@ -137,7 +139,7 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
                                         }
                                     }
                                 },
-                                10000);
+                                MAX_LOCATION_WAIT_TIME);
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                     default:
@@ -192,8 +194,8 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         // Set that we only want one update.
         locationRequest.setNumUpdates(1);
-        // If we don't get an update, kill the request after 30 seconds.
-        locationRequest.setExpirationDuration(30000);
+        // If we don't get an update, kill the request after the max location wait time minus a second (so we beat the timer).
+        locationRequest.setExpirationDuration(MAX_LOCATION_WAIT_TIME - 1000);
 
         return locationRequest;
     }
@@ -208,10 +210,11 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
             LocationCallbackable callback = callbacks.remove(0);
 
             if (location != null) {
-                callback.run(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
+                TauLocation tauLocation = new TauLocation(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), location.getTime());
+                callback.run(tauLocation);
             }
             else {
-                callback.run(null, null);
+                callback.run(null);
             }
         }
         // This shouldn't happen, but if it does, log it as an error.
@@ -232,6 +235,20 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
         }
     }
 
+    /**
+     * Checks if the given location was sampled less than a minute ago.
+     * @return true if the location was sampled less than a minute ago, false otherwise.
+     */
+    private boolean isLocationFresh(Location location) {
+        // We divide the subtraction in a million because they are both in nano seconds.
+        long difInMillis = (SystemClock.elapsedRealtimeNanos() - location.getElapsedRealtimeNanos()) / 1000000;
+        // If the diff is less than a minute (60 seconds - there are a 1000 millis in a second).
+        if ((difInMillis / (60 * 1000)) <= 1) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void onConnectionSuspended(int i) {
         Log.i("LocationManager", "GoogleApiClient connection was suspended, connecting again...");
@@ -249,7 +266,7 @@ public class LocationManager implements GoogleApiClient.ConnectionCallbacks, Goo
      * Interface for supplying a callback for a location request from the location manager.
      */
     public interface LocationCallbackable {
-        void run(String latitude, String longitude);
+        void run(TauLocation location);
     }
 }
 

@@ -23,7 +23,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import tau.user.tausurveyapp.contracts.FieldSubmission;
-import tau.user.tausurveyapp.contracts.Location;
+import tau.user.tausurveyapp.contracts.TauLocation;
 import tau.user.tausurveyapp.contracts.Survey;
 import tau.user.tausurveyapp.types.NetworkCallback;
 
@@ -37,7 +37,7 @@ import tau.user.tausurveyapp.types.NetworkCallback;
 public class NetworkManager {
     private static final NetworkManager ourInstance = new NetworkManager();
 //    private final String baseUrl = "http://10.0.2.2:8090";
-    private final String baseUrl = "http://a6df5815.ngrok.io";
+    private final String baseUrl = "http://053a98e3.ngrok.io";
     private TauService service;
 
     private String userId;
@@ -118,7 +118,7 @@ public class NetworkManager {
         });
     }
 
-    public void sendLocationsBulk(Context context, List<Location> locations, final NetworkCallback<String> callback) {
+    public void sendLocationsBulk(Context context, List<TauLocation> locations, final NetworkCallback<String> callback) {
         Call<Void> call = service.sendLocationsBulk(getUserId(context), locations);
         call.enqueue(new Callback<Void>() {
             @Override
@@ -208,7 +208,7 @@ public class NetworkManager {
                                 @Field("time") long time);
 
         @POST("location/{userId}/bulk")
-        Call<Void> sendLocationsBulk(@Path("userId") String userId, @Body List<Location> locations);
+        Call<Void> sendLocationsBulk(@Path("userId") String userId, @Body List<TauLocation> locations);
 
         @POST("register/{userId}")
         Call<Void> submitRegistration(@Path("userId") String userId, @Body List<FieldSubmission> fieldSubmissions);

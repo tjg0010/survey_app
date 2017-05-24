@@ -4,10 +4,9 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
-import java.util.Date;
 import java.util.List;
 
-import tau.user.tausurveyapp.contracts.Location;
+import tau.user.tausurveyapp.contracts.TauLocation;
 import tau.user.tausurveyapp.types.NetworkCallback;
 
 /**
@@ -50,17 +49,14 @@ public class TrackingService extends IntentService {
         LocationManager locationManager = new LocationManager();
         locationManager.GetCurrentLocation(this, new LocationManager.LocationCallbackable() {
             @Override
-            public void run(final String latitude, final String longitude) {
+            public void run(final TauLocation location) {
                 // If we succeeded getting the user's current location.
-                if (latitude != null && longitude != null) {
-                    // Get the current time (so we know when the location was sampled).
-                    final long time = new Date().getTime();
-
+                if (location != null) {
                     // If we have failed locations (location we failed to send to the server before.
                     if (haveFailedLocations()) {
                         // Get the saved locations and add our new one.
-                        List<Location> locations = getSavedLocations();
-                        locations.add(new Location(latitude, longitude, time));
+                        List<TauLocation> locations = getSavedLocations();
+                        locations.add(location);
                         // Send the info to the server to bulk save everything.
                         NetworkManager.getInstance().sendLocationsBulk(_this, locations, new NetworkCallback<String>() {
                             @Override
@@ -71,14 +67,14 @@ public class TrackingService extends IntentService {
                                 }
                                 else {
                                     // If we failed, add the current locations to the saved locations list too, for next time.
-                                    saveFailedLocation(latitude, longitude, time);
+                                    saveFailedLocation(location);
                                 }
                                 stopSelf();
                             }
 
                             @Override
                             public void onFailure(String error) {
-                                saveFailedLocation(latitude, longitude, time);
+                                saveFailedLocation(location);
                                 stopSelf();
                             }
                         });
@@ -86,19 +82,19 @@ public class TrackingService extends IntentService {
                     // No failed locations to send. Only send the current one.
                     else {
                         // Send the location to the server.
-                        NetworkManager.getInstance().sendLocation(_this, latitude, longitude, time,
+                        NetworkManager.getInstance().sendLocation(_this, location.latitude, location.longitude, location.time,
                             new NetworkCallback<String>() {
                                 @Override
                                 public void onResponse(String response, boolean isSuccessful) {
                                     if (!isSuccessful) {
-                                        saveFailedLocation(latitude, longitude, time);
+                                        saveFailedLocation(location);
                                     }
                                     stopSelf();
                                 }
 
                                 @Override
                                 public void onFailure(String error) {
-                                    saveFailedLocation(latitude, longitude, time);
+                                    saveFailedLocation(location);
                                     stopSelf();
                                 }
                             });
@@ -108,22 +104,22 @@ public class TrackingService extends IntentService {
         });
     }
 
-    private void saveFailedLocation(String latitude, String longitude, long time) {
+    private void saveFailedLocation(TauLocation location) {
         // Get the existing locations.
-        List<Location> existingLocations = getSavedLocations();
+        List<TauLocation> existingLocations = getSavedLocations();
         // Add the new location.
-        existingLocations.add(new Location(latitude, longitude, time));
+        existingLocations.add(location);
         // Save the locations back to the prefs.
         Utils.setObjectListToPrefs(TrackingService.this, R.string.key_saved_locations, existingLocations);
     }
 
     private boolean haveFailedLocations() {
-        List<Location> savedLocationsMap = Utils.geObjectListFromPrefs(Location.class, TrackingService.this, R.string.key_saved_locations);
+        List<TauLocation> savedLocationsMap = Utils.geObjectListFromPrefs(TauLocation.class, TrackingService.this, R.string.key_saved_locations);
         return !savedLocationsMap.isEmpty();
     }
 
-    private List<Location> getSavedLocations() {
-        return Utils.geObjectListFromPrefs(Location.class, TrackingService.this, R.string.key_saved_locations);
+    private List<TauLocation> getSavedLocations() {
+        return Utils.geObjectListFromPrefs(TauLocation.class, TrackingService.this, R.string.key_saved_locations);
     }
 
     private void clearSavedLocations() {

@@ -41,7 +41,7 @@ public class TrackingRepeater {
                 AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
                 alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                         SystemClock.elapsedRealtime(),
-                        15 * 60 * 1000, pendingIntent); // Setting tracking interval to 5 minutes for debugging needs. TODO: revert back to 15 minutes when done.
+                        4 * 60 * 1000, pendingIntent); // Setting tracking interval to 4 minutes for debugging needs.
 //                    AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
                 // TODO: revert this to have an interval of 15 minutes for each location sample.
             }

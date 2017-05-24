@@ -2,7 +2,7 @@ package tau.user.tausurveyapp.contracts;
 
 import com.google.gson.annotations.Expose;
 
-public class Location {
+public class TauLocation {
     @Expose
     public String latitude;
 
@@ -12,10 +12,10 @@ public class Location {
     @Expose
     public long time;
 
-    public Location() {
+    public TauLocation() {
     }
 
-    public Location(String latitude, String longitude, long time) {
+    public TauLocation(String latitude, String longitude, long time) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.time = time;
