@@ -22,9 +22,9 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     private final int notificationId = 101;
     private final int snoozeIntentId = 102;
-    private final int maxSnoozes = 3;
+    private final int maxSnoozes = 2;
     private final int snoozeTime = 4; // 4 minute for now. TODO: change this to 30 minutes!!!
-    private final int snoozeTimeMorning = 13; // Set the morning snooze to 9AM;
+    private final int snoozeTimeMorning = 14; // Set the morning snooze to 9AM;
 
     public static String IS_SNOOZE_CLICKED_ID = "is_snooze_clicked_id";
 
@@ -95,7 +95,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                                                 .setPriority(Notification.PRIORITY_MAX); // So we get a heads-up notification when possible (when the user is active).
 
         // Add a snooze button if this is not the last snooze (if we still have at least one more snooze to go).
-        if (snoozeCount + 1 <= maxSnoozes) {
+        if (snoozeCount <= maxSnoozes) {
             mBuilder.addAction(createSnoozeAction(context, snoozeCount));
         }
 
