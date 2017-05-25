@@ -48,6 +48,7 @@ public class DiaryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         progressBar = (ProgressBar) findViewById(R.id.progress_spinner);
         progressBar.setVisibility(View.VISIBLE);
+        final View btnRetry = findViewById(R.id.btnRetry);
 
         // Remove the notification from display (if any).
         NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
@@ -60,18 +61,28 @@ public class DiaryActivity extends AppCompatActivity {
         NetworkManager.getInstance().getDiarySurvey(this, new NetworkCallback<Survey>() {
             @Override
             public void onResponse(Survey survey, boolean isSuccessful) {
-                sb.buildSurvey(DiaryActivity.this, survey, (LinearLayout)findViewById(R.id.contentView), TauLocale.IL);
-                progressBar.setVisibility(View.GONE);
-                Utils.toggleErrorMsg(DiaryActivity.this, false);
-                DiaryActivity.this.toggleSubmitButton(true);
+                if (isSuccessful) {
+                    sb.buildSurvey(DiaryActivity.this, survey, (LinearLayout)findViewById(R.id.contentView), TauLocale.IL);
+                    progressBar.setVisibility(View.GONE);
+                    Utils.toggleErrorMsg(DiaryActivity.this, false);
+                    btnRetry.setVisibility(View.GONE);
+                    DiaryActivity.this.toggleSubmitButton(true);
+                }
+                else {
+                    progressBar.setVisibility(View.GONE);
+                    DiaryActivity.this.toggleSubmitButton(false);
+                    Utils.toggleErrorMsg(DiaryActivity.this, true);
+                    btnRetry.setVisibility(View.VISIBLE);
+                    DiaryActivity.this.setTitle(getString(R.string.diary_survey_default_title));
+                }
             }
 
             @Override
             public void onFailure(String error) {
-                // TODO: show the user a failure message and log error.
                 progressBar.setVisibility(View.GONE);
                 DiaryActivity.this.toggleSubmitButton(false);
                 Utils.toggleErrorMsg(DiaryActivity.this, true);
+                btnRetry.setVisibility(View.VISIBLE);
                 DiaryActivity.this.setTitle(getString(R.string.diary_survey_default_title));
             }
         });
@@ -158,6 +169,16 @@ public class DiaryActivity extends AppCompatActivity {
                 }
             }
         }.execute();
+    }
+
+    /**
+     * Fired when the user clicks the retry button.
+     * @param button - the view that was clicked (the button).
+     */
+    public void reload(final View button) {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)

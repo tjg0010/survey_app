@@ -50,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         progressBar = (ProgressBar) findViewById(R.id.progress_spinner);
         progressBar.setVisibility(View.VISIBLE);
+        final View btnRetry = findViewById(R.id.btnRetry);
 
         Utils.initializeErrorMsg(this,getString(R.string.register_survey_error_title), getString(R.string.register_survey_error_body));
 
@@ -58,18 +59,28 @@ public class RegisterActivity extends AppCompatActivity {
         NetworkManager.getInstance().getRegistrationSurvey(this, new NetworkCallback<Survey>() {
             @Override
             public void onResponse(Survey survey, boolean isSuccessful) {
-                sb.buildSurvey(RegisterActivity.this, survey, (LinearLayout)findViewById(R.id.contentView), TauLocale.IL);
-                progressBar.setVisibility(View.GONE);
-                Utils.toggleErrorMsg(RegisterActivity.this, false);
-                RegisterActivity.this.toggleSubmitButton(true);
+                if (isSuccessful) {
+                    sb.buildSurvey(RegisterActivity.this, survey, (LinearLayout)findViewById(R.id.contentView), TauLocale.IL);
+                    progressBar.setVisibility(View.GONE);
+                    Utils.toggleErrorMsg(RegisterActivity.this, false);
+                    btnRetry.setVisibility(View.GONE);
+                    RegisterActivity.this.toggleSubmitButton(true);
+                }
+                else {
+                    progressBar.setVisibility(View.GONE);
+                    RegisterActivity.this.toggleSubmitButton(false);
+                    Utils.toggleErrorMsg(RegisterActivity.this, true);
+                    btnRetry.setVisibility(View.VISIBLE);
+                    RegisterActivity.this.setTitle(getString(R.string.register_survey_default_title));
+                }
             }
 
             @Override
             public void onFailure(String error) {
-                // TODO: show the user a failure message and log error.
                 progressBar.setVisibility(View.GONE);
                 RegisterActivity.this.toggleSubmitButton(false);
                 Utils.toggleErrorMsg(RegisterActivity.this, true);
+                btnRetry.setVisibility(View.VISIBLE);
                 RegisterActivity.this.setTitle(getString(R.string.register_survey_default_title));
             }
         });
@@ -188,6 +199,16 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         }.execute();
+    }
+
+    /**
+     * Fired when the user clicks the retry button.
+     * @param button - the view that was clicked (the button).
+     */
+    public void reload(final View button) {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     private void toggleSubmitButton(boolean show) {
