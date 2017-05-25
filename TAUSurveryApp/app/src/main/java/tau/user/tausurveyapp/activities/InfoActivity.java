@@ -58,4 +58,9 @@ public class InfoActivity extends AppCompatActivity {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        // Disable back button.
+    }
 }
