@@ -6,7 +6,10 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
@@ -21,7 +24,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     private final int snoozeIntentId = 102;
     private final int maxSnoozes = 3;
     private final int snoozeTime = 4; // 4 minute for now. TODO: change this to 30 minutes!!!
-    private final int snoozeTimeMorning = 9; // Set the morning snooze to 9AM;
+    private final int snoozeTimeMorning = 13; // Set the morning snooze to 9AM;
 
     public static String IS_SNOOZE_CLICKED_ID = "is_snooze_clicked_id";
 
@@ -77,20 +80,24 @@ public class NotificationReceiver extends BroadcastReceiver {
     }
 
     private void showNotification(Context context, int snoozeCount) {
+        long[] vibrationPattern = {500,500,500,500};
+        Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                                                    .setSmallIcon(R.drawable.tau_logo_round)
-                                                    .setContentTitle(context.getString(R.string.notification_title))
-                                                    .setContentText(context.getString(R.string.notification_body))
-                                                    .addAction(createOkAction(context)) // Create ok button.
-                                                    .setPriority(Notification.PRIORITY_MAX); // So we get a heads-up notification when possible (when the user is active).
+                                                .setSmallIcon(R.mipmap.tau_launcher)
+                                                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.tau_launcher))
+                                                .setContentTitle(context.getString(R.string.notification_title))
+                                                .setContentText(context.getString(R.string.notification_body))
+                                                .addAction(createOkAction(context)) // Create ok button.
+                                                .setLights(Color.BLUE, 500, 500)
+                                                .setVibrate(vibrationPattern)
+                                                .setSound(notificationSound)
+                                                .setPriority(Notification.PRIORITY_MAX); // So we get a heads-up notification when possible (when the user is active).
 
         // Add a snooze button if this is not the last snooze (if we still have at least one more snooze to go).
         if (snoozeCount + 1 <= maxSnoozes) {
             mBuilder.addAction(createSnoozeAction(context, snoozeCount));
         }
-
-        // A hack to make sure the heads-up notification happens. We set a dummy vibration.
-        if (Build.VERSION.SDK_INT >= 21) mBuilder.setVibrate(new long[0]);
 
         // Creates an explicit intent for our DiaryActivity.
         Intent resultIntent = new Intent(context, DiaryActivity.class);

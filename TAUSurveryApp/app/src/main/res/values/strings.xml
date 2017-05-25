@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TAU Survery App</string>
+    <string name="app_name">TAU Survey</string>
     <string name="preference_file_key">preference_file_key</string>
     <string name="key_is_registered">key_is_registered</string>
     <string name="key_survey_end_time">key_survey_end_time</string>

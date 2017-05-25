@@ -35,7 +35,7 @@ import tau.user.tausurveyapp.types.NetworkCallback;
 public class NetworkManager {
     private static final NetworkManager ourInstance = new NetworkManager();
 //    private final String baseUrl = "http://10.0.2.2:8090";
-    private final String baseUrl = "http://053a98e3.ngrok.io";
+    private final String baseUrl = "http://9f277593.ngrok.io";
     private TauService service;
 
     private String userId;
