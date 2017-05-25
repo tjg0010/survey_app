@@ -12,6 +12,12 @@ public class SurveyInfo {
     public TauScreenInfo welcomeScreen;
 
     @Expose
+    public TauScreenInfo agreeScreen;
+
+    @Expose
+    public TauScreenInfo infoScreen;
+
+    @Expose
     public List<NotificationTime> diaryDates;
 
     @Expose

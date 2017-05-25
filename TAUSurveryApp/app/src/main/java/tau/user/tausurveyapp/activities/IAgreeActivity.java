@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.support.design.widget.Snackbar;
 
 import tau.user.tausurveyapp.R;
+import tau.user.tausurveyapp.Utils;
 
 
 public class IAgreeActivity extends AppCompatActivity {
@@ -28,10 +29,17 @@ public class IAgreeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.tau_toolbar);
         setSupportActionBar(toolbar);
 
-        Terms_and_Conditions_Text = (TextView)findViewById(R.id.Terms_and_Conditions_Text);
-        Terms_and_Conditions_Text.setMovementMethod(new ScrollingMovementMethod());
+        // Set the title from the prefs (the title we got from the server).
+        String agreeTitle = Utils.getStringFromPrefs(this, R.string.key_agree_screen_title);
+        setTitle(agreeTitle);
 
-        setTitle("טופס הסכמה");
+        // Get the body text from the prefs and set it.
+        String agreeText = Utils.getStringFromPrefs(this, R.string.key_agree_screen_text);
+        TextView agreeTextView = (TextView)findViewById(R.id.txtTerms);
+        // We parse the text as HTML to enable new lines with <br/>.
+        agreeTextView.setText(Utils.fromHtml(agreeText));
+        // Set scrolling on the text view.
+        agreeTextView.setMovementMethod(new ScrollingMovementMethod());
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)

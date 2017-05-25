@@ -9,8 +9,13 @@
     <string name="key_was_tracking_started">key_was_tracking_started</string>
     <string name="key_user_id">key_user_id</string>
     <string name="key_saved_locations">key_saved_locations</string>
+
     <string name="key_welcome_screen_title">key_welcome_screen_title</string>
     <string name="key_welcome_screen_text">key_welcome_screen_text</string>
+    <string name="key_agree_screen_title">key_agree_screen_title</string>
+    <string name="key_agree_screen_text">key_agree_screen_text</string>
+    <string name="key_info_screen_title">key_info_screen_title</string>
+    <string name="key_info_screen_text">key_info_screen_text</string>
 
 
     <string name="register_survey_error_title">לא ניתן לטעון את טופס ההרשמה כעת</string>
@@ -35,9 +40,6 @@
     <string name="main_btn_retry_txt">נסה שוב</string>
 
     <string name="main_btn_continue_txt">המשך</string>
-
-    <string name="info_survey_title">סיום הרשמה</string>
-    <string name="info_survey_text">תודה רבה על הרשמתך!</string>
 
     <string name="diary_survey_error_title">לא ניתן לטעון את טופס הסקר כעת</string>
     <string name="diary_survey_error_body">אירעה שגיאה בעת טעינת הנתונים.\n\r אנא נסו שוב מאוחר יותר.</string>

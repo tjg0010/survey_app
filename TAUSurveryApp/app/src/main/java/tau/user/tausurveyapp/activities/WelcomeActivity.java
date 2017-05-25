@@ -33,17 +33,7 @@ public class WelcomeActivity extends AppCompatActivity {
         String welcomeText = Utils.getStringFromPrefs(this, R.string.key_welcome_screen_text);
         TextView welcomeTextView = (TextView)findViewById(R.id.txtWelcome);
         // We parse the text as HTML to enable new lines and some decoration.
-        welcomeTextView.setText(fromHtml(welcomeText));
-    }
-
-    public static Spanned fromHtml(String html){
-        Spanned result;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            result = Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY);
-        } else {
-            result = Html.fromHtml(html);
-        }
-        return result;
+        welcomeTextView.setText(Utils.fromHtml(welcomeText));
     }
 
     /**

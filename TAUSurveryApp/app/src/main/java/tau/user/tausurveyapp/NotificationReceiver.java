@@ -23,8 +23,8 @@ public class NotificationReceiver extends BroadcastReceiver {
     private final int notificationId = 101;
     private final int snoozeIntentId = 102;
     private final int maxSnoozes = 2;
-    private final int snoozeTime = 4; // 4 minute for now. TODO: change this to 30 minutes!!!
-    private final int snoozeTimeMorning = 14; // Set the morning snooze to 9AM;
+    private final int snoozeTime = 30; // 30 minutes snooze time.
+    private final int snoozeTimeMorning = 9; // Set the morning snooze to 9AM;
 
     public static String IS_SNOOZE_CLICKED_ID = "is_snooze_clicked_id";
 

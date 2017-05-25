@@ -20,7 +20,7 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <TextView
-            android:id="@+id/Terms_and_Conditions_Text"
+            android:id="@+id/txtTerms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -29,12 +29,11 @@
             android:layout_above="@+id/layoutBottom"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:fontFamily="sans-serif"
-            android:text="@string/Terms_and_Conditions"
             android:scrollbars="vertical"
             android:layoutDirection="rtl"
             android:textDirection="anyRtl"
             android:background="?android:attr/colorControlHighlight"
-            android:padding="2dp"
+            android:padding="6dp"
             tools:ignore="NewApi,ObsoleteLayoutParam" />
 
 

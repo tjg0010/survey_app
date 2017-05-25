@@ -113,7 +113,6 @@ public class DiaryActivity extends AppCompatActivity {
                     NotificationsManager.getInstance().clearUpcomingNotifications(DiaryActivity.this);
 
                     // Go to the info screen.
-                    // TODO: The info screen should change its text according to flags in the storage?
                     Intent intent = new Intent(DiaryActivity.this, InfoActivity.class);
                     startActivity(intent);
                 }

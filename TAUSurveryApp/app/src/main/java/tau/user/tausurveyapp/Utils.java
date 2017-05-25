@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.annotation.StringRes;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -51,6 +53,16 @@ public class Utils {
         ArrayList<Long> result = new ArrayList<>();
         for (String item: list) {
             result.add(Long.parseLong(item));
+        }
+        return result;
+    }
+
+    public static Spanned fromHtml(String html){
+        Spanned result;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            result = Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            result = Html.fromHtml(html);
         }
         return result;
     }

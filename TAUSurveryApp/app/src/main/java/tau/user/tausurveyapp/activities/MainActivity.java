@@ -56,6 +56,14 @@ public class MainActivity extends AppCompatActivity {
                         Utils.setStringToPrefs(MainActivity.this, R.string.key_welcome_screen_title, surveyInfo.getString(TauLocale.IL, surveyInfo.welcomeScreen.title));
                         Utils.setStringToPrefs(MainActivity.this, R.string.key_welcome_screen_text, surveyInfo.getString(TauLocale.IL, surveyInfo.welcomeScreen.text));
 
+                        // Save the agree screen texts.
+                        Utils.setStringToPrefs(MainActivity.this, R.string.key_agree_screen_title, surveyInfo.getString(TauLocale.IL, surveyInfo.agreeScreen.title));
+                        Utils.setStringToPrefs(MainActivity.this, R.string.key_agree_screen_text, surveyInfo.getString(TauLocale.IL, surveyInfo.agreeScreen.text));
+
+                        // Save the info screen texts.
+                        Utils.setStringToPrefs(MainActivity.this, R.string.key_info_screen_title, surveyInfo.getString(TauLocale.IL, surveyInfo.infoScreen.title));
+                        Utils.setStringToPrefs(MainActivity.this, R.string.key_info_screen_text, surveyInfo.getString(TauLocale.IL, surveyInfo.infoScreen.text));
+
                         if (surveyInfo.isUserRegistered) {
                             // If this user is already registered, mark him as such and send him to the info page (that makes sure the tracker is on).
                             Utils.setBooleanToPrefs(MainActivity.this, R.string.key_is_registered, true);

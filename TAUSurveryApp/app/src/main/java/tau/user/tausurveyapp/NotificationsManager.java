@@ -27,12 +27,6 @@ public class NotificationsManager {
         defaultTimes = new ArrayList<>(2);
         defaultTimes.add(new NotificationTime(DayOfWeek.WEDNESDAY, 20, 0));
         defaultTimes.add(new NotificationTime(DayOfWeek.SATURDAY, 21, 0));
-        // TODO: delete these! for now we add a daily notification.
-        defaultTimes.add(new NotificationTime(DayOfWeek.SUNDAY, 20, 0));
-        defaultTimes.add(new NotificationTime(DayOfWeek.MONDAY, 20, 0));
-        defaultTimes.add(new NotificationTime(DayOfWeek.TUESDAY, 20, 0));
-        defaultTimes.add(new NotificationTime(DayOfWeek.THURSDAY, 20, 0));
-        defaultTimes.add(new NotificationTime(DayOfWeek.FRIDAY, 20, 0));
 
         // Un-comment for debugging.
         //Calendar cal = Calendar.getInstance();

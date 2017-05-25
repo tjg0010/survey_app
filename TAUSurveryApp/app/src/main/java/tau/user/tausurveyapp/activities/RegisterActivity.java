@@ -138,7 +138,7 @@ public class RegisterActivity extends AppCompatActivity {
                     SurveyManager.getInstance().surveyStarted(RegisterActivity.this);
 
                     // Set the notification dates, and activate the notifications.
-                    // TODO: change the null of the dates to data from the server.
+                    // We send here null just in case the server haven't sent us anything. If the dates will be set, this will have no effect.
                     NotificationsManager.getInstance().setDates(RegisterActivity.this, null);
                     NotificationsManager.getInstance().activateNotifications(RegisterActivity.this);
 

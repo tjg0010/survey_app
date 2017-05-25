@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import tau.user.tausurveyapp.R;
 import tau.user.tausurveyapp.TrackingRepeater;
+import tau.user.tausurveyapp.Utils;
 
 public class InfoActivity extends AppCompatActivity {
 
@@ -22,7 +24,15 @@ public class InfoActivity extends AppCompatActivity {
         forceRTLIfSupported();
         setContentView(R.layout.activity_info);
 
-        setTitle(R.string.info_survey_title);
+        // Set the title from the prefs (the title we got from the server).
+        String infoTitle = Utils.getStringFromPrefs(this, R.string.key_info_screen_title);
+        setTitle(infoTitle);
+
+        // Get the body text from the prefs and set it.
+        String infoText = Utils.getStringFromPrefs(this, R.string.key_info_screen_text);
+        TextView infoTextView = (TextView)findViewById(R.id.txtInfo);
+        // We parse the text as HTML to enable new lines with <br/>.
+        infoTextView.setText(Utils.fromHtml(infoText));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tau_toolbar);
         setSupportActionBar(toolbar);
