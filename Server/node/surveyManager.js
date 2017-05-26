@@ -312,7 +312,7 @@ function parseGroupParams(group, groupParams, resultParamNames, resultParamValue
                             tempRepetitions[repetition] = [];
                         }
                         // Add the field's value for this param if exists in this repetition. If it doesn't exist, add null.
-                        addParamValueToDbList(groupParams[repetition][paramName] ? groupParams[repetition][paramName] : null, fieldSub.type, tempRepetitions[repetition]);
+                        addParamValueToDbList(groupParams[repetition][paramName] != undefined ? groupParams[repetition][paramName] : null, fieldSub.type, tempRepetitions[repetition]);
                     }
                 }
             }
