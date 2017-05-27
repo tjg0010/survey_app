@@ -109,10 +109,9 @@ public class RegisterActivity extends AppCompatActivity {
                     // Permission granted!
                 }
                 else {
-                    // Permission denied! Do nothing...
-                    // TODO: Add a message saying we really really need location permissions.
+                    // Permission denied!
+                    // Display a message saying the user has to give us location permissions to continue with the survey.
                 }
-                return;
             }
         }
     }

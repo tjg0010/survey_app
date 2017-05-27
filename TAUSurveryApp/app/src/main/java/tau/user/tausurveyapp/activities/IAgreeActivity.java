@@ -50,11 +50,6 @@ public class IAgreeActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        // Disable back button.
-    }
-
     public void notAgree(View view) {
     }
 
