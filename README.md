@@ -3,8 +3,8 @@
 Welcome! Below you will find user instructions on how to configure Tau Survey App. Please follow these instructions to change the surveys and configure the app as you wish.
 
 ## Instructions for creating and updating a survey json *(surveyRegister.json and surveyDiary.json files)*:
-All strings passed to the client are numbers mapped to the [strings](https://github.com/tjg0010/survey_app#the-strings-elements) area in the file.
-   You **MUST** always supply a number and a matching title in the [strings](https://github.com/tjg0010/survey_app#the-strings-elements) element or it won't work.
+All strings passed to the client are numbers mapped to the [strings](https://github.com/tjg0010/survey_app#the-strings-element) area in the file.
+   You **MUST** always supply a number and a matching title in the [strings](https://github.com/tjg0010/survey_app#the-strings-element) element or it won't work.
    This was done to enable localization support later on.
 
 Below you will find a breakdown description of the survey json template and how to use it:
@@ -37,13 +37,13 @@ An array of fields with the following attributes:
   10. **_"TITLE"_** - a title field. Doesn't receive any input and ignored in all processing. It is used to show a the user a title text between fields in an easy way.
   11. **_"GROUP"_** - basically, holds a sub query that will be presented to the user in different scenarios. Its id field **MUST** be mapped to a corresponding table in the db. When this type is chosen you must also supply an attribute called "fields" which holds an array of fields just like the survey itself does. Moreover, you must supply an attribute called _"condition"_ which holds the following attributes:
       1. "type" - (mandatory) may be "REPEAT" or "SHOW". While "show" only displays or hides the whole group, "REPEAT" can also repeat it the number of times requested.
-      2. "repeatText" - (not mandatory) if type is "REPEAT" you may also supply a repeated text which will appear before each group repetition. Note that that text (defined in [strings](https://github.com/tjg0010/survey_app#the-strings-elements)) can contain a joker marked as ```##```. This jocker will be replaced with the repetition number (if source="CLIENT") or the corresponding values found in the db (if source="SERVER").
+      2. "repeatText" - (not mandatory) if type is "REPEAT" you may also supply a repeated text which will appear before each group repetition. Note that that text (defined in [strings](https://github.com/tjg0010/survey_app#the-strings-element)) can contain a joker marked as ```##```. This jocker will be replaced with the repetition number (if source="CLIENT") or the corresponding values found in the db (if source="SERVER").
       3. "source" - (mandatory) "SERVER" or "CLIENT". When "CLIENT" is chosen the group will be repeated according to the value in the field with the id specified in "conditionOn". This is done completely in the client side, which sends the server the results. When "SERVER" is chosen the group will be repeated according to the value in the db according to "conditionOn".
       4. "conditionOn" - (mandatory) either a field id to condition on (when source="CLIENT"), or a table.column name to condition on (when source="SERVER"). When source is "SERVER", the name is assumed to be ```<tableName>.<columnName>```, where the column can be of any type. Notice that the survey query is always according to the userId of the user that is requesting for the survey. Therefore if this is the registration survey, you should not use "SERVER" as source since the user doesn't have an id and data to condition on. When source is "CLIENT", the name should **ONLY** be of a field which is of "INT" type. We might add support for "BOOLEAN" in the future.
       5. "repetitions" - (auto generated) Relevant when source is "SERVER". This is filled by the server according to the number of rows found in the db.
       6. "values" - (auto generated) Relevant when source is "SERVER". This is filled by the server that sends the values found in the "conditionOn" column in the db to the app. The values are sent so the client can fill them inside each repeatedText title, if the title contains the "##" joker.
       
-### The "strings" elements 
+### The "strings" element
 A map (dictionary) that holds the relevant survey titles according to locale.
 The locale can either be "IL" or "EN", though only "IL" is support for the time being.
 Each locale holds another dictionary that maps the title id to the title itself. The title id is then used in the various fields and attributes.
@@ -100,3 +100,32 @@ Each update to the surveys requires a server restart for it to take place!
   }
 }
 ```
+
+## Instructions for creating and updating the surveys configuration *(config.json)*
+### "welcomeScreen", "agreeScreen" and "infoScreen"
+All are consisted of two attributes: "title" and "text", which are (similarly to the surveys) numbers mapping a string in [the strings element](https://github.com/tjg0010/survey_app#the-configuration-strings-element) in this configuration. Both attributes are mandatory.
+
+### The "diaryDates" element
+An array of notification times. This element is not mandatory, and if missing, the app will set 2 notification times using its default values (Wednesday at 20:00 and Saturday at 21:00). Each notification time in this array is consisted of:
+- **"dayOfWeek"** - (mandatory) one of the days of the week in which you want the notification to pop. Can be one of the following: ```"SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"```.
+- **"hour"** - the hour, in 24 hours format, in which the notification should pop.
+- **"minute"** - the minute in the given hour and day of week the notification should pop. Can be between ```0``` and ```59```.
+
+### The configuration "strings" element
+See [the strings element](https://github.com/tjg0010/survey_app#the-strings-element) for the survey jsons.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
