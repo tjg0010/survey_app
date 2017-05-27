@@ -67,7 +67,7 @@ exports.saveLocationsBulk = function(userId, locations, callback) {
     }
 
     con.query(
-        'INSERT INTO `tausurvey`.`locations` (`userId`,`lat`,`long`,`time`)' + ' VALUES ' + paramValuesStrings.join(',') + ';',
+        'INSERT INTO `tausurvey`.`locations` (`userId`,`latitude`,`longitude`,`time`)' + ' VALUES ' + paramValuesStrings.join(',') + ';',
             function(err,res){
                 if(err) {
                     logError('Error saving location.', err);
