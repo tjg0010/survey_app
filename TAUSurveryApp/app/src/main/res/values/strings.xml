@@ -36,6 +36,9 @@
     <string name="survey_error_title">שגיאת הרשמה</string>
     <string name="survey_error_button">סגור</string>
 
+    <string name="location_permissions_text">עליך לאפשר לאפליקציה לגשת לנתוני מיקומך על מנת להשתתף בסקר.</string>
+    <string name="location_permissions_btn">מתן הרשאות גישה</string>
+
     <string name="main_screen_title">אוניברסיטת תל אביב - סקר</string>
     <string name="btn_retry_txt">נסה שוב</string>
 
@@ -49,6 +52,8 @@
 
     <string name="main_screen_error_title">לא ניתן לטעון את הנתונים כעת</string>
     <string name="main_screen_error_body">אירעה שגיאה בעת טעינת הנתונים.\n\r אנא נסו שוב מאוחר יותר.</string>
+
+    <string name="agree_screen_must_agree_text">יש לאשר את טופס ההסכמה תחילה</string>
 
     <string name="notification_title">אוניברסיטת תל אביב</string>
     <string name="notification_body">שאלון מפגשים יומי מוכן למענה. לחצ/י כדי למלא את השאלון.</string>

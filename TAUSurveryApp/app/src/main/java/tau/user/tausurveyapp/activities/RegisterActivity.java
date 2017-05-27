@@ -104,13 +104,24 @@ public class RegisterActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case LOCATION_PERMISSION: {
+                View locationPermissionsContainer = findViewById(R.id.locationPermissionsContainer);
+                View surveyContentView = findViewById(R.id.contentView);
+                View submitButton = findViewById(R.id.btn_submit);
+
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted!
+                    // Make sure error message is hidden and survey is visible.
+                    locationPermissionsContainer.setVisibility(View.GONE);
+                    surveyContentView.setVisibility(View.VISIBLE);
+                    submitButton.setVisibility(View.VISIBLE);
                 }
                 else {
                     // Permission denied!
                     // Display a message saying the user has to give us location permissions to continue with the survey.
+                    surveyContentView.setVisibility(View.GONE);
+                    submitButton.setVisibility(View.GONE);
+                    locationPermissionsContainer.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -208,6 +219,14 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = getIntent();
         finish();
         startActivity(intent);
+    }
+
+    /**
+     * Fired when the user clicks the "add permissions" button.
+     * @param button - the view that was clicked (the button).
+     */
+    public void showLocationPermissionsDialog(final View button) {
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION);
     }
 
     private void toggleSubmitButton(boolean show) {

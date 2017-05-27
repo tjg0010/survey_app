@@ -76,6 +76,35 @@
                 android:visibility="gone"
                 android:onClick="submit"/>
 
+            <RelativeLayout
+                android:id="@+id/locationPermissionsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txtLocationPermissions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/location_permissions_text"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/location_permissions_btn"
+                    android:layout_below="@id/txtLocationPermissions"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="30dp"
+                    android:background="?attr/colorAccent"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:padding="10dp"
+                    android:onClick="showLocationPermissionsDialog"/>
+
+            </RelativeLayout>
+
         </LinearLayout>
 
     </ScrollView>

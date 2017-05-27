@@ -60,7 +60,7 @@ public class IAgreeActivity extends AppCompatActivity {
             startActivity(intent);
         }
         else{
-            Snackbar.make(view, "אנא אשרו את טופס ההסכמה", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(view, getString(R.string.agree_screen_must_agree_text), Snackbar.LENGTH_LONG).show();
         }
     }
 }
