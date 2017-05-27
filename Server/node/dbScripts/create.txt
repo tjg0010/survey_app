@@ -33,8 +33,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `tausurvey`.`locations` (
   `locationId` INT(10) NOT NULL AUTO_INCREMENT,
   `userId` VARCHAR(45) NOT NULL,
-  `lat` VARCHAR(20) NOT NULL,
-  `long` VARCHAR(20) NOT NULL,
+  `latitude` VARCHAR(20) NOT NULL,
+  `longitude` VARCHAR(20) NOT NULL,
   `time` DATETIME NOT NULL,
   PRIMARY KEY (`locationId`),
   CONSTRAINT `fk_userId_locations`

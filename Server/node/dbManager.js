@@ -36,7 +36,7 @@ exports.saveLocation = function(userId, lat, long, time, callback){
 
     con.query(
         // Using ? to supply values auto escapes them to a sql injection safe format.
-        'INSERT INTO `tausurvey`.`locations` (`userId`,`lat`,`long`,`time`) VALUES (?, ?, ?, ?);',
+        'INSERT INTO `tausurvey`.`locations` (`userId`,`latitude`,`longitude`,`time`) VALUES (?, ?, ?, ?);',
         [userId, lat, long, datetime],
         function(err,res){
             if(err) {
