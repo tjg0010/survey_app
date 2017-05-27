@@ -38,7 +38,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancelAll();
 
-        // If this receiver was called to raise an alarm (and not set because the snooze was clicked).
+        // If this receiver was called to raise an alarm (and not called because the snooze was clicked).
         if (!isSnoozing) {
             // Show notification.
             showNotification(context, snoozeCount);
@@ -70,7 +70,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             else {
                 // Don't add a snooze time to the preferences.
                 // Reset the snooze count in the preferences for the next alarm (in some day).
-                Utils.setIntToPrefs(context, R.string.key_survey_notifications_snooze_count, 0);
+                NotificationsManager.getInstance().resetNotificationsSnoozeCount(context);
             }
         }
         // This receiver was called because the user has clicked the snooze button.

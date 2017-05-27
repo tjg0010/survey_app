@@ -82,6 +82,11 @@ public class NotificationsManager {
         }
     }
 
+    public void resetCurrentNotifications(Context context) {
+        clearUpcomingNotifications(context);
+        resetNotificationsSnoozeCount(context);
+    }
+
     /**
      * Used to clear the notifications in the next 16 hours.
      * This is needed after a diary is answered and we want to make sure the user won't get a notification.
@@ -104,6 +109,10 @@ public class NotificationsManager {
         }
 
         Utils.setUniqueStringListToPrefs(context, R.string.key_survey_notifications_times, Utils.convertToStringList(newTimes));
+    }
+
+    public void resetNotificationsSnoozeCount(Context context) {
+        Utils.setIntToPrefs(context, R.string.key_survey_notifications_snooze_count, 0);
     }
 
     private void cancelPendingNotificationAlarm(Context context, long time) {

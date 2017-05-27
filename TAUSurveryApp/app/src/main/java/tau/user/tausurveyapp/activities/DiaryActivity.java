@@ -118,10 +118,10 @@ public class DiaryActivity extends AppCompatActivity {
                 // Hide loading.
                 progressBar.setVisibility(View.GONE);
 
-                // If registration was completed successfully.
+                // If the survey submission was completed successfully.
                 if (surveySubmitResult.isSuccess()) {
-                    // Clear all notifications in the next day since this diary is answered.
-                    NotificationsManager.getInstance().clearUpcomingNotifications(DiaryActivity.this);
+                    // Clear all notifications in the next day since this diary is answered, and reset snooze count to be ready for next time.
+                    NotificationsManager.getInstance().resetCurrentNotifications(DiaryActivity.this);
 
                     // Go to the info screen.
                     Intent intent = new Intent(DiaryActivity.this, InfoActivity.class);
