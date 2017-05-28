@@ -154,6 +154,24 @@ See [the strings element](#the-strings-element) for the survey jsons.
 }
 ```
 
+## Server Setup ##
+1. Install node-v6.9.1-x64.msi
+2. Open cmd, create a code folder and a project folder, navigate to it and run:
+	```
+   npm install express --save
+	npm install body-parser --save
+	npm install multer --save
+	npm install mysql
+   npm install winston --save
+   npm install bluebird --save
+   ```
+3. Install mySql community edition by running the web installer: mysql-installer-web-community-5.7.16.0.msi
+
+
+#### For a developer environment, also install: ####
+1. Install WebStorm - for node js development
+2. Install Android Studio - for mobile app development
+
 
 
 
