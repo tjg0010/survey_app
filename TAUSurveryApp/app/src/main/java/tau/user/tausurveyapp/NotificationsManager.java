@@ -10,30 +10,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import tau.user.tausurveyapp.contracts.DayOfWeek;
 import tau.user.tausurveyapp.contracts.NotificationTime;
 
 
 public class NotificationsManager {
     private static final NotificationsManager self = new NotificationsManager();
 
-    private ArrayList<NotificationTime> defaultTimes;
-
     public static NotificationsManager getInstance() {
         return self;
     }
 
     private NotificationsManager() {
-        defaultTimes = new ArrayList<>(2);
-        defaultTimes.add(new NotificationTime(DayOfWeek.WEDNESDAY, 20, 0));
-        defaultTimes.add(new NotificationTime(DayOfWeek.SATURDAY, 21, 0));
-
-        // Un-comment for debugging.
-        //Calendar cal = Calendar.getInstance();
-        //cal.add(Calendar.MINUTE, 1);
-        //defaultTimes.add(new NotificationTime(DayOfWeek.SUNDAY, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)));
-        //cal.add(Calendar.HOUR, 2);
-        //defaultTimes.add(new NotificationTime(DayOfWeek.SUNDAY, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE)));
     }
 
     /**
@@ -44,8 +31,8 @@ public class NotificationsManager {
     public void setDates(Context context, List<NotificationTime> times) {
         // Only set the dates if they haven't been set yet.
         if (!Utils.getBooleanFromPrefs(context, R.string.key_survey_notifications_saved)) {
-            // Converts the times to a specific time in milliseconds. Use the default times if not supplied with requested times.
-            List<Long> unixTimes = convertNotificationTimesToMillisDate((times == null || times.isEmpty()) ? this.defaultTimes : times);
+            // Converts the times to a specific time in milliseconds. If no times were given, save the key as null.
+            List<Long> unixTimes = convertNotificationTimesToMillisDate((times == null) ? new ArrayList<NotificationTime>() : times);
 
             // Save the dates to the prefs (in case we will get booted and need to re-set the alarms).
             Utils.setUniqueStringListToPrefs(context, R.string.key_survey_notifications_times, Utils.convertToStringList(unixTimes));
