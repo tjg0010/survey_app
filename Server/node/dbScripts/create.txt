@@ -2,6 +2,7 @@ CREATE DATABASE IF NOT EXISTS tausurvey;
 
 CREATE TABLE IF NOT EXISTS `tausurvey`.`main` (
   `userId` VARCHAR(45) NOT NULL,
+  `registerTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `gender` VARCHAR(7) NOT NULL,
   `birthYear` INT(4) NOT NULL,
   `homeCity` VARCHAR(60) NOT NULL,
@@ -94,6 +95,21 @@ CREATE TABLE IF NOT EXISTS `tausurvey`.`children_diaries` (
   CONSTRAINT `fk_children_diaries`
     FOREIGN KEY (`userId`, `childName`)
     REFERENCES `tausurvey`.`children` (`userId`, `childName`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `tausurvey`.`bluetooth` (
+  `sampleId` INT(11) NOT NULL AUTO_INCREMENT,
+  `userId` VARCHAR(45) NOT NULL,
+  `deviceName` VARCHAR(45),
+  `macAddress` VARCHAR(25) NOT NULL,
+  `deviceType` VARCHAR(20),
+  `time` DATETIME NOT NULL,
+  PRIMARY KEY (`sampleId`),
+  CONSTRAINT `fk_userId_bluetooth`
+    FOREIGN KEY (`userId`)
+    REFERENCES `tausurvey`.`main` (`userId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

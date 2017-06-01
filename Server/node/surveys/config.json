@@ -20,6 +20,15 @@
     { "dayOfWeek": "FRIDAY", "hour": 20, "minute": 0 },
     { "dayOfWeek": "SATURDAY", "hour": 21, "minute": 0 }
   ],
+  "bluetoothSamplingDates": [
+    { "dayOfWeek": "SUNDAY", "hour": 11, "minute": 0 },
+    { "dayOfWeek": "MONDAY", "hour": 12, "minute": 30 },
+    { "dayOfWeek": "TUESDAY", "hour": 15, "minute": 0 },
+    { "dayOfWeek": "WEDNESDAY", "hour": 16, "minute": 0 },
+    { "dayOfWeek": "THURSDAY", "hour": 17, "minute": 0 },
+    { "dayOfWeek": "FRIDAY", "hour": 19, "minute": 30 },
+    { "dayOfWeek": "SATURDAY", "hour": 20, "minute": 30 }
+  ],
   "strings": {
     "IL": {
       "1": "אודות הסקר",

@@ -111,7 +111,35 @@ app.post('/location/:userId/bulk', function (req, res) {
             httpHelper.sendResponseError(res, 500, 'Failed saving locations to db.');
         }
     });
+});
 
+app.post('/bluetooth/:userId', function (req, res) {
+    // Parameter validations.
+    if (!req.params.userId) {
+        logger.log('error', '/bluetooth/:userId (POST) called without mandatory parameter.', {missingParameter: 'params.userId'});
+        httpHelper.sendResponseError(res, 400, 'userId was null or empty');
+        return;
+    }
+    if (!req.body  || !req.body.length) {
+        logger.log('error', '/bluetooth/:userId (POST) called without mandatory parameter.', {missingParameter: 'body'});
+        httpHelper.sendResponseError(res, 400, 'body was null or empty');
+        return;
+    }
+
+    // Extract parameters.
+    var userId = req.params.userId;
+    var samples = req.body;
+
+    logger.log('info', '/bluetooth/:userId (POST) called. User id: %s', userId);
+
+    db.saveBluetoothSamples(userId, samples, function (err) {
+        if (!err) {
+            httpHelper.sendResponseSuccess(res);
+        }
+        else {
+            httpHelper.sendResponseError(res, 500, 'Failed saving locations to db.');
+        }
+    });
 });
 
 app.get('/diary/:userId', function (req, res) {

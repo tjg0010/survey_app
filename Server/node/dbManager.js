@@ -53,8 +53,6 @@ exports.saveLocation = function(userId, lat, long, time, callback){
 exports.saveLocationsBulk = function(userId, locations, callback) {
     var paramValuesStrings = [];
 
-    // The paramValuesGroup is an array of paramValues arrays, since groups can have repeated items.
-    // We parse each paramValues list separately.
     for (var i = 0; i < locations.length; i++) {
         var location = locations[i];
         // Only add this location if all of its parameters are valid.
@@ -78,6 +76,34 @@ exports.saveLocationsBulk = function(userId, locations, callback) {
                     callback();
                 }
             });
+};
+
+exports.saveBluetoothSamples = function(userId, samples, callback) {
+    var paramValuesStrings = [];
+
+    for (var i = 0; i < samples.length; i++) {
+        var sample = samples[i];
+        // Only add this bluetooth sample if all of its mandatory parameters are valid.
+        if (sample && sample.mac && sample.time) {
+            // Convert the given time in UTC format, to mySql DATETIME format.
+            var datetime = new Date(parseInt(sample.time)).toMysqlDateTime();
+            var parsedValues = escapeDataArray([userId, sample.name || '', sample.mac, sample.type || '', datetime]);
+            paramValuesStrings.push('(' + parsedValues.join(',') + ')');
+        }
+    }
+
+    con.query(
+        'INSERT INTO `tausurvey`.`bluetooth` (`userId`,`deviceName`,`macAddress`,`deviceType`,`time`)' + ' VALUES ' + paramValuesStrings.join(',') + ';',
+        function(err,res){
+            if(err) {
+                logError('Error saving bluetooth samples.', err);
+                callback(err);
+            }
+            else {
+                logger.log('info', 'Data inserted to DB.', {id: res.insertId});
+                callback();
+            }
+        });
 };
 
 exports.saveSurvey = function(surveyName, paramNames, paramValues, callback) {
