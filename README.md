@@ -113,7 +113,7 @@ An array of notification times. This element is not mandatory, and if missing th
 - **"minute"** - the minute in the given hour and day of week the notification should pop. Can be between ```0``` and ```59```.
 
 ### The "bluetoothSamplingDates" element
-Similarly to [diaryDates](#the-diaryDates-element), this is an array of bluetooth sampling times. This element is not mandatory, and when not supplied no bluetooth samples will be done by the client app. Bluetooth sampling was designed this way (by supplying desired times) because of its heavy battery usage. A bluetooth sample may take up to 1 minute (this is set as an active time cap for the sampling), so requested time should at least have a 2 minutes gap between one another. Each sample time in this array is consisted of:
+Similarly to [diaryDates](#the-diarydates-element), this is an array of bluetooth sampling times. This element is not mandatory, and when not supplied no bluetooth samples will be done by the client app. Bluetooth sampling was designed this way (by supplying desired times) because of its heavy battery usage. A bluetooth sample may take up to 1 minute (this is set as an active time cap for the sampling), so requested time should at least have a 2 minutes gap between one another. Each sample time in this array is consisted of:
 - **"dayOfWeek"** - (mandatory) one of the days of the week in which you want the notification to pop. Can be one of the following: ```"SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"```.
 - **"hour"** - the hour, in 24 hours format, in which the notification should pop.
 - **"minute"** - the minute in the given hour and day of week the notification should pop. Can be between ```0``` and ```59```.
