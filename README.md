@@ -107,7 +107,13 @@ All are consisted of two attributes: "title" and "text", which are (similarly to
 The strings mapped to each screen's "text" element are parsed as HTML. This means that you can add very basic formatting, by adding <br/> elements to the text to create line breaks.
 
 ### The "diaryDates" element
-An array of notification times. This element is not mandatory, and if missing, the app will set 2 notification times using its default values (Wednesday at 20:00 and Saturday at 21:00). Each notification time in this array is consisted of:
+An array of notification times. This element is not mandatory, and if missing the app will not set any notification times. Each notification time in this array is consisted of:
+- **"dayOfWeek"** - (mandatory) one of the days of the week in which you want the notification to pop. Can be one of the following: ```"SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"```.
+- **"hour"** - the hour, in 24 hours format, in which the notification should pop.
+- **"minute"** - the minute in the given hour and day of week the notification should pop. Can be between ```0``` and ```59```.
+
+### The "bluetoothSamplingDates" element
+Similarly to [diaryDates](#the-diaryDates-element), this is an array of bluetooth sampling times. This element is not mandatory, and when not supplied no bluetooth samples will be done by the client app. Bluetooth sampling was designed this way (by supplying desired times) because of its heavy battery usage. A bluetooth sample may take up to 1 minute (this is set as an active time cap for the sampling), so requested time should at least have a 2 minutes gap between one another. Each sample time in this array is consisted of:
 - **"dayOfWeek"** - (mandatory) one of the days of the week in which you want the notification to pop. Can be one of the following: ```"SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"```.
 - **"hour"** - the hour, in 24 hours format, in which the notification should pop.
 - **"minute"** - the minute in the given hour and day of week the notification should pop. Can be between ```0``` and ```59```.
@@ -138,6 +144,15 @@ See [the strings element](#the-strings-element) for the survey jsons.
     { "dayOfWeek": "THURSDAY", "hour": 20, "minute": 0 },
     { "dayOfWeek": "FRIDAY", "hour": 20, "minute": 0 },
     { "dayOfWeek": "SATURDAY", "hour": 21, "minute": 0 }
+  ],
+  "bluetoothSamplingDates": [
+    { "dayOfWeek": "SUNDAY", "hour": 11, "minute": 0 },
+    { "dayOfWeek": "MONDAY", "hour": 12, "minute": 30 },
+    { "dayOfWeek": "TUESDAY", "hour": 15, "minute": 0 },
+    { "dayOfWeek": "WEDNESDAY", "hour": 16, "minute": 0 },
+    { "dayOfWeek": "THURSDAY", "hour": 17, "minute": 0 },
+    { "dayOfWeek": "FRIDAY", "hour": 19, "minute": 30 },
+    { "dayOfWeek": "SATURDAY", "hour": 20, "minute": 30 }
   ],
   "strings": {
     "IL": {
