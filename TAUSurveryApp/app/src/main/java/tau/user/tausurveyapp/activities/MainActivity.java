@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import tau.user.tausurveyapp.BluetoothSamplingManager;
 import tau.user.tausurveyapp.NetworkManager;
 import tau.user.tausurveyapp.NotificationsManager;
 import tau.user.tausurveyapp.R;
@@ -51,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
                     if (isSuccessful) {
                         // Save the diary surveys dates we got.
                         NotificationsManager.getInstance().setDates(MainActivity.this, surveyInfo.diaryDates);
+
+                        // Save the bluetooth sampling dates we got.
+                        BluetoothSamplingManager.getInstance().setDates(MainActivity.this, surveyInfo.bluetoothSamplingDates);
 
                         // Save the welcome screen texts.
                         Utils.setStringToPrefs(MainActivity.this, R.string.key_welcome_screen_title, surveyInfo.getString(TauLocale.IL, surveyInfo.welcomeScreen.title));

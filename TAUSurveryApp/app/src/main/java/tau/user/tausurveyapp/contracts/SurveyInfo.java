@@ -21,6 +21,9 @@ public class SurveyInfo {
     public List<NotificationTime> diaryDates;
 
     @Expose
+    public List<NotificationTime> bluetoothSamplingDates;
+
+    @Expose
     public boolean isUserRegistered;
 
     @Expose

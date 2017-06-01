@@ -28,6 +28,8 @@ public class TrackingService extends IntentService {
             // Only track if the survey time is not finished.
             if (!SurveyManager.getInstance().isSurveyFinished(this)) {
                 track();
+                // Try to send saved bluetooth data to server.
+                BluetoothSamplingManager.getInstance().sendSavedBluetoothData(this);
             }
             else {
                 // If the survey time is finished, stop the repeated tracking.
@@ -114,12 +116,12 @@ public class TrackingService extends IntentService {
     }
 
     private boolean haveFailedLocations() {
-        List<TauLocation> savedLocationsMap = Utils.geObjectListFromPrefs(TauLocation.class, TrackingService.this, R.string.key_saved_locations);
+        List<TauLocation> savedLocationsMap = Utils.getObjectListFromPrefs(TauLocation.class, TrackingService.this, R.string.key_saved_locations);
         return !savedLocationsMap.isEmpty();
     }
 
     private List<TauLocation> getSavedLocations() {
-        return Utils.geObjectListFromPrefs(TauLocation.class, TrackingService.this, R.string.key_saved_locations);
+        return Utils.getObjectListFromPrefs(TauLocation.class, TrackingService.this, R.string.key_saved_locations);
     }
 
     private void clearSavedLocations() {

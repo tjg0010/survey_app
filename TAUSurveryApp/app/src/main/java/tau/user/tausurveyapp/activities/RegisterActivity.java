@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
+import tau.user.tausurveyapp.BluetoothSamplingManager;
 import tau.user.tausurveyapp.NotificationsManager;
 import tau.user.tausurveyapp.SurveyManager;
 import tau.user.tausurveyapp.types.NetworkCallback;
@@ -26,7 +27,6 @@ import tau.user.tausurveyapp.SurveyBuilder;
 import tau.user.tausurveyapp.Utils;
 import tau.user.tausurveyapp.contracts.TauLocale;
 import tau.user.tausurveyapp.contracts.Survey;
-import tau.user.tausurveyapp.types.PreferencesType;
 import tau.user.tausurveyapp.types.SurveySubmitResult;
 import tau.user.tausurveyapp.types.SurveyType;
 
@@ -162,6 +162,9 @@ public class RegisterActivity extends AppCompatActivity {
                     // We send here null just in case the server haven't sent us anything. If the dates will be set, this will have no effect.
                     NotificationsManager.getInstance().setDates(RegisterActivity.this, null);
                     NotificationsManager.getInstance().activateNotifications(RegisterActivity.this);
+
+                    // Activate bluetooth sampling.
+                    BluetoothSamplingManager.getInstance().activateNotifications(RegisterActivity.this);
 
                     // Go to the info screen.
                     Intent intent = new Intent(RegisterActivity.this, InfoActivity.class);

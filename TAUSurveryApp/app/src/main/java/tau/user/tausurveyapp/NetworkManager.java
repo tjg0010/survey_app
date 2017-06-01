@@ -22,6 +22,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import tau.user.tausurveyapp.contracts.BluetoothDeviceData;
 import tau.user.tausurveyapp.contracts.FieldSubmission;
 import tau.user.tausurveyapp.contracts.SurveyInfo;
 import tau.user.tausurveyapp.contracts.TauLocation;
@@ -209,6 +210,23 @@ public class NetworkManager {
         }
     }
 
+    public void sendBluetoothData(Context context, List<BluetoothDeviceData> bluetoothDeviceDataList, final NetworkCallback<String> callback) {
+        Call<Void> call = service.sendBluetoothData(getUserId(context), bluetoothDeviceDataList);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                // The network call was a success and we got a response.
+                callback.onResponse(response.message(), response.isSuccessful());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                // the network call was a failure
+                callback.onFailure(t.getMessage());
+            }
+        });
+    }
+
     // endregion
 
     // region: TauService RetroFit Interface
@@ -236,6 +254,9 @@ public class NetworkManager {
 
         @POST("diary/{userId}")
         Call<Void> submitDiary(@Path("userId") String userId, @Body List<FieldSubmission> fieldSubmissions);
+
+        @POST("bluetooth/{userId}")
+        Call<Void> sendBluetoothData(@Path("userId") String userId, @Body List<BluetoothDeviceData> bluetoothDeviceDataList);
     }
 
     // endregion

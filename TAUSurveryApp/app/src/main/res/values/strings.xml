@@ -9,6 +9,9 @@
     <string name="key_was_tracking_started">key_was_tracking_started</string>
     <string name="key_user_id">key_user_id</string>
     <string name="key_saved_locations">key_saved_locations</string>
+    <string name="key_bluetooth_dates_saved">key_bluetooth_dates_saved</string>
+    <string name="key_bluetooth_sampling_times">key_bluetooth_sampling_times</string>
+    <string name="key_saved_bluetooth_data">key_saved_bluetooth_data</string>
 
     <string name="key_welcome_screen_title">key_welcome_screen_title</string>
     <string name="key_welcome_screen_text">key_welcome_screen_text</string>

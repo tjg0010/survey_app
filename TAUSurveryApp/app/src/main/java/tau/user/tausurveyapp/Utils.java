@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import tau.user.tausurveyapp.contracts.NotificationTime;
 import tau.user.tausurveyapp.types.PreferencesType;
 
 /**
@@ -55,6 +56,28 @@ public class Utils {
             result.add(Long.parseLong(item));
         }
         return result;
+    }
+
+    @SuppressWarnings("WrongConstant")
+    public static List<Long> convertNotificationTimesToMillisDate(List<NotificationTime> times) {
+        ArrayList<Long> milliTimes = new ArrayList<>();
+
+        // Go over the received times.
+        for (NotificationTime time: times) {
+            // Find the next dayOfWeek requested (the next time in the calendar that day comes).
+            Calendar cal = Calendar.getInstance();
+            while (cal.get(Calendar.DAY_OF_WEEK) != time.dayOfWeek.getValue()) {
+                cal.add(Calendar.DATE, 1);
+            }
+            // Once found, set the hour and the minute.
+            cal.set(Calendar.HOUR_OF_DAY, time.hour);
+            cal.set(Calendar.MINUTE, time.minute);
+            cal.set(Calendar.SECOND, 0);
+            // Add the time as long to the array.
+            milliTimes.add(cal.getTimeInMillis());
+        }
+
+        return milliTimes;
     }
 
     public static Spanned fromHtml(String html){
@@ -259,7 +282,7 @@ public class Utils {
         editor.apply();
     }
 
-    public static <T> List<T> geObjectListFromPrefs(Class cls, Context context, @StringRes int resId) {
+    public static <T> List<T> getObjectListFromPrefs(Class cls, Context context, @StringRes int resId) {
         SharedPreferences prefs = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         Set<String> stringSet = prefs.getStringSet(context.getString(resId), new HashSet<String>());
         // Convert to the requested object list using gson.
