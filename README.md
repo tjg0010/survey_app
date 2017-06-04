@@ -174,11 +174,12 @@ See [the strings element](#the-strings-element) for the survey jsons.
 2. Open cmd, create a code folder and a project folder, navigate to it and run:
 	```
    npm install express --save
-	npm install body-parser --save
-	npm install multer --save
-	npm install mysql
+   npm install body-parser --save
+   npm install multer --save
+   npm install mysql
    npm install winston --save
    npm install bluebird --save
+   npm install --save greenlock-express@2.x
    ```
 3. Install mySql community edition by running the web installer: mysql-installer-web-community-5.7.16.0.msi
 
