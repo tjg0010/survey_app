@@ -6,6 +6,7 @@
 	npm install mysql
     npm install winston --save
     npm install bluebird --save
+    npm install --save greenlock-express@2.x
 3. Install mySql community edition by running the web installer: mysql-installer-web-community-5.7.16.0.msi
 
 
