@@ -172,15 +172,16 @@ See [the strings element](#the-strings-element) for the survey jsons.
 ## Server Setup ##
 1. Install node-v6.9.1-x64.msi
 2. Open cmd, create a code folder and a project folder, navigate to it and run:
-	```
-   npm install express --save
+	npm install express --save
 	npm install body-parser --save
 	npm install multer --save
 	npm install mysql
-   npm install winston --save
-   npm install bluebird --save
-   ```
-3. Install mySql community edition by running the web installer: mysql-installer-web-community-5.7.16.0.msi
+    	npm install winston --save
+    	npm install bluebird --save
+3. Create the following folder: C:\OpenSSL-Win64\lib and place the needed files inside it (3 libeay32 files).
+4. Run:
+   	npm install --save greenlock-express@2.x
+5. Install mySql community edition by running the web installer: mysql-installer-web-community-5.7.16.0.msi
 
 
 #### For a developer environment, also install: ####
