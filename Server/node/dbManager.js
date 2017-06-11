@@ -7,8 +7,8 @@ const mysql = require("mysql");             // MySql DB connector.
 
 var con = mysql.createConnection({
     host: "localhost",
-    user: "root",
-    password: "Ran1234"
+    user: "tausurvey",
+    password: "20im.V17"
 });
 
 exports.connect = function()
