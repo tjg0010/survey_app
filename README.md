@@ -189,11 +189,6 @@ See [the strings element](#the-strings-element) for the survey jsons.
 5. (Only on windows - not needed for centOS server) Create the following folder: C:\OpenSSL-Win64\lib and place the needed files inside it (3 libeay32 files). This is only needed if the greenlock installation has error regarding those files.
 
 
-For a developer environment, also install:
-1. Install WebStorm - for node js development
-2. Install Android Studio - for mobile app development
-
-
 #### For a developer environment, also install: ####
 1. Install WebStorm - for node js development
 2. Install Android Studio - for mobile app development
