@@ -4,7 +4,7 @@
 	npm install express --save
 	npm install body-parser --save
 	npm install multer --save
-	npm install mysql
+	npm install mysql --save
     npm install winston --save
     npm install bluebird --save
 4. To install https support (to be able to run main-https) run the following commands:

@@ -29,7 +29,7 @@ var lex = require('greenlock-express').create({
 });
 
 // handles acme-challenge and redirects to https
-require('http').createServer(lex.middleware(require('redirect-https')())).listen(80, function () {
+require('http').createServer(lex.middleware(require('redirect-https')())).listen(8090, function () {
     console.log("Listening for ACME http-01 challenges on", this.address());
 });
 // endregion
@@ -264,7 +264,7 @@ function approveDomains(opts, certs, cb) {
 /**
  * Tha main function that starts the server listener.
  */
-require('https').createServer(lex.httpsOptions, lex.middleware(app)).listen(8091, function () {
+var server = require('https').createServer(lex.httpsOptions, lex.middleware(app)).listen(8091, function () {
     logger.log("Listening for ACME tls-sni-01 challenges and serve app on", this.address());
 
     var host = server.address().address;
@@ -286,7 +286,7 @@ require('https').createServer(lex.httpsOptions, lex.middleware(app)).listen(8091
     sm.loadSurvey(surveyRegister);
     sm.loadSurvey(surveyDiary);
 
-    logger.log('info', 'App is listening at http://%s:%s', host, port);
+    logger.log('info', 'App is listening at https://%s:%s', host, port);
 });
 
 // var server = app.listen(8090, function () {
