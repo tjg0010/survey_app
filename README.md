@@ -171,17 +171,22 @@ See [the strings element](#the-strings-element) for the survey jsons.
 
 ## Server Setup ##
 1. Install node-v6.9.1-x64.msi
-2. Open cmd, create a code folder and a project folder, navigate to it and run:
-	npm install express --save
-	npm install body-parser --save
-	npm install multer --save
-	npm install mysql
-    	npm install winston --save
-    	npm install bluebird --save
-3. Create the following folder: C:\OpenSSL-Win64\lib and place the needed files inside it (3 libeay32 files).
-4. Run:
-   	npm install --save greenlock-express@2.x
-5. Install mySql community edition by running the web installer: mysql-installer-web-community-5.7.16.0.msi
+2. Install mySql community edition by running the web installer: mysql-installer-web-community-5.7.16.0.msi
+3. Open cmd, create a code folder and a project folder, navigate to it and run:
+   1. npm install express --save
+   2. npm install body-parser --save
+   3. npm install multer --save
+   4. npm install mysql
+   5. npm install winston --save
+   6. npm install bluebird --save
+4. To install https support (to be able to run main-https) run the following commands:
+   1. npm install --save greenlock-express@2.x
+   2. npm install --save le-store-certbot@2.x   # default plugin for accounts, certificates, and keypairs
+   3. npm install --save le-challenge-fs@2.x    # default plugin for http-01 challenge
+   4. npm install --save le-challenge-sni@2.x   # default plugin for tls-sni-01 and tls-sni-02 challenge
+   5. npm install --save le-acme-core@2.x       # default plugin for ACME spec
+   6. npm install --save le-sni-auto@2.x        # default plugin for SNICallback
+5. (Only on windows - not needed for centOS server) Create the following folder: C:\OpenSSL-Win64\lib and place the needed files inside it (3 libeay32 files). This is only needed if the greenlock installation has error regarding those files.
 
 
 #### For a developer environment, also install: ####
