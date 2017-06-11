@@ -1,6 +1,7 @@
 // region: Dependencies
 const logger = require('./logger.js');         // Our own logger.
-const mysql = require("mysql");             // MySql DB connector.
+const mysql = require("mysql");                // MySql DB connector.
+var fs = require('fs');                        // File system.
 // endregion
 
 // A map that holds all table names (as values) and their name representation in the json file (as keys).
@@ -8,8 +9,12 @@ const mysql = require("mysql");             // MySql DB connector.
 var con = mysql.createConnection({
     host: "localhost",
     user: "tausurvey",
-    password: "20im.V17"
+    password: getDBPassword()
 });
+
+function getDBPassword() {
+    return fs.readFileSync('authentications/db-auth.txt', 'utf8');
+}
 
 exports.connect = function()
 {
