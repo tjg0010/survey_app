@@ -170,13 +170,13 @@ See [the strings element](#the-strings-element) for the survey jsons.
 ```
 
 ## Server Setup ##
-1. Install node-v6.9.1-x64.msi
+1. Install [node.js](https://nodejs.org/en/)
 2. Install mySql community edition by running the web installer: mysql-installer-web-community-5.7.16.0.msi
-3. Open cmd, create a code folder and a project folder, navigate to it and run:
+3. Open cmd, create a project folder and a code folder, navigate to it and run:
    1. npm install express --save
    2. npm install body-parser --save
    3. npm install multer --save
-   4. npm install mysql
+   4. npm install mysql --save
    5. npm install winston --save
    6. npm install bluebird --save
 4. To install https support (to be able to run main-https) run the following commands:
@@ -186,7 +186,13 @@ See [the strings element](#the-strings-element) for the survey jsons.
    4. npm install --save le-challenge-sni@2.x   # default plugin for tls-sni-01 and tls-sni-02 challenge
    5. npm install --save le-acme-core@2.x       # default plugin for ACME spec
    6. npm install --save le-sni-auto@2.x        # default plugin for SNICallback
-5. (Only on windows - not needed for centOS server) Create the following folder: C:\OpenSSL-Win64\lib and place the needed files inside it (3 libeay32 files). This is only needed if the greenlock installation has error regarding those files.
+5. (Step only needed on Windows, not on centos server) Create the following folder: C:\OpenSSL-Win64\lib and place the needed files inside it (3 libeay32 files). This is only needed if the greenlock installation has errors regarding those files.
+6. Run the [DB create script](https://github.com/tjg0010/survey_app/blob/master/Server/node/dbScripts/create.txt) to create the db and all of its tables. Notice that if mySql is in a version priorr to 5.7.1, DEFAULT CURRENT_TIMESTAMP configuration won't work on DATETIME fields, so those fields should be changed to be TIMESTAMP instead (3 fields in total in the script).
+7. In your code directory, make sure the _authentications_ directory exists. Inside it create the following files:
+   1. db-auth.txt - needs to contain the db password for the 'tausurvey' user in plain text. This must be created since the dbManager expects to find the password in this file.
+8. Copy all the code located in [the server/node folder](https://github.com/tjg0010/survey_app/tree/master/Server/node) and paste is in your code folder.
+9. Run ```node main-https.js``` to start the server with HTTPS support, or just ```node main.js``` to start a plain HTTP server.
+* Notice: the server listens to port 8091 for HTTPS and 8090 for HTTP.
 
 
 #### For a developer environment, also install: ####
