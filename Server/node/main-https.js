@@ -83,6 +83,19 @@ app.post('/register/:userId', function (req, res) {
     saveSurvey(req, res, '/register (POST)', surveyRegister);
 });
 
+app.get('/privacy', function(req, res) {
+    fs.readFile('html/privacy.html', function (err, html) {
+        if (err) {
+            httpHelper.sendResponseError(res, 500, 'Failed loading html file.');
+        }
+        else {
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        }
+    });
+});
+
 app.post('/location/:userId', function (req, res) {
     var userId = req.params.userId;
     var lat = req.body.lat;
