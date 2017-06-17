@@ -12,12 +12,7 @@
     "text": 6
   },
   "diaryDates": [
-    { "dayOfWeek": "SUNDAY", "hour": 20, "minute": 0 },
-    { "dayOfWeek": "MONDAY", "hour": 20, "minute": 0 },
-    { "dayOfWeek": "TUESDAY", "hour": 20, "minute": 0 },
     { "dayOfWeek": "WEDNESDAY", "hour": 20, "minute": 0 },
-    { "dayOfWeek": "THURSDAY", "hour": 20, "minute": 0 },
-    { "dayOfWeek": "FRIDAY", "hour": 20, "minute": 0 },
     { "dayOfWeek": "SATURDAY", "hour": 21, "minute": 0 }
   ],
   "bluetoothSamplingDates": [
