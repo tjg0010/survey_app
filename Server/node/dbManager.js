@@ -4,20 +4,27 @@ const mysql = require("mysql");                // MySql DB connector.
 var fs = require('fs');                        // File system.
 // endregion
 
-// A map that holds all table names (as values) and their name representation in the json file (as keys).
+// Expose the connection to the other function in the class.
+var con;
 
-var con = mysql.createConnection({
+var dbConfig = {
     host: "localhost",
     user: "tausurvey",
     password: getDBPassword()
-});
+};
 
 function getDBPassword() {
     return fs.readFileSync('authentications/db-auth.txt', 'utf8');
 }
 
+exports.test = function() {
+    this.connect();
+};
+
 exports.connect = function()
 {
+    con = mysql.createConnection(dbConfig);
+
     con.connect(function(err){
         if(err){
             logger.log('error', 'Error connecting to Db', {error: err});
@@ -25,7 +32,23 @@ exports.connect = function()
         }
         logger.log('info', 'Connection established to db');
     });
+
+    // Handle timeout disconnects.
+    con.on('error', function(err) {
+        logger.log('db error has been catched', {error: err});
+        if(err.code === 'PROTOCOL_CONNECTION_LOST') {   // Connection to the MySQL server is usually
+            this.connect();                             // lost due to either server restart, or a
+        } else {                                        // connection idle timeout (the wait_timeout
+            throw err;                                  // server variable configures this)
+        }
+    });
 };
+
+function handleDisconnect() {
+    connection = mysql.createConnection(db_config); // Recreate the connection, since
+                                                    // the old one cannot be reused.
+
+}
 
 exports.disconnect = function(){
     con.end(function(err) {
