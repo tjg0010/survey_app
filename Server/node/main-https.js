@@ -3,6 +3,8 @@ var utils = require('./utils.js');              // Our own utils lib.
 var express = require('express');               // Express web server.
 var bodyParser = require("body-parser");        // Body parser for parsing post body.
 var fs = require('fs');                         // File system.
+var http = require('http');                     // http lib.
+var https = require('https');                   // https lib.
 const logger = require('./logger.js');          // Our own logger.
 var httpHelper = require('./httpHelper.js');    // Our own httpHelper.
 var db = require('./dbManager.js');             // Our own dbManager.
@@ -29,7 +31,7 @@ var lex = require('greenlock-express').create({
 });
 
 // handles acme-challenge and redirects to https
-require('http').createServer(lex.middleware(require('redirect-https')())).listen(8090, function () {
+http.createServer(lex.middleware(require('redirect-https')())).listen(8090, function () {
     console.log("Listening for ACME http-01 challenges on", this.address());
 });
 // endregion
@@ -277,7 +279,7 @@ function approveDomains(opts, certs, cb) {
 /**
  * Tha main function that starts the server listener.
  */
-var server = require('https').createServer(lex.httpsOptions, lex.middleware(app)).listen(8091, function () {
+var server = https.createServer(lex.httpsOptions, lex.middleware(app)).listen(8091, function () {
     logger.log("Listening for ACME tls-sni-01 challenges and serve app on", this.address());
 
     var host = server.address().address;
