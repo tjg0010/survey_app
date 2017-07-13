@@ -179,20 +179,19 @@ See [the strings element](#the-strings-element) for the survey jsons.
    4. npm install mysql --save
    5. npm install winston --save
    6. npm install bluebird --save
-4. To install https support (to be able to run main-https) run the following commands:
-   1. npm install --save greenlock-express@2.x
-   2. npm install --save le-store-certbot@2.x   # default plugin for accounts, certificates, and keypairs
-   3. npm install --save le-challenge-fs@2.x    # default plugin for http-01 challenge
-   4. npm install --save le-challenge-sni@2.x   # default plugin for tls-sni-01 and tls-sni-02 challenge
-   5. npm install --save le-acme-core@2.x       # default plugin for ACME spec
-   6. npm install --save le-sni-auto@2.x        # default plugin for SNICallback
-5. (Step only needed on Windows, not on centos server) Create the following folder: C:\OpenSSL-Win64\lib and place the needed files inside it (3 libeay32 files). This is only needed if the greenlock installation has errors regarding those files.
-6. Run the [DB create script](https://github.com/tjg0010/survey_app/blob/master/Server/node/dbScripts/create.txt) to create the db and all of its tables. Notice that if mySql is in a version priorr to 5.7.1, DEFAULT CURRENT_TIMESTAMP configuration won't work on DATETIME fields, so those fields should be changed to be TIMESTAMP instead (3 fields in total in the script).
-7. In your code directory, make sure the _authentications_ directory exists. Inside it create the following files:
+5. Run the [DB create script](https://github.com/tjg0010/survey_app/blob/master/Server/node/dbScripts/create.txt) to create the db and all of its tables. Notice that if mySql is in a version priorr to 5.7.1, DEFAULT CURRENT_TIMESTAMP configuration won't work on DATETIME fields, so those fields should be changed to be TIMESTAMP instead (3 fields in total in the script).
+6. In your code directory, make sure the _authentications_ directory exists. Inside it create the following files:
    1. db-auth.txt - needs to contain the db password for the 'tausurvey' user in plain text. This must be created since the dbManager expects to find the password in this file.
-8. Copy all the code located in [the server/node folder](https://github.com/tjg0010/survey_app/tree/master/Server/node) and paste is in your code folder.
-9. Run ```node main-https.js``` to start the server with HTTPS support, or just ```node main.js``` to start a plain HTTP server.
-* Notice: the server listens to port 8091 for HTTPS and 8090 for HTTP.
+7. Copy all the code located in [the server/node folder](https://github.com/tjg0010/survey_app/tree/master/Server/node) and paste is in your code folder.
+8. Run ```node main-https.js``` to start the server with HTTPS support, or just ```node main.js``` to start a plain HTTP server.
+* Notice: the server listens to port 8091 (which should be mapped to port 443) for HTTPS and 8090 (which should be mapped to port 80) for HTTP.
+9. We use Let's Encrypt to support https. To install https support (to be able to run main-https) do the following:
+   1. Go to https://certbot.eff.org/#centos6-other and follow the instructions under "Install" and "Get Started". Use the "webroot" option. Notice that the server should be running while going through the "Get Started" steps (go to the code folder and run ```node main-https.js```).
+   2. You should now have Let's Encrypt's certificates under ```etc/letsencrypt/live/<your.domain.com>/```.
+   3. Create a folder under ```/code``` called ```sslcert```.
+   4. In the ```sslcert``` folder create symbolic links of ```etc/letsencrypt/live/<your.domain.com>/fullchain.pem``` and ```etc/letsencrypt/live/<your.domain.com>/privkey.pem```.
+   5. Let's Encrypt's certificates expire after aprox. 90 days. Follow the instructions under in the "Automating renewal" part in https://certbot.eff.org/#centos6-other. You should set a daily crontab task to run the renweal command.
+   6. That's it. Your server is good to go with https!
 
 
 #### For a developer environment, also install: ####
