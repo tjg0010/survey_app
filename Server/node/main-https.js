@@ -229,7 +229,6 @@ function saveSurvey(req, res, apiName, survey) {
 
 
 const serverOptions = {
-    // TODO: update these files if needed.
     cert: fs.readFileSync('./sslcert/fullchain.pem'),
     key: fs.readFileSync('./sslcert/privkey.pem')
 };
