@@ -4,14 +4,15 @@ const mysql = require("mysql");                // MySql DB connector.
 var fs = require('fs');                        // File system.
 // endregion
 
-// Expose the connection to the other function in the class.
-var con;
-
+// Load the db configuration.
 var dbConfig = {
     host: "localhost",
     user: "tausurvey",
     password: getDBPassword()
 };
+
+// Expose the connection pool to the other functions in the class.
+var pool  = mysql.createPool(dbConfig);
 
 function getDBPassword() {
     return fs.readFileSync('authentications/db-auth.txt', 'utf8');
@@ -23,38 +24,24 @@ exports.test = function() {
 
 exports.connect = function()
 {
-    con = mysql.createConnection(dbConfig);
+    pool.getConnection(function(err, connection) {
+        // connected! (unless `err` is set).
 
-    con.connect(function(err){
+        // And done with the connection.
+        connection.release();
+
+        // If we've got an error, report it. Always handle error after the release.
         if(err){
             logger.log('error', 'Error connecting to Db', {error: err});
             return;
         }
-        logger.log('info', 'Connection established to db');
-    });
-
-    // Handle timeout disconnects.
-    con.on('error', function(err) {
-        logger.log('db error has been catched', {error: err});
-        if(err.code === 'PROTOCOL_CONNECTION_LOST') {   // Connection to the MySQL server is usually
-            this.connect();                             // lost due to either server restart, or a
-        } else {                                        // connection idle timeout (the wait_timeout
-            throw err;                                  // server variable configures this)
-        }
+        logger.log('info', 'Connection established to db')
     });
 };
 
-function handleDisconnect() {
-    connection = mysql.createConnection(db_config); // Recreate the connection, since
-                                                    // the old one cannot be reused.
-
-}
-
 exports.disconnect = function(){
-    con.end(function(err) {
-        // The connection is terminated gracefully
-        // Ensures all previously enqueued queries are still
-        // before sending a COM_QUIT packet to the MySQL server.
+    pool.end(function (err) {
+        // all connections in the pool have ended
     });
 };
 
@@ -62,19 +49,28 @@ exports.saveLocation = function(userId, lat, long, time, callback){
     // Convert the given time in UTC format, to mySql DATETIME format.
     var datetime = new Date(parseInt(time)).toMysqlDateTime();
 
-    con.query(
-        // Using ? to supply values auto escapes them to a sql injection safe format.
-        'INSERT INTO `tausurvey`.`locations` (`userId`,`latitude`,`longitude`,`time`) VALUES (?, ?, ?, ?);',
-        [userId, lat, long, datetime],
-        function(err,res){
-            if(err) {
-                logError('Error saving location.', err);
-                callback(err);
-            }
-            else {
-                logger.log('info', 'Data inserted to DB.', {id: res.insertId});
-                callback();
-            }
+    pool.getConnection(function(error, con) {
+        // We've got an error getting a connection from the pool. Report it.
+        if (error) {
+            logError('Error getting mysql connection from pool.', error);
+        }
+
+        con.query(
+            // Using ? to supply values auto escapes them to a sql injection safe format.
+            'INSERT INTO `tausurvey`.`locations` (`userId`,`latitude`,`longitude`,`time`) VALUES (?, ?, ?, ?);',
+            [userId, lat, long, datetime],
+            function(err,res){
+                con.release();
+
+                if(err) {
+                    logError('Error saving location.', err);
+                    callback(err);
+                }
+                else {
+                    logger.log('info', 'Data inserted to DB.', {id: res.insertId});
+                    callback();
+                }
+            });
     });
 };
 
@@ -92,9 +88,17 @@ exports.saveLocationsBulk = function(userId, locations, callback) {
         }
     }
 
-    con.query(
-        'INSERT INTO `tausurvey`.`locations` (`userId`,`latitude`,`longitude`,`time`)' + ' VALUES ' + paramValuesStrings.join(',') + ';',
+    pool.getConnection(function(error, con) {
+        // We've got an error getting a connection from the pool. Report it.
+        if (error) {
+            logError('Error getting mysql connection from pool.', error);
+        }
+
+        con.query(
+            'INSERT INTO `tausurvey`.`locations` (`userId`,`latitude`,`longitude`,`time`)' + ' VALUES ' + paramValuesStrings.join(',') + ';',
             function(err,res){
+                con.release();
+
                 if(err) {
                     logError('Error saving location.', err);
                     callback(err);
@@ -104,6 +108,7 @@ exports.saveLocationsBulk = function(userId, locations, callback) {
                     callback();
                 }
             });
+    });
 };
 
 exports.saveBluetoothSamples = function(userId, samples, callback) {
@@ -120,18 +125,27 @@ exports.saveBluetoothSamples = function(userId, samples, callback) {
         }
     }
 
-    con.query(
-        'INSERT INTO `tausurvey`.`bluetooth` (`userId`,`deviceName`,`macAddress`,`deviceType`,`time`)' + ' VALUES ' + paramValuesStrings.join(',') + ';',
-        function(err,res){
-            if(err) {
-                logError('Error saving bluetooth samples.', err);
-                callback(err);
-            }
-            else {
-                logger.log('info', 'Data inserted to DB.', {id: res.insertId});
-                callback();
-            }
-        });
+    pool.getConnection(function(error, con) {
+        // We've got an error getting a connection from the pool. Report it.
+        if (error) {
+            logError('Error getting mysql connection from pool.', error);
+        }
+
+        con.query(
+            'INSERT INTO `tausurvey`.`bluetooth` (`userId`,`deviceName`,`macAddress`,`deviceType`,`time`)' + ' VALUES ' + paramValuesStrings.join(',') + ';',
+            function(err,res){
+                con.release();
+
+                if(err) {
+                    logError('Error saving bluetooth samples.', err);
+                    callback(err);
+                }
+                else {
+                    logger.log('info', 'Data inserted to DB.', {id: res.insertId});
+                    callback();
+                }
+            });
+    });
 };
 
 exports.saveSurvey = function(surveyName, paramNames, paramValues, callback) {
@@ -139,20 +153,29 @@ exports.saveSurvey = function(surveyName, paramNames, paramValues, callback) {
     if (surveyName) {
         var parsedValues = escapeDataArray(paramValues);
 
-        con.query(
-            'INSERT INTO `tausurvey`.`' + surveyName + '` '                 // the table name.
-            + '(' + paramNames.join(',') + ')'                              // param names.
-            + ' VALUES ( ' + parsedValues.join(',') + ');',                 // param values.
-            function(err,res){
-                if(err) {
-                    logError('Error saving survey.', err);
-                    callback(err);
-                }
-                else {
-                    logger.log('info', 'Data inserted to DB (saveSurvey).', {id: res.insertId});
-                    callback();
-                }
-            });
+        pool.getConnection(function(error, con) {
+            // We've got an error getting a connection from the pool. Report it.
+            if (error) {
+                logError('Error getting mysql connection from pool.', error);
+            }
+
+            con.query(
+                'INSERT INTO `tausurvey`.`' + surveyName + '` '                 // the table name.
+                + '(' + paramNames.join(',') + ')'                              // param names.
+                + ' VALUES ( ' + parsedValues.join(',') + ');',                 // param values.
+                function(err,res){
+                    con.release();
+
+                    if(err) {
+                        logError('Error saving survey.', err);
+                        callback(err);
+                    }
+                    else {
+                        logger.log('info', 'Data inserted to DB (saveSurvey).', {id: res.insertId});
+                        callback();
+                    }
+                });
+        });
     }
     // Otherwise, throw an exception.
     else {
@@ -177,20 +200,29 @@ exports.saveSurveyGroup = function(surveyName, paramNames, paramValuesGroup, use
             paramValuesStrings.push('(' + parsedValues.join(',') + ',' + mysql.escape(userId) + ')');
         }
 
-        con.query(
-            'INSERT INTO `tausurvey`.`' + surveyName + '` '                 // the table name.
-            + '(' + paramNames.join(',') + ')'                              // param names.
-            + ' VALUES ' + paramValuesStrings.join(',') + ';',              // param values arrays.
-            function(err,res){
-                if(err) {
-                    logError('Error saving survey group.', err);
-                    callback(err);
-                }
-                else {
-                    logger.log('info', 'Data inserted to DB (saveSurveyGroup).', {id: res.insertId});
-                    callback();
-                }
-            });
+        pool.getConnection(function(error, con) {
+            // We've got an error getting a connection from the pool. Report it.
+            if (error) {
+                logError('Error getting mysql connection from pool.', error);
+            }
+
+            con.query(
+                'INSERT INTO `tausurvey`.`' + surveyName + '` '                 // the table name.
+                + '(' + paramNames.join(',') + ')'                              // param names.
+                + ' VALUES ' + paramValuesStrings.join(',') + ';',              // param values arrays.
+                function(err,res){
+                    con.release();
+
+                    if(err) {
+                        logError('Error saving survey group.', err);
+                        callback(err);
+                    }
+                    else {
+                        logger.log('info', 'Data inserted to DB (saveSurveyGroup).', {id: res.insertId});
+                        callback();
+                    }
+                });
+        });
     }
     // Otherwise, throw an exception.
     else {
@@ -202,30 +234,48 @@ exports.saveSurveyGroup = function(surveyName, paramNames, paramValuesGroup, use
 exports.getSurveyEnrichmentData = function(tableName, paramName, userId, callback) {
     logger.log('info', 'dbManager.getSurveyEnrichmentData called.', {tableName: tableName, paramName: paramName, userId: userId});
 
-    con.query('SELECT ' + paramName + ' FROM tausurvey.' + tableName + ' WHERE userId = ?', userId, function(err, rows){
-        if(err) {
-            logError('Error selecting survey enrichment data.', err);
-            callback(err);
+    pool.getConnection(function(error, con) {
+        // We've got an error getting a connection from the pool. Report it.
+        if (error) {
+            logError('Error getting mysql connection from pool.', error);
         }
-        else {
-            logger.log('info', 'dbManager.getSurveyEnrichmentData found ' + rows.length + ' results.');
-            callback(null, rows);
-        }
+
+        con.query('SELECT ' + paramName + ' FROM tausurvey.' + tableName + ' WHERE userId = ?', userId, function(err, rows){
+            con.release();
+
+            if(err) {
+                logError('Error selecting survey enrichment data.', err);
+                callback(err);
+            }
+            else {
+                logger.log('info', 'dbManager.getSurveyEnrichmentData found ' + rows.length + ' results.');
+                callback(null, rows);
+            }
+        });
     });
 };
 
 exports.isUserExists = function(userId, mainTableName, callback) {
     logger.log('info', 'dbManager.isUserExists called.', {userId: userId,mainTableName: mainTableName});
 
-    con.query('SELECT userId FROM tausurvey.' + mainTableName + ' WHERE userId = ?', userId, function(err, rows){
-        if(err) {
-            logError('Error checking if user id exists in db.', err);
-            callback(err);
+    pool.getConnection(function(error, con) {
+        // We've got an error getting a connection from the pool. Report it.
+        if (error) {
+            logError('Error getting mysql connection from pool.', error);
         }
-        else {
-            logger.log('info', 'dbManager.isUserExists found ' + rows.length + ' users with the given user id.');
-            callback(null, (rows.length > 0));
-        }
+
+        con.query('SELECT userId FROM tausurvey.' + mainTableName + ' WHERE userId = ?', userId, function(err, rows){
+            con.release();
+
+            if(err) {
+                logError('Error checking if user id exists in db.', err);
+                callback(err);
+            }
+            else {
+                logger.log('info', 'dbManager.isUserExists found ' + rows.length + ' users with the given user id.');
+                callback(null, (rows.length > 0));
+            }
+        });
     });
 };
 
